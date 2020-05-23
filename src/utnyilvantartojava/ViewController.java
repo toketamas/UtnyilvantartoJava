@@ -6,9 +6,13 @@
 package utnyilvantartojava;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -33,7 +37,7 @@ public class ViewController implements Initializable {
 
 // gombok
     @FXML
-    Button button_bevitel;
+    Button button_Bevitel;
 
     @FXML
     Button button_BeallitasKesz;
@@ -50,7 +54,7 @@ public class ViewController implements Initializable {
 
 //date picker
     @FXML
-    DatePicker datePicker;
+    DatePicker date_Picker;
 
 //check boxok
     @FXML
@@ -62,15 +66,46 @@ public class ViewController implements Initializable {
     @FXML
     CheckBox checkBox_Magan;
   
-
-    private final ObservableList<Route> data = FXCollections.observableArrayList(
-            new Route("2020-05-12","Székesfehérvár", "Mór", "Erste Bank", "33")
-    );
+String datum;
+    private final ObservableList<Route> tableContent = FXCollections.observableArrayList();
 
     public void kiir(){
         System.out.println("Elindult");
     }
     
+    
+    
+   @FXML
+   private void dateChanged(ActionEvent event){
+       datum=date_Picker.getValue().toString();
+   }
+    
+    @FXML
+    private void bevitelClick(ActionEvent event){
+      
+     
+       String indulas =  comboBox_Indulas.getEditor().getText();
+       comboBox_Indulas.getItems().add(indulas);
+       comboBox_Indulas.getEditor().clear();
+       String erkezes =(String) comboBox_Erkezes.getEditor().getText();
+       comboBox_Erkezes.getItems().add(erkezes);
+       comboBox_Erkezes.getEditor().clear();
+       String ugyfel = (String) comboBox_Ugyfel.getEditor().getText();
+       comboBox_Ugyfel.getItems().add(ugyfel);
+       comboBox_Ugyfel.getEditor().clear();
+       String tavolsag =(String) comboBox_Tavolsag.getEditor().getText();
+       comboBox_Tavolsag.getItems().add(tavolsag);
+       comboBox_Tavolsag.getEditor().clear();
+       comboBox_Indulas.getItems().add(indulas);
+       comboBox_Ugyfel.getItems().add(ugyfel);
+       comboBox_Tavolsag.getItems().add(tavolsag);
+              
+       tableContent.add(new Route(datum,indulas,erkezes,ugyfel,tavolsag));
+       tableView.setItems(tableContent);
+        //System.out.println(indulas);
+        //System.out.println(datum);
+        System.out.println("öcsisajt");
+    }
     public void setTableData() {
         
        TableColumn datCol = new TableColumn("Dátum");
@@ -105,7 +140,7 @@ public class ViewController implements Initializable {
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, String>("ugyfel"));
 
         tableView.getColumns().addAll(datCol,indCol, erkCol, ugyfCol,tavCol);
-         tableView.setItems(data);
+         tableView.setItems(tableContent);
         
         
     }
@@ -114,6 +149,11 @@ public class ViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("elindult");
         setTableData();
+        //date_Picker.setValue(LocalDate.now());
+        int year = Calendar.YEAR;
+        int month= Calendar.MONTH;
+        int day = Calendar.DAY_OF_WEEK;
+    
     }    
     
 }
