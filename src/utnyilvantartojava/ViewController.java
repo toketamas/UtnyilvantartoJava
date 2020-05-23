@@ -9,6 +9,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,11 +67,10 @@ public class ViewController implements Initializable {
     @FXML
     CheckBox checkBox_Magan;
   
-String datum;
-    private final ObservableList<Route> tableContent = FXCollections.observableArrayList();
 
-    public void kiir(){
-        System.out.println("Elindult");
+    @FXML
+    private void beir(ActionEvent event){
+        System.out.println("irt");
     }
     
     
@@ -82,11 +82,26 @@ String datum;
     
     @FXML
     private void bevitelClick(ActionEvent event){
-      
-     
+      readBox();
+    }
+    
+    String datum;
+    private final ObservableList<Route> tableContent = FXCollections.observableArrayList();
+     private HashSet<String> hashSet = new HashSet<>();
+     public void sortList(ComboBox box){
+         for(int i=0;i<box.getItems().size();i++){
+          hashSet.add(box.getItems().get(i).toString());
+         }
+         box.getItems().clear();
+         box.getItems().addAll(hashSet);
+         
+         
+     }
+     public void readBox(){ 
        String indulas =  comboBox_Indulas.getEditor().getText();
-       comboBox_Indulas.getItems().add(indulas);
+       //comboBox_Indulas.getItems().add(indulas);
        comboBox_Indulas.getEditor().clear();
+       sortList(comboBox_Indulas);
        String erkezes =(String) comboBox_Erkezes.getEditor().getText();
        comboBox_Erkezes.getItems().add(erkezes);
        comboBox_Erkezes.getEditor().clear();
@@ -101,11 +116,10 @@ String datum;
        comboBox_Tavolsag.getItems().add(tavolsag);
               
        tableContent.add(new Route(datum,indulas,erkezes,ugyfel,tavolsag));
-       tableView.setItems(tableContent);
-        //System.out.println(indulas);
-        //System.out.println(datum);
-        System.out.println("öcsisajt");
+       tableView.setItems(tableContent);    
     }
+    
+    
     public void setTableData() {
         
        TableColumn datCol = new TableColumn("Dátum");
