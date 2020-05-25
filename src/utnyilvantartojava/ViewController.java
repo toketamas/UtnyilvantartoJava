@@ -7,6 +7,7 @@ package utnyilvantartojava;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -24,17 +25,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import org.controlsfx.control.SearchableComboBox;
 
 /**
  *
  * @author Tamas
  */
 public class ViewController implements Initializable {
-    
-    
-    
-   @FXML
-   TableView tableView;
+
+    @FXML
+    TableView tableView;
 
 // gombok
     @FXML
@@ -45,13 +45,13 @@ public class ViewController implements Initializable {
 
 //combo boxok
     @FXML
-    ComboBox comboBox_Indulas;
+    SearchableComboBox comboBox_Indulas;
     @FXML
-    ComboBox comboBox_Erkezes;
+    SearchableComboBox comboBox_Erkezes;
     @FXML
-    ComboBox comboBox_Ugyfel;
+    SearchableComboBox comboBox_Ugyfel;
     @FXML
-    ComboBox comboBox_Tavolsag;
+    SearchableComboBox comboBox_Tavolsag;
 
 //date picker
     @FXML
@@ -66,69 +66,74 @@ public class ViewController implements Initializable {
     CheckBox checkBox_OdaVissza;
     @FXML
     CheckBox checkBox_Magan;
-  
 
     @FXML
-    private void beir(ActionEvent event){
+    private void beir(ActionEvent event) {
         System.out.println("irt");
     }
-    
-    
-    
-   @FXML
-   private void dateChanged(ActionEvent event){
-       datum=date_Picker.getValue().toString();
-   }
-    
+
     @FXML
-    private void bevitelClick(ActionEvent event){
-      readBox();
+    private void dateChanged(ActionEvent event) {
+        datum = date_Picker.getValue().toString();
     }
-    
+
+    @FXML
+    private void indTextChanged(ActionEvent event) {
+        indulas = comboBox_Indulas.getValue().toString();
+    }
+
+    @FXML
+    private void erkTextChanged(ActionEvent event) {
+        erkezes = comboBox_Indulas.getValue().toString();
+    }
+
+    @FXML
+    private void bevitelClick(ActionEvent event) {
+        readBox();
+    }
+    String erkezes;
+    String indulas;
     String datum;
     private final ObservableList<Route> tableContent = FXCollections.observableArrayList();
-     private HashSet<String> hashSet = new HashSet<>();
-     public void sortList(ComboBox box){
-         for(int i=0;i<box.getItems().size();i++){
-          hashSet.add(box.getItems().get(i).toString());
-         }
-         box.getItems().clear();
-         box.getItems().addAll(hashSet);
-         
-         
-     }
-     public void readBox(){ 
-       String indulas =  comboBox_Indulas.getEditor().getText();
-       //comboBox_Indulas.getItems().add(indulas);
-       comboBox_Indulas.getEditor().clear();
-       sortList(comboBox_Indulas);
-       String erkezes =(String) comboBox_Erkezes.getEditor().getText();
-       comboBox_Erkezes.getItems().add(erkezes);
-       comboBox_Erkezes.getEditor().clear();
-       String ugyfel = (String) comboBox_Ugyfel.getEditor().getText();
-       comboBox_Ugyfel.getItems().add(ugyfel);
-       comboBox_Ugyfel.getEditor().clear();
-       String tavolsag =(String) comboBox_Tavolsag.getEditor().getText();
-       comboBox_Tavolsag.getItems().add(tavolsag);
-       comboBox_Tavolsag.getEditor().clear();
-       comboBox_Indulas.getItems().add(indulas);
-       comboBox_Ugyfel.getItems().add(ugyfel);
-       comboBox_Tavolsag.getItems().add(tavolsag);
-              
-       tableContent.add(new Route(datum,indulas,erkezes,ugyfel,tavolsag));
-       tableView.setItems(tableContent);    
-    }
-    
-    
-    public void setTableData() {
-        
-       TableColumn datCol = new TableColumn("Dátum");
-       datCol.setMaxWidth(190);
-       datCol.setResizable(false);
-       datCol.setCellFactory(TextFieldTableCell.forTableColumn());
-       datCol.setCellValueFactory(new PropertyValueFactory<Route, String>("datum"));
+    //private HashSet<String> hashSet = new HashSet<>();
+    ArrayList<String> list;
+
+    /*public void sortList(ComboBox box) {
+        for (int i = 0; i < box.getItems().size(); i++) {
+            hashSet.add(box.getItems().get(i).toString());
+        }
+        box.getItems().clear();
+        box.getItems().addAll(hashSet);
+
+    }*/
+    public void readBox() {
        
-        
+       // String ugyfel = comboBox_Ugyfel.getValue().toString();
+       // comboBox_Ugyfel.getItems().add(ugyfel);
+       // comboBox_Ugyfel.getEditor().clear();
+
+        //String tavolsag =  comboBox_Tavolsag.getValue().toString();
+        //comboBox_Tavolsag.getItems().add(tavolsag);
+       // comboBox_Tavolsag.getEditor().clear();
+
+        comboBox_Indulas.getItems().add(indulas);
+       // comboBox_Ugyfel.getItems().add(ugyfel);
+       // comboBox_Tavolsag.getItems().add(tavolsag);
+
+        tableContent.add(new Route(datum, indulas, erkezes,erkezes,indulas));
+        tableView.setItems(tableContent);
+        comboBox_Indulas.getEditor().clear();
+        comboBox_Erkezes.getEditor().clear();
+    }
+
+    public void setTableData() {
+
+        TableColumn datCol = new TableColumn("Dátum");
+        datCol.setMaxWidth(190);
+        datCol.setResizable(false);
+        datCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        datCol.setCellValueFactory(new PropertyValueFactory<Route, String>("datum"));
+
         TableColumn indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése        
         indCol.setMinWidth(190);        //oszlop min szélesség beállítása 100 pixelre        
         indCol.setResizable(false);
@@ -153,21 +158,25 @@ public class ViewController implements Initializable {
         ugyfCol.setCellFactory(TextFieldTableCell.forTableColumn());
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, String>("ugyfel"));
 
-        tableView.getColumns().addAll(datCol,indCol, erkCol, ugyfCol,tavCol);
-         tableView.setItems(tableContent);
-        
-        
+        tableView.getColumns().addAll(datCol, indCol, erkCol, ugyfCol, tavCol);
+        tableView.setItems(tableContent);
+
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("elindult");
         setTableData();
+        FileModel filemodel = new FileModel();
+        list = filemodel.readFile("A:\\TT_GIT\\UtnyilvantartoJava\\telepulesek.dat");
+         comboBox_Indulas.getItems().addAll(list);
+        comboBox_Erkezes.getItems().addAll(list);
+        readBox();
         //date_Picker.setValue(LocalDate.now());
-        int year = Calendar.YEAR;
-        int month= Calendar.MONTH;
-        int day = Calendar.DAY_OF_WEEK;
-    
-    }    
-    
+        //int year = Calendar.YEAR;
+        //int month= Calendar.MONTH;
+        //int day = Calendar.DAY_OF_WEEK;
+
+    }
+
 }
