@@ -5,13 +5,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 
 public class Route {
 
 // private LocalDate datum;
 
-    private StringProperty datum;
-    private StringProperty indulas;
+    private DatePicker datum;
+    private ComboBox indulas;
     private StringProperty erkezes;
     private IntegerProperty tavolsag;
     private StringProperty ugyfel;
@@ -19,29 +21,20 @@ public class Route {
     private CheckBox vissza;
 
 
-
-    public String getDatum() {
-        return datum.get();
-    }
-
-    public StringProperty datumProperty() {
+    public DatePicker getDatum() {
         return datum;
     }
 
-    public void setDatum(String datum) {
-        this.datum.set(datum);
+    public void setDatum(DatePicker datum) {
+        this.datum = datum;
     }
 
-    public String getIndulas() {
-        return indulas.get();
-    }
-
-    public StringProperty indulasProperty() {
+    public ComboBox getIndulas() {
         return indulas;
     }
 
-    public void setIndulas(String indulas) {
-        this.indulas.set(indulas);
+    public void setIndulas(ComboBox indulas) {
+        this.indulas = indulas;
     }
 
     public String getErkezes() {
@@ -98,9 +91,9 @@ public class Route {
         this.vissza = vissza;
     }
 
-    public Route(String datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, CheckBox magan, CheckBox vissza) {
-        this.datum = new SimpleStringProperty(datum);
-        this.indulas = new SimpleStringProperty(indulas);
+    public Route(DatePicker datum, ComboBox indulas, String erkezes, Integer tavolsag, String ugyfel, CheckBox magan, CheckBox vissza) {
+        this.datum = datum;
+        this.indulas = indulas;
         this.erkezes = new SimpleStringProperty(erkezes);
         this.tavolsag = new SimpleIntegerProperty(tavolsag);
         this.ugyfel = new SimpleStringProperty(ugyfel);
@@ -109,8 +102,8 @@ public class Route {
     }
 
     public Route(){
-        this.datum = new SimpleStringProperty("");
-        this.indulas = new SimpleStringProperty("");
+        this.datum = new DatePicker();
+        this.indulas = new ComboBox();
         this.erkezes = new SimpleStringProperty("");
         this.tavolsag = new SimpleIntegerProperty(0);
         this.ugyfel = new SimpleStringProperty("");

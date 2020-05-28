@@ -5,13 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class ViewController implements Initializable {
@@ -33,9 +32,14 @@ public class ViewController implements Initializable {
         //list = filemodel.readFile("A:\\TT_GIT\\UtnyilvantartoJava\\telepulesek.dat");
         CheckBox chk =new CheckBox();         //teszt
         CheckBox chk1 = new CheckBox();
+        DatePicker dtp = new DatePicker();
+        ComboBox cbi = new ComboBox();
+        FileModel fileModel = new FileModel();
+        cbi.setItems(fileModel.readFile("telepulesek.dat"));
+        dtp.setValue(LocalDate.now());
         chk.setSelected(true);
         chk1.setSelected(true);    //teszt
-       observableList.add(new Route("2020-01-01","Szfvár","Pécs",123,"Erste Bank",chk1,chk));
+       observableList.add(new Route(dtp,cbi,"Pécs",123,"Erste Bank",chk1,chk));
 
     }
 
@@ -46,7 +50,7 @@ public class ViewController implements Initializable {
         TableColumn datCol = new TableColumn("Dátum");
         datCol.setPrefWidth(150);
         datCol.setResizable(false);
-        datCol.setCellValueFactory(new PropertyValueFactory<Route, String>("datum"));
+        datCol.setCellValueFactory(new PropertyValueFactory<Route, DatePicker>("datum"));
 
         TableColumn checkMagan = new TableColumn("Magán");
         checkMagan.setPrefWidth(50);
@@ -62,7 +66,7 @@ public class ViewController implements Initializable {
         indCol.setPrefWidth(150);        //oszlop min szélesség beállítása 100 pixelre
         indCol.setResizable(false);
         indCol.setEditable(true);
-        indCol.setCellValueFactory(new PropertyValueFactory<Route, String>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
+        indCol.setCellValueFactory(new PropertyValueFactory<Route, ComboBox>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
 
         TableColumn erkCol = new TableColumn("Érkezés");
         erkCol.setPrefWidth(150);
