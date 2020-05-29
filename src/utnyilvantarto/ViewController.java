@@ -6,7 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import jdk.nashorn.internal.codegen.types.BooleanType;
+import org.controlsfx.control.textfield.CustomTextField;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -22,7 +26,13 @@ public class ViewController implements Initializable {
 
     @FXML private void  btnClick( ActionEvent event){
         observableList.add(new Route());
-        System.out.println(observableList.get(0).getMagan().isSelected());
+        System.out.println(observableList.size());
+        System.out.print(observableList.get(observableList.size()-2).getIndulas().getText()+" ");
+        System.out.print(observableList.get(observableList.size()-2).getErkezes().getText()+" ");
+        System.out.print(observableList.get(observableList.size()-2).getTavolsag().getValue()+" ");
+        System.out.print(observableList.get(observableList.size()-2).getUgyfel().getValue()+" ");
+        System.out.print(observableList.get(observableList.size()-2).getMagan().isSelected()+" ");
+        System.out.println(observableList.get(observableList.size()-2).getVissza().isSelected());
     }
 
     public void initialize(URL url, ResourceBundle rb) {
@@ -33,13 +43,12 @@ public class ViewController implements Initializable {
         CheckBox chk =new CheckBox();         //teszt
         CheckBox chk1 = new CheckBox();
         DatePicker dtp = new DatePicker();
-        ComboBox cbi = new ComboBox();
-        FileModel fileModel = new FileModel();
-        cbi.setItems(fileModel.readFile("telepulesek.dat"));
+        TextField cbi = new TextField();
+
         dtp.setValue(LocalDate.now());
         chk.setSelected(true);
         chk1.setSelected(true);    //teszt
-       observableList.add(new Route(dtp,cbi,"Pécs",123,"Erste Bank",chk1,chk));
+       observableList.add(new Route(dtp,"Székesfehérvár","Pécs",123,"Erste Bank",true,false));
 
     }
 
@@ -50,23 +59,24 @@ public class ViewController implements Initializable {
         TableColumn datCol = new TableColumn("Dátum");
         datCol.setPrefWidth(150);
         datCol.setResizable(false);
-        datCol.setCellValueFactory(new PropertyValueFactory<Route, DatePicker>("datum"));
+        datCol.setCellValueFactory(new PropertyValueFactory<Route, LocalDate>("datum"));
 
         TableColumn checkMagan = new TableColumn("Magán");
         checkMagan.setPrefWidth(50);
         checkMagan.setResizable(false);
-        checkMagan.setCellValueFactory(new PropertyValueFactory<Route, CheckBox>("magan"));
+
+        checkMagan.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("magan"));
 
         TableColumn checkVissza = new TableColumn("Vissza");
         checkVissza.setPrefWidth(50);
         checkVissza.setResizable(false);
-        checkVissza.setCellValueFactory(new PropertyValueFactory<Route, CheckBox>("vissza"));
+        checkVissza.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("vissza"));
 
         TableColumn indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
         indCol.setPrefWidth(150);        //oszlop min szélesség beállítása 100 pixelre
         indCol.setResizable(false);
         indCol.setEditable(true);
-        indCol.setCellValueFactory(new PropertyValueFactory<Route, ComboBox>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
+        indCol.setCellValueFactory(new PropertyValueFactory<Route, String>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
 
         TableColumn erkCol = new TableColumn("Érkezés");
         erkCol.setPrefWidth(150);
@@ -79,7 +89,7 @@ public class ViewController implements Initializable {
         tavCol.setCellValueFactory(new PropertyValueFactory<Route, Integer>("tavolsag"));
 
         TableColumn ugyfCol = new TableColumn("Ügyfél");
-        ugyfCol.setPrefWidth(100);
+        ugyfCol.setPrefWidth(120);
         tavCol.setResizable(false);
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, String>("ugyfel"));
 

@@ -7,19 +7,21 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 
 public class Route {
 
 // private LocalDate datum;
 
     private DatePicker datum;
-    private ComboBox indulas;
-    private StringProperty erkezes;
-    private IntegerProperty tavolsag;
-    private StringProperty ugyfel;
+    private TextField indulas;
+    private TextField erkezes;
+    private ComboBox tavolsag;
+    private ComboBox ugyfel;
     private CheckBox magan;
     private CheckBox vissza;
-
 
     public DatePicker getDatum() {
         return datum;
@@ -29,50 +31,37 @@ public class Route {
         this.datum = datum;
     }
 
-    public ComboBox getIndulas() {
+    public TextField getIndulas() {
         return indulas;
     }
 
-    public void setIndulas(ComboBox indulas) {
+    public void setIndulas(TextField indulas) {
         this.indulas = indulas;
     }
 
-    public String getErkezes() {
-        return erkezes.get();
-    }
-
-    public StringProperty erkezesProperty() {
+    public TextField getErkezes() {
         return erkezes;
     }
 
-    public void setErkezes(String erkezes) {
-        this.erkezes.set(erkezes);
+    public void setErkezes(TextField erkezes) {
+        this.erkezes = erkezes;
     }
 
-    public int getTavolsag() {
-        return tavolsag.get();
-    }
-
-    public IntegerProperty tavolsagProperty() {
+    public ComboBox getTavolsag() {
         return tavolsag;
     }
 
-    public void setTavolsag(int tavolsag) {
-        this.tavolsag.set(tavolsag);
+    public void setTavolsag(ComboBox tavolsag) {
+        this.tavolsag = tavolsag;
     }
 
-    public String getUgyfel() {
-        return ugyfel.get();
-    }
-
-    public StringProperty ugyfelProperty() {
+    public ComboBox getUgyfel() {
         return ugyfel;
     }
 
-    public void setUgyfel(String ugyfel) {
-        this.ugyfel.set(ugyfel);
+    public void setUgyfel(ComboBox ugyfel) {
+        this.ugyfel = ugyfel;
     }
-
 
     public CheckBox getMagan() {
         return magan;
@@ -82,7 +71,6 @@ public class Route {
         this.magan = magan;
     }
 
-
     public CheckBox getVissza() {
         return vissza;
     }
@@ -91,23 +79,43 @@ public class Route {
         this.vissza = vissza;
     }
 
-    public Route(DatePicker datum, ComboBox indulas, String erkezes, Integer tavolsag, String ugyfel, CheckBox magan, CheckBox vissza) {
+    public Route(DatePicker datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza) {
         this.datum = datum;
-        this.indulas = indulas;
-        this.erkezes = new SimpleStringProperty(erkezes);
-        this.tavolsag = new SimpleIntegerProperty(tavolsag);
-        this.ugyfel = new SimpleStringProperty(ugyfel);
-        this.magan = magan;
-        this.vissza = vissza;
+
+        this.indulas = new TextField();
+        this.indulas.setText(indulas);
+        fillField(this.indulas);
+
+        this.erkezes = new TextField();
+        this.erkezes.setText(erkezes);
+        fillField(this.erkezes);
+
+        this.tavolsag = new ComboBox();
+        this.tavolsag.setValue(tavolsag);
+
+        this.ugyfel = new ComboBox();
+        this.ugyfel.setValue(ugyfel);
+
+        this.magan = new CheckBox();
+        this.magan.setSelected(magan);
+
+        this.vissza = new CheckBox();
+        this.vissza.setSelected(vissza);
     }
 
     public Route(){
         this.datum = new DatePicker();
-        this.indulas = new ComboBox();
-        this.erkezes = new SimpleStringProperty("");
-        this.tavolsag = new SimpleIntegerProperty(0);
-        this.ugyfel = new SimpleStringProperty("");
+        this.indulas = new TextField("");
+        fillField(this.indulas);
+        this.erkezes = new TextField("");
+        this.tavolsag = new ComboBox();
+        this.ugyfel = new ComboBox();
         this.magan = new CheckBox();
         this.vissza = new CheckBox();
+    }
+
+    private void fillField(TextField text){
+        FileModel fm = new FileModel();
+        TextFields.bindAutoCompletion(text,fm.readFile("telepulesek.dat"));
     }
 }
