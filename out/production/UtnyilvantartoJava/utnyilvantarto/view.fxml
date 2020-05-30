@@ -5,11 +5,11 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantarto.View">
   <tabs>
-    <Tab text="Untitled Tab 1">
+    <Tab text="Útnyilvántartó">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView id="table" fx:id="table" layoutX="86.0" layoutY="-4.0" prefHeight="375.0" prefWidth="800.0" editable="true">
+                  <TableView id="table" fx:id="table" editable="true" layoutX="86.0" layoutY="-4.0" prefHeight="375.0" prefWidth="800.0">
 
                       <placeholder>
                         <Label text="Nincs Adat" />
@@ -22,9 +22,29 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Untitled Tab 2">
+    <Tab text="Beállítás">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane id="btnSetOk" fx:id="btnSetOk" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextField layoutX="157.0" layoutY="34.0" promptText="Név" />
+                  <TextField layoutX="157.0" layoutY="79.0" promptText="Telephely" />
+                  <TextField layoutX="157.0" layoutY="123.0" promptText="Auto Típusa" />
+                  <TextField layoutX="157.0" layoutY="168.0" promptText="Rendszám" />
+                  <TextField layoutX="157.0" layoutY="208.0" promptText="Lökettérfogat" />
+                  <TextField layoutX="434.0" layoutY="38.0" promptText="Előző Záró Km" />
+                  <TextField id="textZaro" fx:id="textZaro" disable="true" layoutX="434.0" layoutY="82.0" promptText="Jelenlegi Záró Km" />
+                  <Label layoutX="125.0" layoutY="38.0" text="Név" />
+                  <Label layoutX="96.0" layoutY="83.0" text="Telephely" />
+                  <Label layoutX="83.0" layoutY="127.0" text="Auto Típusa" />
+                  <Label layoutX="91.0" layoutY="172.0" text="Rendszám" />
+                  <Label layoutX="75.0" layoutY="212.0" text="Lökettérfogat" />
+                  <Label layoutX="88.0" layoutY="256.0" text="Fogyasztás" />
+                  <Label layoutX="346.0" layoutY="42.0" text="Előző Záró Km" />
+                  <TextField layoutX="157.0" layoutY="252.0" promptText="Fogyasztás" />
+                  <Label layoutX="331.0" layoutY="86.0" text="Jelenlegi Záró Km" />
+                  <Button id="btnSetOk" layoutX="524.0" layoutY="252.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="OK" />
+                  <Button id="btSet" fx:id="btnSet" layoutX="434.0" layoutY="252.0" mnemonicParsing="false" text="Beállítás" />
+               </children></AnchorPane>
       </content>
     </Tab>
   </tabs>
