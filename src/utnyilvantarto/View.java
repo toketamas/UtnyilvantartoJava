@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.EventListener;
 import java.util.ResourceBundle;
 
-public class ViewController implements Initializable {
+public class View implements Initializable {
 
     @FXML
     TableView table;
