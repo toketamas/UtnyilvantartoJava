@@ -1,5 +1,6 @@
 package utnyilvantarto;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,6 +11,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
+
+import java.time.LocalDate;
 
 public class Route {
 
@@ -27,24 +30,24 @@ public class Route {
         return datum;
     }
 
-    public void setDatum(DatePicker datum) {
-        this.datum = datum;
+    public void setDatum(LocalDate dat) {
+        this.datum.setValue(dat);
     }
 
     public TextField getIndulas() {
         return indulas;
     }
 
-    public void setIndulas(TextField indulas) {
-        this.indulas = indulas;
+    public void setIndulas(String indulas) {
+        this.indulas.setText(indulas);
     }
 
     public TextField getErkezes() {
         return erkezes;
     }
 
-    public void setErkezes(TextField erkezes) {
-        this.erkezes = erkezes;
+    public void setErkezes(String erkezes) {
+        this.erkezes.setText(erkezes);
     }
 
     public ComboBox getTavolsag() {
@@ -59,28 +62,31 @@ public class Route {
         return ugyfel;
     }
 
-    public void setUgyfel(ComboBox ugyfel) {
-        this.ugyfel = ugyfel;
+    public void setUgyfel(String ugyfel) {
+        this.ugyfel.setValue(ugyfel);
     }
+
+
 
     public CheckBox getMagan() {
         return magan;
     }
 
-    public void setMagan(CheckBox magan) {
-        this.magan = magan;
+    public void setMagan(Boolean magan) {
+        this.magan.setSelected(magan);
     }
 
     public CheckBox getVissza() {
         return vissza;
     }
 
-    public void setVissza(CheckBox vissza) {
-        this.vissza = vissza;
+    public void setVissza(Boolean vissza) {
+        this.vissza.setSelected(vissza);
     }
 
-    public Route(DatePicker datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza) {
-        this.datum = datum;
+    public Route(LocalDate datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza) {
+        this.datum = new DatePicker();
+        this.datum.setValue( datum);
 
         this.indulas = new TextField();
         this.indulas.setText(indulas);
@@ -98,9 +104,14 @@ public class Route {
 
         this.magan = new CheckBox();
         this.magan.setSelected(magan);
+        if (this.magan.isSelected()){
+            this.erkezes.setText("Magán");
+        }
 
         this.vissza = new CheckBox();
         this.vissza.setSelected(vissza);
+
+
     }
 
     public Route(){
@@ -108,6 +119,7 @@ public class Route {
         this.indulas = new TextField("");
         fillField(this.indulas);
         this.erkezes = new TextField("");
+        fillField(this.erkezes);
         this.tavolsag = new ComboBox();
         this.ugyfel = new ComboBox();
         this.magan = new CheckBox();
