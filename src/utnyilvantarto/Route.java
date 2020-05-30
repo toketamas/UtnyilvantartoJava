@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Route {
 
@@ -15,10 +16,12 @@ public class Route {
     private DatePicker datum;
     private TextField indulas;
     private TextField erkezes;
-    private ComboBox tavolsag;
+    private TextField tavolsag;
     private ComboBox ugyfel;
     private CheckBox magan;
     private CheckBox vissza;
+    private CheckBox telephelyrol;
+
 
     public DatePicker getDatum() {
         return datum;
@@ -44,12 +47,12 @@ public class Route {
         this.erkezes.setText(erkezes);
     }
 
-    public ComboBox getTavolsag() {
+    public TextField getTavolsag() {
         return tavolsag;
     }
 
-    public void setTavolsag(ComboBox tavolsag) {
-        this.tavolsag = tavolsag;
+    public void setTavolsag(TextField tavolsag) {
+        this.tavolsag.setText(tavolsag.toString());
     }
 
     public ComboBox getUgyfel() {
@@ -61,13 +64,20 @@ public class Route {
     }
 
 
-
     public CheckBox getMagan() {
         return magan;
     }
 
     public void setMagan(Boolean magan) {
         this.magan.setSelected(magan);
+    }
+
+    public CheckBox getTelephelyrol() {
+        return telephelyrol;
+    }
+
+    public void setTelephelyrol(Boolean magan) {
+        this.telephelyrol.setSelected(magan);
     }
 
     public CheckBox getVissza() {
@@ -78,50 +88,61 @@ public class Route {
         this.vissza.setSelected(vissza);
     }
 
-    public Route(LocalDate datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza) {
+
+    public Route(LocalDate datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza, Boolean telephelyrol) {
         this.datum = new DatePicker();
-        this.datum.setValue( datum);
+        this.datum.setValue(datum);
 
         this.indulas = new TextField();
         this.indulas.setText(indulas);
-        fillField(this.indulas);
+        fillField(this.indulas, "telepulesek.dat");
 
         this.erkezes = new TextField();
         this.erkezes.setText(erkezes);
-        fillField(this.erkezes);
+        fillField(this.erkezes, "telepulesek.dat");
 
-        this.tavolsag = new ComboBox();
-        this.tavolsag.setValue(tavolsag);
+        this.tavolsag = new TextField();
+        this.tavolsag.setText(tavolsag.toString());
 
         this.ugyfel = new ComboBox();
         this.ugyfel.setValue(ugyfel);
+        this.ugyfel.getItems().addAll(fillBox("ugyfelek.dat"));
 
         this.magan = new CheckBox();
         this.magan.setSelected(magan);
-        if (this.magan.isSelected()){
+        if (this.magan.isSelected()) {
             this.erkezes.setText("Magán");
         }
 
         this.vissza = new CheckBox();
         this.vissza.setSelected(vissza);
 
+        this.telephelyrol=new CheckBox();
+        this.telephelyrol.setSelected(telephelyrol);
 
     }
 
-    public Route(){
+    public Route() {
         this.datum = new DatePicker();
         this.indulas = new TextField("");
-        fillField(this.indulas);
+        fillField(this.indulas, "telepulesek.dat");
         this.erkezes = new TextField("");
-        fillField(this.erkezes);
-        this.tavolsag = new ComboBox();
+        fillField(this.erkezes, "telepulesek.dat");
+        this.tavolsag = new TextField();
         this.ugyfel = new ComboBox();
+        this.ugyfel.getItems().addAll(fillBox("ugyfelek.dat"));
         this.magan = new CheckBox();
         this.vissza = new CheckBox();
+        this.telephelyrol=new CheckBox();
     }
 
-    private void fillField(TextField text){
-        FileModel fm = new FileModel();
-        TextFields.bindAutoCompletion(text,fm.readFile("telepulesek.dat"));
+    private void fillField(TextField text, String fileName) {
+        DbModel fm = new DbModel();
+        TextFields.bindAutoCompletion(text, fm.readFile(fileName));
+    }
+
+    private ArrayList fillBox(String fileName) {
+        DbModel fm = new DbModel();
+        return fm.readFile(fileName);
     }
 }
