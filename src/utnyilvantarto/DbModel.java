@@ -1,6 +1,7 @@
 package utnyilvantarto;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DbModel {
 
@@ -186,8 +187,9 @@ public class DbModel {
         }
     }
 
-   /* public ArrayList getAllUsers() {
-        ArrayList<User> users=null;
+    public ArrayList getRoutes(String startDate, String endDate) {      //ezt meg kell írni a két dátum közötti utakat
+        ArrayList<Route> routes = null;
+     /*
         try {
             String sqlQuery = "select * from users";
             users = new ArrayList<>();
@@ -201,10 +203,32 @@ public class DbModel {
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
             System.out.println("" + ex);
-        }
-        return users;
-    }*/
-
-
-
+        }*/
+        return routes;
     }
+
+    public int getDistance(String client1, String Client2) {      // a distances listából a távolságot adja vissza
+        int distance = 0;
+
+        return distance;
+    }
+
+    public ArrayList availableDest(String startClient) {             // az összes célt amihez megvan a távolság
+        return null;
+    }
+
+    public ArrayList availableClient(String startClient) {             // az összes lehetséges célt egy városban
+        return null;
+    }
+
+    public ArrayList availableCity(String startClient) {             // az összes várost ahol
+        return null;
+    }
+
+}
+//Lekérdezéseket írni a javításokhoz
+
+
+
+
+
