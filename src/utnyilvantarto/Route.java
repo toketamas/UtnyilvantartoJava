@@ -1,15 +1,9 @@
 package utnyilvantarto;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.File;
@@ -24,14 +18,14 @@ public class Route {
 
 // private LocalDate datum;
 
-    private DatePicker datum;
-    private TextField indulas;
-    private TextField erkezes;
-    private TextField tavolsag;
-    private ComboBox ugyfel;
-    private CheckBox magan;
-    private CheckBox vissza;
-    private CheckBox telephelyrol;
+    private final DatePicker datum;
+    private final TextField indulas;
+    private final TextField erkezes;
+    private final TextField tavolsag;
+    private final ComboBox ugyfel;
+    private final CheckBox magan;
+    private final CheckBox vissza;
+    private final CheckBox telephelyrol;
 
 
     public DatePicker getDatum() {

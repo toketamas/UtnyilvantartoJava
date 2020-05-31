@@ -17,7 +17,7 @@ public class DbModel {
     PreparedStatement prep = null;
 
     public DbModel() {
-            try {
+        try {
             conn = DriverManager.getConnection(URL);
             System.out.println("A kapcsolat létrejött az adatbázissal,");
         } catch (SQLException ex) {
@@ -35,44 +35,6 @@ public class DbModel {
         }
         try {
             dbmeta = conn.getMetaData();
-      } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
-
-        try {
-            rs1 = dbmeta.getTables(null, "APP", "ROUTES", null);
-            if (!rs1.next())             {
-                createStatement.execute("create table routes(" +
-                        "routeid integer primary key autoincrement," +
-                        "date text," +
-                        "depart text," +
-                        "arrive text," +
-                        "distance integer," +
-                        "client text," +
-                        "private integer," +
-                        "backandforth integer," +
-                        "sites integer);");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
-
-        try {
-            rs1 = dbmeta.getTables(null, "APP", "", null);
-            if (!rs1.next())             {
-                createStatement.execute("create table routes(" +
-                        "routeid integer primary key autoincrement," +
-                        "date text," +
-                        "depart text," +
-                        "arrive text," +
-                        "distance integer," +
-                        "client text," +
-                        "private integer," +
-                        "backandforth integer," +
-                        "sites integer);");
-            }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
             System.out.println("" + ex);
@@ -80,7 +42,7 @@ public class DbModel {
 
         try {
             rs1 = dbmeta.getTables(null, "APP", "ROUTES", null);
-            if (!rs1.next())             {
+            if (!rs1.next()) {
                 createStatement.execute("create table routes(" +
                         "routeid integer primary key autoincrement," +
                         "date text," +
@@ -96,8 +58,39 @@ public class DbModel {
             System.out.println("Hiba!");
             System.out.println("" + ex);
         }
+
+        try {
+            rs1 = dbmeta.getTables(null, "APP", "CLIENTS", null);
+            if (!rs1.next()) {
+                createStatement.execute("create table clients(" +
+                        "id integer primary key autoincrement," +
+                        "city text not null," +
+                        "client text," +
+                        "address text," +
+                        "clientnumber text," +
+                        "field text," +
+                        "exsist integer);");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba!");
+            System.out.println("" + ex);
+        }
+
+        try {
+            rs1 = dbmeta.getTables(null, "APP", "DISTANCES", null);
+            if (!rs1.next()) {
+                createStatement.execute("create table distances(" +
+                        "distid integer primary key autoincrement," +
+                        "clientid1 text," +
+                        "clientid2 text," +
+                        "distance integer);");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba!");
+            System.out.println("" + ex);
+        }
+
     }
-
     public void addUser1(String name, String address, int age) {
 
         try {
@@ -122,6 +115,39 @@ public class DbModel {
             prep.setInt(7, magan);
             prep.setInt(8, odaVissza);
             prep.setInt(9, telephelyrol);
+            prep.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("" + ex);
+        }
+    }
+
+    public void addClient(String city, String client, String address, String clientnumber, String field, int exist) {
+        String sqlQuery = "insert into clients values (?,?,?,?,?,?,?)";
+        try {
+            prep = conn.prepareStatement(sqlQuery);
+            prep.setString(1, null);
+            prep.setString(2, city);
+            prep.setString(3, client);
+            prep.setString(4, address);
+            prep.setString(5, clientnumber);
+            prep.setString(6, field);
+            prep.setInt(7, exist);
+            prep.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("" + ex);
+        }
+    }
+
+    public void addDistance(String clientId1, String clientId2, int distance) {
+        String sqlQuery = "insert into distances values (?,?,?,?)";
+        try {
+            prep = conn.prepareStatement(sqlQuery);
+            prep.setString(1, null);
+            prep.setString(2, clientId1);
+            prep.setString(3, clientId2);
+            prep.setInt(4, distance);
             prep.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
