@@ -12,8 +12,13 @@ import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Route {
 
@@ -143,12 +148,28 @@ public class Route {
     }
 
     private void fillField(TextField text, String fileName) {
-        DbModel fm = new DbModel();
-        TextFields.bindAutoCompletion(text, fm.readFile(fileName));
+        TextFields.bindAutoCompletion(text, readFile(fileName));
     }
 
     private ArrayList fillBox(String fileName) {
-        DbModel fm = new DbModel();
-        return fm.readFile(fileName);
+
+        return readFile(fileName);
+    }
+    ArrayList<String> list = new ArrayList<String>() ;
+
+
+    public ArrayList<String> readFile(String path) {
+
+        File file = new File(path);
+        try {
+            Scanner read = new Scanner(file);
+            while (read.hasNextLine()) {
+                list.add(read.nextLine());
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DbModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // list.sort(Comparator.naturalOrder());
+        return list;
     }
 }

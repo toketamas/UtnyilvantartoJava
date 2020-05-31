@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 public class ViewController implements Initializable {
 
-    DbModel db;
 
     //Tábla
     @FXML
@@ -52,33 +51,34 @@ public class ViewController implements Initializable {
     @FXML
     TextField txfFogyaszt;
 
+    DbModel db = new DbModel();
+
 
     private EventHandler checkBoxEventHandler;
 
     @FXML
     private void btnClick(ActionEvent event) {
         observableList.add(new Route());
-        if(observableList.get(observableList.size()-2).getMagan().isSelected()){
-            observableList.get(observableList.size()-2).setIndulas("Magán");
-            observableList.get(observableList.size()-2).setErkezes("Magán");
-            observableList.get(observableList.size()-2).setUgyfel("Magán");
-            observableList.get(observableList.size()-2).setVissza(false);
+        if (observableList.get(observableList.size() - 2).getMagan().isSelected()) {
+            observableList.get(observableList.size() - 2).setIndulas("Magán");
+            observableList.get(observableList.size() - 2).setErkezes("Magán");
+            observableList.get(observableList.size() - 2).setUgyfel("Magán");
+            observableList.get(observableList.size() - 2).setVissza(false);
         }
 
 
-
-        System.out.print(observableList.get(observableList.size() - 2).getDatum().getValue()+" ");
+        System.out.print(observableList.get(observableList.size() - 2).getDatum().getValue() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getIndulas().getText() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getErkezes().getText() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getTavolsag().getText() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getUgyfel().getValue() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getMagan().isSelected() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getVissza().isSelected()+" ");
+        System.out.print(observableList.get(observableList.size() - 2).getVissza().isSelected() + " ");
         System.out.println(observableList.get(observableList.size() - 2).getTelephelyrol().isSelected());
 
 
 
-        /*db.addRoute(
+       /* db.addRoute(
                 observableList.get(observableList.size()-2).getDatum().getValue().toString(),
                 observableList.get(observableList.size()-2).getIndulas().getText(),
                 observableList.get(observableList.size() - 2).getErkezes().getText(),
@@ -86,18 +86,16 @@ public class ViewController implements Initializable {
                 observableList.get(observableList.size() - 2).getUgyfel().getValue().toString(),
                 boolToInt(observableList.get(observableList.size() - 2).getMagan().isSelected()),
                 boolToInt(observableList.get(observableList.size() - 2).getVissza().isSelected()),
-                boolToInt(observableList.get(observableList.size()-2).getTelephelyrol().isSelected())
-                );
-        try {
-            db.conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }*/
-        db.addRoute1("2","4","5",4,"3",1,0,1);
+                boolToInt(observableList.get(observableList.size()-2).getTelephelyrol().isSelected())    );
+
+         }*/
+
+        db.addRoute("2","4","5",4,"3",1,0,1);
 
     }
 
-    public Integer boolToInt(Boolean value){
+
+    public int boolToInt(Boolean value){
         int convertedValue;
         if(value)
             convertedValue=1;
@@ -174,9 +172,11 @@ public class ViewController implements Initializable {
     //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("elindult");
-        db = new DbModel();
+
         setTableData();
         observableList.add(new Route());
+
+
 
 
 
