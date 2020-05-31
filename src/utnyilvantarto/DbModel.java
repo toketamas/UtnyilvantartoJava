@@ -18,10 +18,11 @@ public class DbModel {
      */
 
 
-        final String JDBC_DRIVER = "org.apache.jdbc.EmbeddedDriver";
-        final String URL = "jdbc:h2:A:\\TT_GIT\\Útnyilvántartó Projekt\\UtnyilvantartoJava\\H2\\RoadRegistry.db";
-        final String USERNAME = "sa";
-        final String PASSWORD = "";
+
+    final String JDBC_DRIVER = "org.apache.jdbc.EmbeddedDriver";
+    final String URL = "jdbc:derby:A:\\TT_GIT\\Útnyilvántartó Projekt\\UtnyilvantartoJava\\db-derby-10.14.2.0-bin\\Route;create=true";
+    final String USERNAME = "";
+    final String PASSWORD = "";
 
         //Létrehozzuk a kapcsolatot
         Connection conn = null;
@@ -38,7 +39,7 @@ public class DbModel {
             //Létrehozzuk a kapcsolatot az adatbázissal
             //megpróbáljuk életre kelteni
             try {
-                conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
                 System.out.println("A híd létrejött");
             } catch (SQLException ex) {
                 System.out.println("Valami baj van");
@@ -70,38 +71,26 @@ public class DbModel {
                 //ha nem létezik következő adat(üres az adatbázis)
                 if (!rs1.next()) //Akkor létrehozzuk a táblákat
                 {
-                    createStatement.execute("CREATE TABLE Routes(routeID int," +
-                            "date varchar(20)," +
-                            "depart varchar(20)," +
-                            "arrive varchar(20)," +
-                            "distance int," +
-                            "client varchar(20)," +
-                            "private int," +
-                            "backAndForth int, " +
-                            "sites int);");
+                    createStatement.execute("create table routes(key int,date varchar(20),depart varchar(20),arrive varchar(20),distance int,client varchar(20),private int,backAndforth int, sites int)",1);
                 }
             } catch (SQLException ex) {
                 System.out.println("Valami baj van");
                 System.out.println("" + ex);
-                try {
-                    conn.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+
             }
         }
 
-        /*public void addUser1(String name, String address, int age) {
+        public void addRoute1(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, int magan, int odaVissza, int telephelyrol) {
 
             try {
                 //!!FONTOS a Statementbe nem írunk sql utasítást csak a változót adhatjuk át!!
-                String sqlQuery = "insert into users values ('" + name + "','" + address + "'," + age + ")";
+                String sqlQuery = "insert into Routes values ('"+tavolsag+"','" + datum + "','" + indulas + "','" + erkezes + "','" + tavolsag + "','" + ugyfel + "','" + magan + "','" + odaVissza + "'," + telephelyrol + ")";
                 createStatement.execute(sqlQuery);
             } catch (SQLException ex) {
                 System.out.println("Valami baj van, nem sikerült az adatbázisba írni");
                 System.out.println("" + ex);
             }
-        }*/
+        }
 
         public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, int magan, int odaVissza, int telephelyrol) {
             //Biztonságosabb lekérdezés

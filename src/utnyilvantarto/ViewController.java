@@ -93,7 +93,7 @@ public class ViewController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }*/
-        db.addRoute("2","4","5",4,"3",1,0,1);
+        db.addRoute1("2","4","5",4,"3",1,0,1);
 
     }
 
