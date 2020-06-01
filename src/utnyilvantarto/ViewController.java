@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.beans.EventHandler;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -67,7 +66,7 @@ public class ViewController implements Initializable {
         }
 
 
-        System.out.print(observableList.get(observableList.size() - 2).getDatum().getValue() + " ");
+        System.out.print(observableList.get(0).getDatum().getValue() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getIndulas().getText() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getErkezes().getText() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getTavolsag().getText() + " ");
@@ -77,20 +76,18 @@ public class ViewController implements Initializable {
         System.out.println(observableList.get(observableList.size() - 2).getTelephelyrol().isSelected());
 
 
-
-       /* db.addRoute(
-                observableList.get(observableList.size()-2).getDatum().getValue().toString(),
-                observableList.get(observableList.size()-2).getIndulas().getText(),
+        db.addRoute(
+                observableList.get(observableList.size() - 2).getDatum().getValue().toString(),
+                observableList.get(observableList.size() - 2).getIndulas().getText(),
                 observableList.get(observableList.size() - 2).getErkezes().getText(),
                 Integer.parseInt(observableList.get(observableList.size() - 2).getTavolsag().getText()),
                 observableList.get(observableList.size() - 2).getUgyfel().getValue().toString(),
                 boolToInt(observableList.get(observableList.size() - 2).getMagan().isSelected()),
                 boolToInt(observableList.get(observableList.size() - 2).getVissza().isSelected()),
-                boolToInt(observableList.get(observableList.size()-2).getTelephelyrol().isSelected())    );
+                boolToInt(observableList.get(observableList.size() - 2).getTelephelyrol().isSelected()));
 
-         }*/
 
-        db.addRoute("2","4","5",4,"3",1,0,1);
+        // db.addRoute("2","4","5",4,"3",1,0,1);
 
     }
 
@@ -174,10 +171,9 @@ public class ViewController implements Initializable {
         System.out.println("elindult");
 
         setTableData();
+        observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));
         observableList.add(new Route());
-
-
-
+        db.getRoutes("2020-06-01", "2020-06-07");
 
 
     }

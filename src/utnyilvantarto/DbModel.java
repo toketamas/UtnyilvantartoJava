@@ -1,6 +1,7 @@
 package utnyilvantarto;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DbModel {
@@ -103,6 +104,7 @@ public class DbModel {
         }
     }
 
+    // hozzáad egy új utat a routes táblához
     public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, int magan, int odaVissza, int telephelyrol) {
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?)";
         try {
@@ -123,6 +125,8 @@ public class DbModel {
         }
     }
 
+
+    // hozzáad egy új ügyfelet(gépet) a client táblához
     public void addClient(String city, String client, String address, String clientnumber, String field, int exist) {
         String sqlQuery = "insert into clients values (?,?,?,?,?,?,?)";
         try {
@@ -141,6 +145,7 @@ public class DbModel {
         }
     }
 
+    //hozzáad két ügyfél közti távolságot a distances táblához
     public void addDistance(String clientId1, String clientId2, int distance) {
         String sqlQuery = "insert into distances values (?,?,?,?)";
         try {
@@ -156,7 +161,7 @@ public class DbModel {
         }
     }
 
-    public void getUser() {
+    /*public void getUser() {
         try {
             String sqlQuery = "select * from users";
             rs1 = createStatement.executeQuery(sqlQuery);
@@ -185,46 +190,99 @@ public class DbModel {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
             System.out.println("" + ex);
         }
-    }
+    }*/
 
-    public ArrayList getRoutes(String startDate, String endDate) {      //ezt meg kell írni a két dátum közötti utakat
+    public ArrayList getRoutes(String startDate, String endDate) {      //két dátum közötti utakat adja vissza
         ArrayList<Route> routes = null;
-     /*
+
         try {
-            String sqlQuery = "select * from users";
-            users = new ArrayList<>();
+            String sqlQuery = "select * from routes where date between \"" + startDate + "\" and \"" + endDate + "\" order by date";
+            routes = new ArrayList<>();
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
-                String name = rs1.getString("name");
-                String address = rs1.getString("address");
-                int age = rs1.getInt("age");
-                users.add(new User(name, address, age));
+                String date = rs1.getString("date");
+                String depart = rs1.getString("depart");
+                String arrive = rs1.getString("arrive");
+                int distance = rs1.getInt("distance");
+                String client = rs1.getString("client");
+                boolean priv = intToBool(rs1.getInt("private"));
+                boolean backandforth = intToBool(rs1.getInt("backandforth"));
+                boolean sites = intToBool(rs1.getInt("sites"));
+
+                routes.add(new Route(LocalDate.parse(date), depart, arrive, distance, client, priv, backandforth, sites));
+                System.out.println(date);
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
             System.out.println("" + ex);
-        }*/
+        }
         return routes;
     }
 
-    public int getDistance(String client1, String Client2) {      // a distances listából a távolságot adja vissza
+    public int getDistance(String client1, String Client2) {      // a distances listából két ügyfél távolságát adja vissza
         int distance = 0;
 
         return distance;
     }
 
-    public ArrayList availableDest(String startClient) {             // az összes célt amihez megvan a távolság
-        return null;
+    public ArrayList availableDest(String startClient) {// az összes célt amihez megvan a távolság
+        ArrayList<Distance> distances = null;
+        try {
+            String sqlQuery = "select * from distances where distance is not null";
+            distances = new ArrayList<>();
+            rs1 = createStatement.executeQuery(sqlQuery);
+            while (rs1.next()) {
+                String clientid1 = rs1.getString("clientid1");
+                String clientid2 = rs1.getString("clientid2");
+                int distance = rs1.getInt("distance");
+                distances.add(new Distance(clientid1, clientid2, distance));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return distances;
     }
 
-    public ArrayList availableClient(String startClient) {             // az összes lehetséges célt egy városban
-        return null;
+    public void setDistance(String clientid1, String clientid2, int distance) { //Beállítja a távolságot a két meglévő helyszín között
+        String sqlQuery = "update distances set distance=" + distance + " where clientid1="
+                + clientid1 + " and clientid2=" + clientid2 + " (?,?,?,?)";
+        try {
+            prep = conn.prepareStatement(sqlQuery);
+            prep.setString(1, null);
+            prep.setString(2, clientid1);
+            prep.setString(3, clientid2);
+            prep.setInt(4, distance);
+            prep.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("" + ex);
+        }
+    }
+
+    public ArrayList availableClient(String targetClient) {      //visszaadja  az összes lehetséges célt egy városban
+        ArrayList<String> clients = null;
+        try {
+            String sqlQuery = "select clientnumber from clients where city=" + targetClient;
+            clients = new ArrayList<>();
+            rs1 = createStatement.executeQuery(sqlQuery);
+            while (rs1.next()) {
+                clients.add(rs1.getString("clientnumber"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return clients;
     }
 
     public ArrayList availableCity(String startClient) {             // az összes várost ahol
         return null;
     }
 
+    private Boolean intToBool(int value) {
+        return value == 0;
+    }
 }
 //Lekérdezéseket írni a javításokhoz
 
