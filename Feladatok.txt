@@ -1,0 +1,5 @@
+Megírni a lekérdezéseket <-
+
+
+Írni egy client osztályt <--- kész
+Írni egy distance osztályt <---kész
