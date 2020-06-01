@@ -1,4 +1,4 @@
-package utnyilvantarto;
+package utnyilvantartojava;
 
 public class Clients {
     private String city;

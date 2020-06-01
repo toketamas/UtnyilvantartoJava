@@ -1,4 +1,4 @@
-package utnyilvantarto;
+package utnyilvantartojava;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -150,11 +150,12 @@ public class Route {
 
         return readFile(fileName);
     }
-    ArrayList<String> list = new ArrayList<String>() ;
+
 
 
     public ArrayList<String> readFile(String path) {
 
+        ArrayList<String> list = new ArrayList<String>() ;
         File file = new File(path);
         try {
             Scanner read = new Scanner(file);

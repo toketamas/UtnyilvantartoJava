@@ -1,4 +1,4 @@
-package utnyilvantarto;
+package utnyilvantartojava;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -63,44 +63,28 @@ public class ViewController implements Initializable {
             observableList.get(observableList.size() - 2).setErkezes("Magán");
             observableList.get(observableList.size() - 2).setUgyfel("Magán");
             observableList.get(observableList.size() - 2).setVissza(false);
+            observableList.get(observableList.size()-2).setTelephelyrol(false);
         }
 
-
-        System.out.print(observableList.get(0).getDatum().getValue() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getIndulas().getText() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getErkezes().getText() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getTavolsag().getText() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getUgyfel().getValue() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getMagan().isSelected() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getVissza().isSelected() + " ");
-        System.out.println(observableList.get(observableList.size() - 2).getTelephelyrol().isSelected());
-
+        System.out.print(observableList.get(0).getDatum() + " ");
+        System.out.print(observableList.get(observableList.size() - 2).getIndulas()+ " ");
+        System.out.print(observableList.get(observableList.size() - 2).getErkezes()+ " ");
+        System.out.print(observableList.get(observableList.size() - 2).getTavolsag() + " ");
+        System.out.print(observableList.get(observableList.size() - 2).getUgyfel() + " ");
+        System.out.print(observableList.get(observableList.size() - 2).getMagan() + " ");
+        System.out.print(observableList.get(observableList.size() - 2).getVissza() + " ");
+        System.out.println(observableList.get(observableList.size() - 2).getTelephelyrol());
 
         db.addRoute(
-                observableList.get(observableList.size() - 2).getDatum().getValue().toString(),
+                observableList.get(observableList.size() - 2).getDatum().getValue(),
                 observableList.get(observableList.size() - 2).getIndulas().getText(),
                 observableList.get(observableList.size() - 2).getErkezes().getText(),
                 Integer.parseInt(observableList.get(observableList.size() - 2).getTavolsag().getText()),
-                observableList.get(observableList.size() - 2).getUgyfel().getValue().toString(),
-                boolToInt(observableList.get(observableList.size() - 2).getMagan().isSelected()),
-                boolToInt(observableList.get(observableList.size() - 2).getVissza().isSelected()),
-                boolToInt(observableList.get(observableList.size() - 2).getTelephelyrol().isSelected()));
-
-
-        // db.addRoute("2","4","5",4,"3",1,0,1);
-
+                observableList.get(observableList.size() - 2).getUgyfel().getEditor().getText(),
+                observableList.get(observableList.size() - 2).getMagan().isSelected(),
+                observableList.get(observableList.size() - 2).getVissza().isSelected(),
+                observableList.get(observableList.size() - 2).getTelephelyrol().isSelected());
     }
-
-
-    public int boolToInt(Boolean value){
-        int convertedValue;
-        if(value)
-            convertedValue=1;
-        else
-            convertedValue=0;
-        return convertedValue;
-    }
-
 
     LocalDate date = LocalDate.now();
     TableColumn datCol;
@@ -172,8 +156,8 @@ public class ViewController implements Initializable {
 
         setTableData();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));
-        observableList.add(new Route());
-        db.getRoutes("2020-06-01", "2020-06-07");
+       // observableList.add(new Route());
+        //db.getRoutes("2020-06-01", "2020-06-07");
 
 
     }

@@ -1,4 +1,4 @@
-package utnyilvantarto;
+package utnyilvantartojava;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -105,19 +105,19 @@ public class DbModel {
     }
 
     // hozzáad egy új utat a routes táblához
-    public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, int magan, int odaVissza, int telephelyrol) {
+    public void addRoute(LocalDate datum, String indulas, String erkezes, int tavolsag, String ugyfel, Boolean magan, Boolean odaVissza, Boolean telephelyrol) {
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?)";
         try {
             prep = conn.prepareStatement(sqlQuery);
             prep.setString(1,null);
-            prep.setString(2, datum);
+            prep.setString(2, datum.toString());
             prep.setString(3, indulas);
             prep.setString(4, erkezes);
             prep.setInt(5,tavolsag );
             prep.setString(6, ugyfel);
-            prep.setInt(7, magan);
-            prep.setInt(8, odaVissza);
-            prep.setInt(9, telephelyrol);
+            prep.setInt(7, convertBool(magan));
+            prep.setInt(8, convertBool(odaVissza));
+            prep.setInt(9, convertBool(telephelyrol));
             prep.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -127,7 +127,7 @@ public class DbModel {
 
 
     // hozzáad egy új ügyfelet(gépet) a client táblához
-    public void addClient(String city, String client, String address, String clientnumber, String field, int exist) {
+    public void addClient(String city, String client, String address, String clientnumber, String field, Boolean exist) {
         String sqlQuery = "insert into clients values (?,?,?,?,?,?,?)";
         try {
             prep = conn.prepareStatement(sqlQuery);
@@ -137,7 +137,7 @@ public class DbModel {
             prep.setString(4, address);
             prep.setString(5, clientnumber);
             prep.setString(6, field);
-            prep.setInt(7, exist);
+            prep.setInt(7, convertBool(exist));
             prep.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -205,9 +205,9 @@ public class DbModel {
                 String arrive = rs1.getString("arrive");
                 int distance = rs1.getInt("distance");
                 String client = rs1.getString("client");
-                boolean priv = intToBool(rs1.getInt("private"));
-                boolean backandforth = intToBool(rs1.getInt("backandforth"));
-                boolean sites = intToBool(rs1.getInt("sites"));
+                boolean priv = convertBool(rs1.getInt("private"));
+                boolean backandforth = convertBool(rs1.getInt("backandforth"));
+                boolean sites = convertBool(rs1.getInt("sites"));
 
                 routes.add(new Route(LocalDate.parse(date), depart, arrive, distance, client, priv, backandforth, sites));
                 System.out.println(date);
@@ -276,12 +276,26 @@ public class DbModel {
         return clients;
     }
 
+
+
     public ArrayList availableCity(String startClient) {             // az összes várost ahol
         return null;
     }
 
-    private Boolean intToBool(int value) {
-        return value == 0;
+
+    // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
+    public int convertBool(Boolean value){
+        int convertedValue;
+        if(value)
+            return 1;
+        else
+            return  0;
+    }
+    private Boolean convertBool(int value) {
+        if (value==1)
+            return true;
+        else
+            return false;
     }
 }
 //Lekérdezéseket írni a javításokhoz

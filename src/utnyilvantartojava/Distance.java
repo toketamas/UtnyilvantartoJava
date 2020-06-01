@@ -1,4 +1,4 @@
-package utnyilvantarto;
+package utnyilvantartojava;
 
 public class Distance {
     private String clientid1;
