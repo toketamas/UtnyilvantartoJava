@@ -107,18 +107,19 @@ public class ViewController implements Initializable {
         datCol.setCellValueFactory(new PropertyValueFactory<Route, LocalDate>("datum"));
 
         checkMagan = new TableColumn("Magán");
-        checkMagan.setPrefWidth(50);
+        checkMagan.setPrefWidth(60);
+        checkMagan.styleProperty();
         checkMagan.setResizable(false);
 
         checkMagan.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("magan"));
 
         checkVissza = new TableColumn("Vissza");
-        checkVissza.setPrefWidth(50);
+        checkVissza.setPrefWidth(60);
         checkVissza.setResizable(false);
         checkVissza.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("vissza"));
 
-        checkTeleph = new TableColumn("Telephelyről");
-        checkTeleph.setPrefWidth(50);
+        checkTeleph = new TableColumn( "Telephelyről");
+        checkTeleph.setPrefWidth(80);
         checkTeleph.setResizable(false);
         checkTeleph.setCellValueFactory(new PropertyValueFactory<Route,Boolean>("telephelyrol"));
 
