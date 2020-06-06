@@ -2,7 +2,7 @@
   <library name="controlsfx-8.40.16-javadoc">
     <CLASSES />
     <JAVADOC>
-      <root url="jar://C:/Program Files/Java/controlsfx-8.40.16-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/Programok/Ex_lib/controlsfx-8.40.16-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES />
   </library>

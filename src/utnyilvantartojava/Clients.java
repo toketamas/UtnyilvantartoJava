@@ -1,5 +1,5 @@
 package utnyilvantartojava;
-
+//Ez egy helyszínt reprezentál(egy gépet a clientnumber lesz a gépszám ez lesz elsődleges kulcs )
 public class Clients {
     private String city;
     private String client;
