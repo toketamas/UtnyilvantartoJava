@@ -7,8 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.web.WebView;
 
 import java.beans.EventHandler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -31,6 +35,8 @@ public class ViewController implements Initializable {
     Button btnSetOk;
     @FXML
     Button btnSet;
+    @FXML
+    Button btnSel;
 
     //textfildek
     @FXML
@@ -49,11 +55,15 @@ public class ViewController implements Initializable {
     TextField textZaro;
     @FXML
     TextField txfFogyaszt;
+    @FXML
+    WebView WV;
 
     DbModel db = new DbModel();
 
 
     private EventHandler checkBoxEventHandler;
+    URL url1;
+    String inputLine;
 
     @FXML
     private void btnClick(ActionEvent event) {
@@ -63,12 +73,12 @@ public class ViewController implements Initializable {
             observableList.get(observableList.size() - 2).setErkezes("Magán");
             observableList.get(observableList.size() - 2).setUgyfel("Magán");
             observableList.get(observableList.size() - 2).setVissza(false);
-            observableList.get(observableList.size()-2).setTelephelyrol(false);
+            observableList.get(observableList.size() - 2).setTelephelyrol(false);
         }
 
         System.out.print(observableList.get(0).getDatum() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getIndulas()+ " ");
-        System.out.print(observableList.get(observableList.size() - 2).getErkezes()+ " ");
+        System.out.print(observableList.get(observableList.size() - 2).getIndulas() + " ");
+        System.out.print(observableList.get(observableList.size() - 2).getErkezes() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getTavolsag() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getUgyfel() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getMagan() + " ");
@@ -85,6 +95,35 @@ public class ViewController implements Initializable {
                 observableList.get(observableList.size() - 2).getVissza().isSelected(),
                 observableList.get(observableList.size() - 2).getTelephelyrol().isSelected());
     }
+
+    @FXML
+    private void btnSelClick(ActionEvent event) throws IOException {
+
+
+        url1 = new URL(WV.getEngine().getLocation());
+        System.out.println(url1);
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(url1.openStream()));
+
+
+        while ((inputLine = in.readLine()) != null)
+            //inputLine = in.readLine();
+
+            //inputLine = inputLine.substring(0, inputLine.indexOf('<'));
+            in.close();
+
+
+        /*WV.getEngine().load(inputLine);
+
+        String inputLine2;
+       BufferedReader in2 = new BufferedReader(
+                new InputStreamReader(url1.openStream()));
+        while ((inputLine2 = in2.readLine()) != null)
+
+            System.out.println(inputLine2);
+        in.close();*/
+    }
+
 
     LocalDate date = LocalDate.now();
     TableColumn datCol;
@@ -118,10 +157,10 @@ public class ViewController implements Initializable {
         checkVissza.setResizable(false);
         checkVissza.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("vissza"));
 
-        checkTeleph = new TableColumn( "Telephelyről");
+        checkTeleph = new TableColumn("Telephelyről");
         checkTeleph.setPrefWidth(80);
         checkTeleph.setResizable(false);
-        checkTeleph.setCellValueFactory(new PropertyValueFactory<Route,Boolean>("telephelyrol"));
+        checkTeleph.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("telephelyrol"));
 
         indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
         indCol.setPrefWidth(150);        //oszlop min szélesség beállítása 100 pixelre
@@ -145,9 +184,10 @@ public class ViewController implements Initializable {
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, String>("ugyfel"));
 
 
-        table.getColumns().addAll(checkMagan,datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph,  checkVissza);
+        table.getColumns().addAll(checkMagan, datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza);
 
         table.setItems(observableList);
+
 
     }
 
@@ -155,9 +195,13 @@ public class ViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("elindult");
 
+
+        WV.getEngine().load("https://www.google.hu/maps/dir///@47.200571,18.4805116,14z");
+        //String a = WV.getInputMethodRequests().getSelectedText();
+        //System.out.println(a);
         setTableData();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));
-       // observableList.add(new Route());
+        // observableList.add(new Route());
         //db.getRoutes("2020-06-01", "2020-06-07");
 
 
