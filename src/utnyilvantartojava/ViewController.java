@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -63,7 +64,7 @@ public class ViewController implements Initializable {
 
     private EventHandler checkBoxEventHandler;
     URL url1;
-    String inputLine;
+   // String inputLine;
 
     @FXML
     private void btnClick(ActionEvent event) {
@@ -97,17 +98,20 @@ public class ViewController implements Initializable {
     }
 
     @FXML
-    private void btnSelClick(ActionEvent event) throws IOException {
-
+    private void btnSelClick(ActionEvent event) throws Exception {
 
         url1 = new URL(WV.getEngine().getLocation());
+        System.out.println(url1.toString());
+        String content = getText(url1.toString());
+        System.out.println(content);
+     /*
         System.out.println(url1);
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(url1.openStream()));
 
 
         while ((inputLine = in.readLine()) != null)
-            //inputLine = in.readLine();
+            System.out.println(inputLine = in.readLine());
 
             //inputLine = inputLine.substring(0, inputLine.indexOf('<'));
             in.close();
@@ -182,10 +186,7 @@ public class ViewController implements Initializable {
         ugyfCol.setPrefWidth(120);
         tavCol.setResizable(false);
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, String>("ugyfel"));
-
-
         table.getColumns().addAll(checkMagan, datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza);
-
         table.setItems(observableList);
 
 
@@ -196,7 +197,7 @@ public class ViewController implements Initializable {
         System.out.println("elindult");
 
 
-        WV.getEngine().load("https://www.google.hu/maps/dir///@47.200571,18.4805116,14z");
+        WV.getEngine().load("https://www.google.hu/maps");
         //String a = WV.getInputMethodRequests().getSelectedText();
         //System.out.println(a);
         setTableData();
@@ -205,5 +206,24 @@ public class ViewController implements Initializable {
         //db.getRoutes("2020-06-01", "2020-06-07");
 
 
+    }
+    public static String getText(String url) throws Exception {
+        URL website = new URL(url);
+        URLConnection connection = website.openConnection();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        connection.getInputStream()));
+
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null)
+            response.append(inputLine+"\n");
+
+        //System.out.println(inputLine);
+
+        in.close();
+
+        return response.toString();
     }
 }

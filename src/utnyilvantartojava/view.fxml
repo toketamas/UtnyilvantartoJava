@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.web.WebView?>
-<TabPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="800" maxWidth="1378.0" minHeight="800" minWidth="1378"
-         prefHeight="800" prefWidth="1378.0" tabClosingPolicy="UNAVAILABLE"
-         xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="utnyilvantartojava.ViewController">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<TabPane maxHeight="1000.0" maxWidth="1200.0" minHeight="424.0" minWidth="1200.0" prefHeight="782.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
-                <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                            prefHeight="771.0" prefWidth="1466.0">
+                <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0">
                     <children>
-                        <TableView id="table" fx:id="table" editable="true" layoutX="491.0" layoutY="-4.0"
-                                   maxHeight="774.0" maxWidth="1094.0" minHeight="-Infinity" minWidth="-Infinity"
-                                   prefHeight="774.0" prefWidth="886.0" tableMenuButtonVisible="true">
+                        <TableView id="table" fx:id="table" editable="true" layoutX="140.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="1050.0" tableMenuButtonVisible="true">
 
                             <placeholder>
-                                <Label text="Nincs Adat"/>
+                                <Label text="Nincs Adat" />
                             </placeholder>
                             <columns>
 
                             </columns>
                         </TableView>
-                        <Button id="btnUjSor" fx:id="btnBev" layoutX="22.0" layoutY="46.0" mnemonicParsing="false"
-                                onAction="#btnClick" text="Bevitel"/>
-                        <Button id="btnSel" fx:id="btnSel" layoutX="23.0" layoutY="112.0" mnemonicParsing="false"
-                                text="Select" onAction="#btnSelClick"/>
-                        <WebView id="WV" fx:id="WV" layoutY="154.0" prefHeight="520.0" prefWidth="493.0"/>
+                        <Button id="btnUjSor" fx:id="btnBev" layoutX="22.0" layoutY="46.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel" />
+                        <Button id="btnSel" fx:id="btnSel" layoutX="23.0" layoutY="112.0" mnemonicParsing="false" onAction="#btnSelClick" text="Select" />
+                        <WebView id="WV" fx:id="WV" layoutX="10" layoutY="370.0" maxHeight="500" maxWidth="1180" minHeight="500" minWidth="1180" prefHeight="480" prefWidth="1180" />
                     </children></AnchorPane>
       </content>
     </Tab>
