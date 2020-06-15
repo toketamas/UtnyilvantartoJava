@@ -1,14 +1,11 @@
 package utnyilvantartojava;
 
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
+import javafx.beans.property.*;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -18,127 +15,130 @@ public class Route {
 
 // private LocalDate datum;
 
-    private final DatePicker datum;
-    private final TextField indulas;
-    private final TextField erkezes;
-    private final TextField tavolsag;
-    private final ComboBox ugyfel;
-    private final CheckBox magan;
-    private final CheckBox vissza;
-    private final CheckBox telephelyrol;
+    private final StringProperty datum;
+    private final StringProperty indulas;
+    private final StringProperty erkezes;
+    private final IntegerProperty tavolsag;
+    private final StringProperty ugyfel;
+    private final BooleanProperty magan;
+    private final BooleanProperty vissza;
+    private final BooleanProperty telephelyrol;
 
+    public Route(String datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza, Boolean telephelyrol) {
+        this.datum = new SimpleStringProperty(datum);
+        this.indulas = new SimpleStringProperty(indulas);
+        this.erkezes = new SimpleStringProperty(erkezes);
+        this.tavolsag = new SimpleIntegerProperty(tavolsag);
+        this.ugyfel = new SimpleStringProperty(ugyfel);
+        this.magan = new SimpleBooleanProperty(magan);
+        this.vissza = new SimpleBooleanProperty(vissza);
+        this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
+    }
+    public Route() {
+        this.datum = new SimpleStringProperty("");
+        this.indulas = new SimpleStringProperty("");
+        this.erkezes = new SimpleStringProperty("");
+        this.tavolsag = new SimpleIntegerProperty();
+        this.ugyfel = new SimpleStringProperty("");
+        this.magan = new SimpleBooleanProperty();
+        this.vissza = new SimpleBooleanProperty();
+        this.telephelyrol = new SimpleBooleanProperty();
+    }
 
-    public DatePicker getDatum() {
+    public String getDatum() {
+        return datum.get();
+    }
+
+    public StringProperty datumProperty() {
         return datum;
     }
 
-    public void setDatum(LocalDate dat) {
-        this.datum.setValue(dat);
+    public void setDatum(String datum) {
+        this.datum.set(datum);
     }
 
-    public TextField getIndulas() {
+    public String getIndulas() {
+        return indulas.get();
+    }
+
+    public StringProperty indulasProperty() {
         return indulas;
     }
 
     public void setIndulas(String indulas) {
-        this.indulas.setText(indulas);
+        this.indulas.set(indulas);
     }
 
-    public TextField getErkezes() {
+    public String getErkezes() {
+        return erkezes.get();
+    }
+
+    public StringProperty erkezesProperty() {
         return erkezes;
     }
 
     public void setErkezes(String erkezes) {
-        this.erkezes.setText(erkezes);
+        this.erkezes.set(erkezes);
     }
 
-    public TextField getTavolsag() {
+    public int getTavolsag() {
+        return tavolsag.get();
+    }
+
+    public IntegerProperty tavolsagProperty() {
         return tavolsag;
     }
 
-    public void setTavolsag(TextField tavolsag) {
-        this.tavolsag.setText(tavolsag.toString());
+    public void setTavolsag(int tavolsag) {
+        this.tavolsag.set(tavolsag);
     }
 
-    public ComboBox getUgyfel() {
+    public String getUgyfel() {
+        return ugyfel.get();
+    }
+
+    public StringProperty ugyfelProperty() {
         return ugyfel;
     }
 
     public void setUgyfel(String ugyfel) {
-        this.ugyfel.setValue(ugyfel);
+        this.ugyfel.set(ugyfel);
     }
 
+    public boolean isMagan() {
+        return magan.get();
+    }
 
-    public CheckBox getMagan() {
+    public BooleanProperty maganProperty() {
         return magan;
     }
 
-    public void setMagan(Boolean magan) {
-        this.magan.setSelected(magan);
+    public void setMagan(boolean magan) {
+        this.magan.set(magan);
     }
 
-    public CheckBox getTelephelyrol() {
-        return telephelyrol;
+    public boolean isVissza() {
+        return vissza.get();
     }
 
-    public void setTelephelyrol(Boolean magan) {
-        this.telephelyrol.setSelected(magan);
-    }
-
-    public CheckBox getVissza() {
+    public BooleanProperty visszaProperty() {
         return vissza;
     }
 
-    public void setVissza(Boolean vissza) {
-        this.vissza.setSelected(vissza);
+    public void setVissza(boolean vissza) {
+        this.vissza.set(vissza);
     }
 
-
-    public Route(LocalDate datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza, Boolean telephelyrol) {
-        this.datum = new DatePicker();
-        this.datum.setValue(datum);
-
-        this.indulas = new TextField();
-        this.indulas.setText(indulas);
-        fillField(this.indulas, "telepulesek.dat");
-
-        this.erkezes = new TextField();
-        this.erkezes.setText(erkezes);
-        fillField(this.erkezes, "telepulesek.dat");
-
-        this.tavolsag = new TextField();
-        this.tavolsag.setText(tavolsag.toString());
-
-        this.ugyfel = new ComboBox();
-        this.ugyfel.setValue(ugyfel);
-        this.ugyfel.getItems().addAll(fillBox("ugyfelek.dat"));
-
-        this.magan = new CheckBox();
-        this.magan.setSelected(magan);
-        if (this.magan.isSelected()) {
-            this.erkezes.setText("Magán");
-        }
-
-        this.vissza = new CheckBox();
-        this.vissza.setSelected(vissza);
-
-        this.telephelyrol=new CheckBox();
-        this.telephelyrol.setSelected(telephelyrol);
-
+    public boolean isTelephelyrol() {
+        return telephelyrol.get();
     }
 
-    public Route() {
-        this.datum = new DatePicker();
-        this.indulas = new TextField("");
-        fillField(this.indulas, "telepulesek.dat");
-        this.erkezes = new TextField("");
-        fillField(this.erkezes, "telepulesek.dat");
-        this.tavolsag = new TextField();
-        this.ugyfel = new ComboBox();
-        this.ugyfel.getItems().addAll(fillBox("ugyfelek.dat"));
-        this.magan = new CheckBox();
-        this.vissza = new CheckBox();
-        this.telephelyrol=new CheckBox();
+    public BooleanProperty telephelyrolProperty() {
+        return telephelyrol;
+    }
+
+    public void setTelephelyrol(boolean telephelyrol) {
+        this.telephelyrol.set(telephelyrol);
     }
 
     private void fillField(TextField text, String fileName) {

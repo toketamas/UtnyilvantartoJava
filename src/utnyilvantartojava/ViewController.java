@@ -1,5 +1,7 @@
 package utnyilvantartojava;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,25 +11,27 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebView;
 
-import java.beans.EventHandler;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class ViewController implements Initializable {
 
 
-    //Tábla
+
     @FXML
-    TableView table;
+    TabPane tabPane;
     @FXML
     Tab tabNyilv;
     @FXML
     Tab tabBeallit;
+    //Tábla
+    @FXML
+    TableView table;
 
     // gombok
     @FXML
@@ -39,7 +43,34 @@ public class ViewController implements Initializable {
     @FXML
     Button btnSel;
 
+    // Checkboxok
+    @FXML
+    CheckBox chkBack;
+    @FXML
+    CheckBox chkSites;
+    @FXML
+    CheckBox chkPrivate;
+
+    // Labelek
+    @FXML
+    Label lblName;
+    @FXML
+    Label lblKm;
+    @FXML
+    Label lblSites;
+
+
     //textfildek
+    // Utnyilvántartó tab
+    @FXML
+    TextField txtDepart;
+    @FXML
+    TextField txtArrive;
+    @FXML
+    TextField txtDistance;
+    @FXML
+    TextField txtClient;
+    // Beállítás tab
     @FXML
     TextField txfNev;
     @FXML
@@ -56,20 +87,37 @@ public class ViewController implements Initializable {
     TextField textZaro;
     @FXML
     TextField txfFogyaszt;
+
+    @FXML
+    DatePicker datePicker;
+
     @FXML
     WebView WV;
 
     DbModel db = new DbModel();
-
-
-    private EventHandler checkBoxEventHandler;
     URL url1;
-   // String inputLine;
+    LocalDate date = LocalDate.now();
+    TableColumn datCol;
+    TableColumn checkMagan;
+    TableColumn checkVissza;
+    TableColumn checkTeleph;
+    TableColumn indCol;
+    TableColumn erkCol;
+    TableColumn tavCol;
+    TableColumn ugyfCol;
+    public ObservableList<Route> observableList = FXCollections.observableArrayList();
+    SingleSelectionModel<Tab> selectionModel;
+    ArrayList<String> settings = new ArrayList<>(); //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
+    //
+
+    // String inputLine;
 
     @FXML
-    private void btnClick(ActionEvent event) {
-        observableList.add(new Route());
-        if (observableList.get(observableList.size() - 2).getMagan().isSelected()) {
+    private void btnBevitelClick(ActionEvent event) {
+
+
+        //observableList.add(new Route());
+       /* if (observableList.get(observableList.size() - 2).isMagan()) {
             observableList.get(observableList.size() - 2).setIndulas("Magán");
             observableList.get(observableList.size() - 2).setErkezes("Magán");
             observableList.get(observableList.size() - 2).setUgyfel("Magán");
@@ -82,27 +130,29 @@ public class ViewController implements Initializable {
         System.out.print(observableList.get(observableList.size() - 2).getErkezes() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getTavolsag() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getUgyfel() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getMagan() + " ");
-        System.out.print(observableList.get(observableList.size() - 2).getVissza() + " ");
-        System.out.println(observableList.get(observableList.size() - 2).getTelephelyrol());
+        System.out.print(observableList.get(observableList.size() - 2).isMagan() + " ");
+        System.out.print(observableList.get(observableList.size() - 2).isVissza() + " ");
+        System.out.println(observableList.get(observableList.size() - 2).isTelephelyrol());
 
         db.addRoute(
-                observableList.get(observableList.size() - 2).getDatum().getValue(),
-                observableList.get(observableList.size() - 2).getIndulas().getText(),
-                observableList.get(observableList.size() - 2).getErkezes().getText(),
-                Integer.parseInt(observableList.get(observableList.size() - 2).getTavolsag().getText()),
-                observableList.get(observableList.size() - 2).getUgyfel().getEditor().getText(),
-                observableList.get(observableList.size() - 2).getMagan().isSelected(),
-                observableList.get(observableList.size() - 2).getVissza().isSelected(),
-                observableList.get(observableList.size() - 2).getTelephelyrol().isSelected());
+                observableList.get(observableList.size() - 2).getDatum(),
+                observableList.get(observableList.size() - 2).getIndulas(),
+                observableList.get(observableList.size() - 2).getErkezes(),
+                observableList.get(observableList.size() - 2).getTavolsag(),
+                observableList.get(observableList.size() - 2).getUgyfel(),
+                observableList.get(observableList.size() - 2).isMagan(),
+                observableList.get(observableList.size() - 2).isVissza(),
+                observableList.get(observableList.size() - 2).isTelephelyrol()
+        );*/
     }
+
 
     @FXML
     private void btnSelClick(ActionEvent event) throws Exception {
 
         url1 = new URL(WV.getEngine().getLocation());
         System.out.println(url1.toString());
-        String content = getText(url1.toString());
+        String content = getURL(url1.toString());
         System.out.println(content);
      /*
         System.out.println(url1);
@@ -128,24 +178,60 @@ public class ViewController implements Initializable {
         in.close();*/
     }
 
+    @FXML
+    private void btnSetClick(ActionEvent event) {
+        settings.clear();
+        settings.add(txfNev.getText());
+        settings.add(txfTelep.getText());
+        settings.add(txfAuto.getText());
+        settings.add(txfRendsz.getText());
+        settings.add(txfLoket.getText());
+        settings.add(txfFogyaszt.getText());
+        settings.add(txfElozo.getText());
+        saveFile("settings.cfg",settings);
+    }
 
-    LocalDate date = LocalDate.now();
-    TableColumn datCol;
-    TableColumn checkMagan;
-    TableColumn checkVissza;
-    TableColumn checkTeleph;
-    TableColumn indCol;
-    TableColumn erkCol;
-    TableColumn tavCol;
-    TableColumn ugyfCol;
+    @FXML
+    private void setBtnSetOkClick(ActionEvent event){
+        selectionModel = tabPane.getSelectionModel();
+    selectionModel.select(0);
+    }
 
-    public ObservableList<Route> observableList = FXCollections.observableArrayList();
 
-    //
+
+
+
+    //Itt Indul
+    public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("elindult");
+        WV.getEngine().load("https://www.google.hu/maps");                   //betölti a WebViev-ba a térképet
+        setTableData();                                                          //beállítja a táblát
+        checkConfigFile();                                                       //ellenőrzi a settings.cfg meglétét
+        loadFile("settings.cfg");
+        observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
+        //setLabel();
+
+    }
+
+
+    public static String getURL(String url) throws Exception {             // URL beolvasása
+        URL website = new URL(url);
+        URLConnection connection = website.openConnection();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+        while ((inputLine = in.readLine()) != null)
+            response.append(inputLine + "\n");
+        in.close();
+        return response.toString();
+    }
+
     public void setTableData() {
 
         datCol = new TableColumn("Dátum");
-        datCol.setPrefWidth(150);
+        datCol.setPrefWidth(100);
         datCol.setResizable(false);
         datCol.setCellValueFactory(new PropertyValueFactory<Route, LocalDate>("datum"));
 
@@ -156,74 +242,92 @@ public class ViewController implements Initializable {
 
         checkMagan.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("magan"));
 
-        checkVissza = new TableColumn("Vissza");
+        checkVissza = new TableColumn("Oda-V.");
         checkVissza.setPrefWidth(60);
         checkVissza.setResizable(false);
         checkVissza.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("vissza"));
 
-        checkTeleph = new TableColumn("Telephelyről");
-        checkTeleph.setPrefWidth(80);
+        checkTeleph = new TableColumn("Teleph.");
+        checkTeleph.setPrefWidth(60);
         checkTeleph.setResizable(false);
         checkTeleph.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("telephelyrol"));
 
         indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
-        indCol.setPrefWidth(150);        //oszlop min szélesség beállítása 100 pixelre
+        indCol.setPrefWidth(200);        //oszlop min szélesség beállítása 100 pixelre
         indCol.setResizable(false);
         indCol.setEditable(true);
-        indCol.setCellValueFactory(new PropertyValueFactory<Route, String>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
+        indCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
 
         erkCol = new TableColumn("Érkezés");
-        erkCol.setPrefWidth(150);
+        erkCol.setPrefWidth(200);
         erkCol.setResizable(false);
-        erkCol.setCellValueFactory(new PropertyValueFactory<Route, String>("erkezes"));
+        erkCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("erkezes"));
 
         tavCol = new TableColumn("Távolság");
-        tavCol.setPrefWidth(100);
+        tavCol.setPrefWidth(60);
         tavCol.setResizable(false);
-        tavCol.setCellValueFactory(new PropertyValueFactory<Route, Integer>("tavolsag"));
+        tavCol.setCellValueFactory(new PropertyValueFactory<Route, IntegerProperty>("tavolsag"));
 
         ugyfCol = new TableColumn("Ügyfél");
-        ugyfCol.setPrefWidth(120);
+        ugyfCol.setPrefWidth(60);
         tavCol.setResizable(false);
-        ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, String>("ugyfel"));
+        ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("ugyfel"));
         table.getColumns().addAll(checkMagan, datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza);
         table.setItems(observableList);
-
-
     }
 
-    //Itt Indul
-    public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("elindult");
+    public static void saveFile(String filename, ArrayList<String> list)  {
 
 
-        WV.getEngine().load("https://www.google.hu/maps");
-        //String a = WV.getInputMethodRequests().getSelectedText();
-        //System.out.println(a);
-        setTableData();
-        observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));
-        // observableList.add(new Route());
-        //db.getRoutes("2020-06-01", "2020-06-07");
-
-
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(filename);
+            writer.println(list.size());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        writer.print("");
+        for (int i = 0; i < list.size(); i++)
+            writer.println(list.get(i));
+        writer.flush();
+        writer.close();
     }
-    public static String getText(String url) throws Exception {
-        URL website = new URL(url);
-        URLConnection connection = website.openConnection();
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        connection.getInputStream()));
 
-        StringBuilder response = new StringBuilder();
-        String inputLine;
 
-        while ((inputLine = in.readLine()) != null)
-            response.append(inputLine+"\n");
+    public static ArrayList loadFile(String filename) {
 
-        //System.out.println(inputLine);
+        ArrayList<String> list = new ArrayList<>();
+        int rowNumber;
+        File file = new File(filename);
+        try {
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()){
+               list.add(sc.nextLine());
+            }
+            sc.close();
+            System.out.println(list.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        in.close();
+        return list;
+    }
 
-        return response.toString();
+    public void checkConfigFile(){
+        File file = new File("settings.cfg");
+        if (file.exists() ){
+            settings = loadFile("settings.cfg");
+            System.out.println(settings.toString());
+        } else {
+            selectionModel = tabPane.getSelectionModel();
+            selectionModel.select(1);
+        }
+    }
+
+    public void setLabel(){
+        lblName.setText(settings.get(0));
+        lblSites.setText(settings.get(1));
+        lblKm.setText(settings.get(6));
     }
 }
+

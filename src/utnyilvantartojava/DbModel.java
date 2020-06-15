@@ -62,6 +62,24 @@ public class DbModel {
         }
 
         try {
+            rs1 = dbmeta.getTables(null, "APP", "SETTINGS", null);
+            if (!rs1.next()) {
+                createStatement.execute("create table settings(" +
+                        "id integer primary key," +
+                        "nev text," +
+                        "telephely text," +
+                        "autoTipusa text," +
+                        "rendszam text," +
+                        "loketterfogat integer," +
+                        "fogyasztas integer," +
+                        "elozoZaroKm integer);");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba!");
+            System.out.println("" + ex);
+        }
+
+        try {
             rs1 = dbmeta.getTables(null, "APP", "CLIENTS", null);
             if (!rs1.next()) {
                 createStatement.execute("create table clients(" +
@@ -104,8 +122,37 @@ public class DbModel {
         }
     }
 
+   public void delSettings(){
+       String sqlQuery="delete from settings where id ='1'";
+       try {
+           createStatement.execute(sqlQuery);
+       } catch (SQLException throwables) {
+           System.out.println("Hiba az adatok törlésekor"+throwables);;
+       }
+   }
+
+
+    public void addSetting(int id,String nev,String telephely,String autoTip,String rendsz,int lokett, int fogy, int zaroKm) {
+        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?)";
+        try {
+            prep = conn.prepareStatement(sqlQuery);
+            prep.setInt(1,id);
+            prep.setString(2, nev);
+            prep.setString(3, telephely );
+            prep.setString(4, autoTip);
+            prep.setString(5, rendsz);
+            prep.setInt(6, lokett);
+            prep.setInt(7, fogy);
+            prep.setInt(8, zaroKm);
+            prep.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("" + ex);
+        }
+    }
+
     // hozzáad egy új utat a routes táblához
-    public void addRoute(LocalDate datum, String indulas, String erkezes, int tavolsag, String ugyfel, Boolean magan, Boolean odaVissza, Boolean telephelyrol) {
+    public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, Boolean magan, Boolean odaVissza, Boolean telephelyrol) {
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?)";
         try {
             prep = conn.prepareStatement(sqlQuery);
@@ -209,7 +256,7 @@ public class DbModel {
                 boolean backandforth = convertBool(rs1.getInt("backandforth"));
                 boolean sites = convertBool(rs1.getInt("sites"));
 
-                routes.add(new Route(LocalDate.parse(date), depart, arrive, distance, client, priv, backandforth, sites));
+                routes.add(new Route(date, depart, arrive, distance, client, priv, backandforth, sites));
                 System.out.println(date);
             }
         } catch (SQLException ex) {
