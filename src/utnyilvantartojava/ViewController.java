@@ -189,12 +189,13 @@ public class ViewController implements Initializable {
         settings.add(txfFogyaszt.getText());
         settings.add(txfElozo.getText());
         saveFile("settings.cfg",settings);
+        setLabel();
     }
 
     @FXML
     private void setBtnSetOkClick(ActionEvent event){
         selectionModel = tabPane.getSelectionModel();
-    selectionModel.select(0);
+        selectionModel.select(0);
     }
 
 
@@ -208,6 +209,8 @@ public class ViewController implements Initializable {
         setTableData();                                                          //beállítja a táblát
         checkConfigFile();                                                       //ellenőrzi a settings.cfg meglétét
         loadFile("settings.cfg");
+        setText();
+        setLabel();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
         //setLabel();
 
@@ -253,7 +256,7 @@ public class ViewController implements Initializable {
         checkTeleph.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("telephelyrol"));
 
         indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
-        indCol.setPrefWidth(200);        //oszlop min szélesség beállítása 100 pixelre
+        indCol.setPrefWidth(200);        //oszlop min szélesség beállítása 200 pixelre
         indCol.setResizable(false);
         indCol.setEditable(true);
         indCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
@@ -272,7 +275,7 @@ public class ViewController implements Initializable {
         ugyfCol.setPrefWidth(60);
         tavCol.setResizable(false);
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("ugyfel"));
-        table.getColumns().addAll(checkMagan, datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza);
+        table.getColumns().addAll( datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza, checkMagan);
         table.setItems(observableList);
     }
 
@@ -282,7 +285,7 @@ public class ViewController implements Initializable {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(filename);
-            writer.println(list.size());
+            //writer.println(list.size());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -322,6 +325,19 @@ public class ViewController implements Initializable {
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
         }
+    }
+
+    public void setText(){
+        //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
+       txfNev.setText(settings.get(0));
+       txfTelep.setText(settings.get(1));
+       txfAuto.setText(settings.get(2));
+       txfRendsz.setText(settings.get(3));
+       txfLoket.setText(settings.get(4));
+       txfElozo.setText(settings.get(6));
+       txfFogyaszt.setText(settings.get(5));
+
+
     }
 
     public void setLabel(){
