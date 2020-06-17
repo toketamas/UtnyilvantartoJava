@@ -93,7 +93,7 @@ public class ViewController implements Initializable {
 
     @FXML
     WebView WV;
-
+    IOExcel ioExcel = new IOExcel();
     DbModel db = new DbModel();
     URL url1;
     LocalDate date = LocalDate.now();
@@ -212,7 +212,7 @@ public class ViewController implements Initializable {
         setText();
         setLabel();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
-        //setLabel();
+        ioExcel.getData("üres.xls","Nyomtat","A3");
 
     }
 
