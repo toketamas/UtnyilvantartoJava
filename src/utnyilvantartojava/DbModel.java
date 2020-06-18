@@ -83,13 +83,16 @@ public class DbModel {
             rs1 = dbmeta.getTables(null, "APP", "CLIENTS", null);
             if (!rs1.next()) {
                 createStatement.execute("create table clients(" +
-                        "id integer primary key autoincrement," +
+                        "client text not null,"+
+                        "clientnumber text primary key not null ," +
+                        "type text,"+
+                        "factorynumber text,"+
+                        "zipcode integer,"+
                         "city text not null," +
-                        "client text," +
                         "address text," +
-                        "clientnumber text," +
-                        "field text," +
-                        "exsist integer);");
+                        "exist integer,"+
+                        "maintenanceperyear integer,"+
+                        "field text);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -174,17 +177,20 @@ public class DbModel {
 
 
     // hozzáad egy új ügyfelet(gépet) a client táblához
-    public void addClient(String city, String client, String address, String clientnumber, String field, Boolean exist) {
-        String sqlQuery = "insert into clients values (?,?,?,?,?,?,?)";
+    public void addClient(String client, String clientnumber,String type, String factorynumber, int zipcode,  String city,  String address, Boolean exist,int maintinanceperyear, String field) {
+        String sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
         try {
             prep = conn.prepareStatement(sqlQuery);
-            prep.setString(1, null);
-            prep.setString(2, city);
-            prep.setString(3, client);
-            prep.setString(4, address);
-            prep.setString(5, clientnumber);
-            prep.setString(6, field);
-            prep.setInt(7, convertBool(exist));
+            prep.setString(1, client);
+            prep.setString(2, clientnumber);
+            prep.setString(3, type);
+            prep.setString(4, factorynumber);
+            prep.setInt(5, zipcode);
+            prep.setString(6, city);
+            prep.setString(7, address);
+            prep.setInt(8, convertBool(exist));
+            prep.setInt(9, maintinanceperyear);
+            prep.setString(10, field);
             prep.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");

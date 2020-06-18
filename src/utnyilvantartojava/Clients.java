@@ -1,28 +1,28 @@
 package utnyilvantartojava;
 //Ez egy helyszínt reprezentál(egy gépet a clientnumber lesz a gépszám ez lesz elsődleges kulcs )
 public class Clients {
-    private String city;
     private String client;
+    private String clientNumber;
+    private String type;
+    private  String factoryNumber;
+    private int zipCode;
+    private String city;
     private String address;
-    private String clientnumber;
+    private boolean exist;
+    private int maintenancePerYear;
     private String field;
-    private int exist;
 
-    public Clients(String city, String client, String address, String clientnumber, String field, int exist) {
-        this.city = city;
+    public Clients(String client, String clientNumber, String type, String factoryNumber, int zipCode, String city, String address, boolean exist, int maintenancePerYear, String field) {
         this.client = client;
-        this.address = address;
-        this.clientnumber = clientnumber;
-        this.field = field;
-        this.exist = exist;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
+        this.clientNumber = clientNumber;
+        this.type = type;
+        this.factoryNumber = factoryNumber;
+        this.zipCode = zipCode;
         this.city = city;
+        this.address = address;
+        this.exist = exist;
+        this.maintenancePerYear = maintenancePerYear;
+        this.field = field;
     }
 
     public String getClient() {
@@ -33,6 +33,46 @@ public class Clients {
         this.client = client;
     }
 
+    public String getClientNumber() {
+        return clientNumber;
+    }
+
+    public void setClientNumber(String clientNumber) {
+        this.clientNumber = clientNumber;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFactoryNumber() {
+        return factoryNumber;
+    }
+
+    public void setFactoryNumber(String factoryNumber) {
+        this.factoryNumber = factoryNumber;
+    }
+
+    public int getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(int zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -41,12 +81,20 @@ public class Clients {
         this.address = address;
     }
 
-    public String getClientnumber() {
-        return clientnumber;
+    public boolean getExist() {
+        return exist;
     }
 
-    public void setClientnumber(String clientnumber) {
-        this.clientnumber = clientnumber;
+    public void setExist(boolean exist) {
+        this.exist = exist;
+    }
+
+    public int getMaintenancePerYear() {
+        return maintenancePerYear;
+    }
+
+    public void setMaintenancePerYear(int maintenancePerYear) {
+        this.maintenancePerYear = maintenancePerYear;
     }
 
     public String getField() {
@@ -55,13 +103,5 @@ public class Clients {
 
     public void setField(String field) {
         this.field = field;
-    }
-
-    public int getExist() {
-        return exist;
-    }
-
-    public void setExist(int exist) {
-        this.exist = exist;
     }
 }

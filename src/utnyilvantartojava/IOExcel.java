@@ -6,14 +6,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+
+import java.io.*;
 
 public class IOExcel {
 
-   public Cell  getData(String fileName, String sheetName,String cellAddr){
+   public Cell getCell(String fileName, String sheetName, String cellAddr){
        FileInputStream inputStream=null;
        Workbook workbook = null;
 
@@ -29,6 +27,24 @@ public class IOExcel {
      CellAddress cellAddress = new CellAddress(cellAddr);
      Row row = sheet.getRow(cellAddress.getRow());
      Cell cell = row.getCell(cellAddress.getColumn());
-     return cell;
+       try {
+           inputStream.close();
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+       return cell;
+   }
+
+   public void setCell(String fileName, String sheetName, String cellAddr){
+       FileOutputStream outputStream=null;
+       Workbook workbook = null;
+   }
+
+   public void getRow(String fileName, String sheetName,int rowNumber, int rowLength){
+           for(int j=65; j< 65+rowLength;j++) {
+               //System.out.println(((char) j)+""+rowNumber);
+               System.out.print(getCell(fileName, sheetName, (char) j + "" + rowNumber)+" ");
+           }
    }
 }
+

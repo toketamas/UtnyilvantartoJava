@@ -38,7 +38,7 @@
     </Tab>
     <Tab id="tabBeallit" fx:id="tabBeallit" text="Beállítás">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane id="btnReadExcel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TextField id="txfNev" fx:id="txfNev" layoutX="162.0" layoutY="34.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" />
                   <TextField id="txfTelep" fx:id="txfTelep" layoutX="162.0" layoutY="77.0" prefHeight="25.6" prefWidth="148.8" promptText="Telephely" />
@@ -58,6 +58,7 @@
                   <Label layoutX="324.0" layoutY="86.0" text="Jelenlegi Záró Km" />
                   <Button id="btnSetOk" layoutX="524.0" layoutY="252.0" mnemonicParsing="false" onAction="#setBtnSetOkClick" prefHeight="25.0" prefWidth="59.0" text="OK" />
                   <Button id="btSet" fx:id="btnSet" layoutX="434.0" layoutY="252.0" mnemonicParsing="false" onAction="#btnSetClick" text="Beállítás" />
+                  <Button id="btnReadExcel" fx:id="btnReadExcel" layoutX="79.0" layoutY="352.0" mnemonicParsing="false" text="Excel beolvasása" onAction="#btnReadExcelClick" />
                </children></AnchorPane>
       </content>
     </Tab>

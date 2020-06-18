@@ -42,6 +42,8 @@ public class ViewController implements Initializable {
     Button btnSet;
     @FXML
     Button btnSel;
+    @FXML
+    Button btnReadExcel;
 
     // Checkboxok
     @FXML
@@ -198,6 +200,11 @@ public class ViewController implements Initializable {
         selectionModel.select(0);
     }
 
+    @FXML
+    private void btnReadExcelClick(ActionEvent event){
+
+    }
+
 
 
 
@@ -212,7 +219,17 @@ public class ViewController implements Initializable {
         setText();
         setLabel();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
-        ioExcel.getData("blank.xlsx","Nyomtat","A3");
+
+
+        for(int i = 1; i<103 ; i++){
+           System.out.println();
+        for(int j=65; j< 77;j++) {
+        //   System.out.println(((char) j)+""+i);
+            System.out.print(ioExcel.getCell("ATM_karb_20200525.xlsx", "ADATOK", (char) j + "" + i));
+
+        }
+      }
+
 
     }
 
