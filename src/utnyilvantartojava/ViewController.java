@@ -212,7 +212,7 @@ public class ViewController implements Initializable {
         setText();
         setLabel();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
-        ioExcel.getData("üres.xls","Nyomtat","A3");
+        ioExcel.getData("blank.xlsx","Nyomtat","A3");
 
     }
 
