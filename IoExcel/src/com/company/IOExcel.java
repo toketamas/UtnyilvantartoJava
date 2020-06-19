@@ -1,9 +1,6 @@
-package utnyilvantartojava;
+package com.company;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -36,6 +33,7 @@ public class IOExcel {
             e.printStackTrace();
         }
 
+
         return cell;
     }
 
@@ -50,5 +48,24 @@ public class IOExcel {
             System.out.print(getCell(fileName, sheetName, (char) j + "" + rowNumber) + " ");
         }
     }
+    public static Object getCellValue(Cell cell) {
+        Object cellValue = null;
+        CellType cellType = cell.getCellType();// CellType.forInt(cell.getCellType());
+        if (cellType == CellType.STRING) {
+            cellValue = cell.getStringCellValue();
+        } else if (cellType == CellType.NUMERIC) {
+            if (DateUtil.isCellDateFormatted(cell)) {
+                cellValue = cell.getDateCellValue();
+            } else {
+                cellValue = cell.getNumericCellValue();
+            }
+        } else if (cellType == CellType.BOOLEAN) {
+            cellValue = cell.getBooleanCellValue();
+        } else if (cellType == CellType.FORMULA) {
+            cellValue = cell.getCellFormula();
+        } else if (cellType == CellType.BLANK) {
+            cellValue = "";
+        }
+        return cellValue;
+    }
 }
-

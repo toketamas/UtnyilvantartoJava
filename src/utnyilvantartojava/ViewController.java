@@ -15,6 +15,7 @@ import javafx.scene.web.WebView;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -92,13 +93,13 @@ public class ViewController implements Initializable {
     @FXML
     TextArea txtExcel;
 
+
     @FXML
     DatePicker datePicker;
 
     @FXML
     WebView WV;
-    IOExcel ioExcel = new IOExcel();
-    DbModel db = new DbModel();
+
     URL url1;
     LocalDate date = LocalDate.now();
     TableColumn datCol;
@@ -112,6 +113,10 @@ public class ViewController implements Initializable {
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
     ArrayList<String> settings = new ArrayList<>(); //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
+
+    public ViewController() {
+
+    }
     //
 
     // String inputLine;
@@ -193,6 +198,8 @@ public class ViewController implements Initializable {
         settings.add(txfFogyaszt.getText());
         settings.add(txfElozo.getText());
         saveFile("settings.cfg", settings);
+
+
         setLabel();
     }
 
@@ -203,8 +210,26 @@ public class ViewController implements Initializable {
     }
 
     @FXML
-    private void btnReadExcelClick(ActionEvent event) {
-        String fileName = "ATM_karb_20200525.xlsx";
+    public  void btnReadExcelClick(ActionEvent event) {
+
+        try
+        {
+            // Just one line and you are done !
+            // We have given a command to start cmd
+            // /K : Carries out command specified by string
+            Runtime.getRuntime().exec( "cmd /c start cmd.exe /K \"java -jar IoExcel.jar\"");
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("Nem nyitható meg az IoExcel.jar ! ");
+            e.printStackTrace();
+        }
+
+
+
+
+        /*String fileName = "ATM_karb_20200525.xlsx";
         String sheetName = "ADATOK";
         int i = 2;
 
@@ -219,21 +244,23 @@ public class ViewController implements Initializable {
            boolean exist = db.convertBool(ioExcel.getCell(fileName,sheetName,"H"+i).getStringCellValue());
            int maintenancePerYear = (int) ioExcel.getCell(fileName, sheetName, "I" + i).getNumericCellValue();
            String field = ioExcel.getCell(fileName, sheetName, "K" + i).getStringCellValue();
-           System.err.println(client+" "+clentNumber+" "+type+" "+factoryNumber+" "+zipCode+" "+city+" "+address+" "+exist+" "+maintenancePerYear+" "+field+"\n");
-           // addText(client+" "+clentNumber+" "+type+" "+factoryNumber+" "+zipCode+" "+city+" "+address+" "+exist+" "+maintenancePerYear+" "+field+"\n");;
-            db.addClient(client,clentNumber,type,factoryNumber,zipCode,city,address,exist,maintenancePerYear,field);
+           String txt=client+" "+clentNumber+" "+type+" "+factoryNumber+" "+zipCode+" "+city+" "+address+" "+exist+" "+maintenancePerYear+" "+field+"\n";
 
+
+           db.addClient(client,clentNumber,type,factoryNumber,zipCode,city,address,exist,maintenancePerYear,field);
+
+            txtExcel.appendText(txt);
 
             i++;
 
-        }
+        }*/
     }
 
 
 
 
 
-
+    //private PrintStream ps;
     //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("elindult");
@@ -243,8 +270,15 @@ public class ViewController implements Initializable {
         loadFile("settings.cfg");
         setText();
         setLabel();
+        IOExcel ioExcel = new IOExcel();
+        DbModel db = new DbModel();
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
-
+        try {
+            db.conn.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        txtExcel.appendText("Az adatok beolvasása akár egy óráig is tarthat!!!!!");
 
 
 
@@ -357,6 +391,7 @@ public class ViewController implements Initializable {
             settings = loadFile("settings.cfg");
             System.out.println(settings.toString());
         } else {
+            saveFile("settings.cfg",null);
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
         }

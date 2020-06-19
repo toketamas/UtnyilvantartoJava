@@ -11,6 +11,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("view.fxml"));
+
+
         primaryStage.setTitle("Útnyilvántartó");
         primaryStage.setScene(new Scene(root, 1190, 900));
         primaryStage.setResizable(false);
@@ -20,6 +22,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
+      launch(args);
     }
 }
