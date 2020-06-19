@@ -334,13 +334,13 @@ public class ViewController implements Initializable {
         checkTeleph.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("telephelyrol"));
 
         indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
-        indCol.setPrefWidth(200);        //oszlop min szélesség beállítása 200 pixelre
+        indCol.setPrefWidth(250);        //oszlop min szélesség beállítása 200 pixelre
         indCol.setResizable(false);
         indCol.setEditable(true);
         indCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
 
         erkCol = new TableColumn("Érkezés");
-        erkCol.setPrefWidth(200);
+        erkCol.setPrefWidth(250);
         erkCol.setResizable(false);
         erkCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("erkezes"));
 
@@ -350,7 +350,7 @@ public class ViewController implements Initializable {
         tavCol.setCellValueFactory(new PropertyValueFactory<Route, IntegerProperty>("tavolsag"));
 
         ugyfCol = new TableColumn("Ügyfél");
-        ugyfCol.setPrefWidth(60);
+        ugyfCol.setPrefWidth(200);
         tavCol.setResizable(false);
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("ugyfel"));
         table.getColumns().addAll(datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza, checkMagan);
@@ -359,6 +359,7 @@ public class ViewController implements Initializable {
 
     public static void saveFile(String filename, ArrayList<String> list) {
         PrintWriter writer = null;
+
         try {
             writer = new PrintWriter(filename);
             //writer.println(list.size());

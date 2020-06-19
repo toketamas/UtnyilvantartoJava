@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="1000.0" maxWidth="1200.0" minHeight="1000" minWidth="1200.0" prefHeight="1000" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="1000.0" maxWidth="1200.0" minHeight="910.0" minWidth="1200.0" prefHeight="910.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
@@ -67,7 +67,7 @@
                         <ToggleGroup fx:id="radio" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="209.0" layoutY="413.0" mnemonicParsing="false" onAction="#radioBtnThCheck" text="Betöltés: TeamHub" toggleGroup="$radio" />
+                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="207.0" layoutY="412.0" mnemonicParsing="false" onAction="#radioBtnThCheck" text="Betöltés: TeamHub" toggleGroup="$radio" />
                </children></AnchorPane>
       </content>
     </Tab>
