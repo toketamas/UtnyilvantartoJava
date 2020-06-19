@@ -350,6 +350,13 @@ public class DbModel {
         else
             return false;
     }
+
+    public Boolean convertBool(String value) {
+        if (value.contentEquals("ok"))
+            return true;
+        else
+            return false;
+    }
 }
 //Lekérdezéseket írni a javításokhoz
 

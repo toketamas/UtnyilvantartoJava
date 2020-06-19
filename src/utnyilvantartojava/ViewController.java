@@ -1,5 +1,6 @@
 package utnyilvantartojava;
 
+import com.sun.xml.internal.ws.util.pipe.DumpTube;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -20,7 +21,6 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class ViewController implements Initializable {
-
 
 
     @FXML
@@ -89,6 +89,8 @@ public class ViewController implements Initializable {
     TextField textZaro;
     @FXML
     TextField txfFogyaszt;
+    @FXML
+    TextArea txtExcel;
 
     @FXML
     DatePicker datePicker;
@@ -190,20 +192,43 @@ public class ViewController implements Initializable {
         settings.add(txfLoket.getText());
         settings.add(txfFogyaszt.getText());
         settings.add(txfElozo.getText());
-        saveFile("settings.cfg",settings);
+        saveFile("settings.cfg", settings);
         setLabel();
     }
 
     @FXML
-    private void setBtnSetOkClick(ActionEvent event){
+    private void setBtnSetOkClick(ActionEvent event) {
         selectionModel = tabPane.getSelectionModel();
         selectionModel.select(0);
     }
 
     @FXML
-    private void btnReadExcelClick(ActionEvent event){
+    private void btnReadExcelClick(ActionEvent event) {
+        String fileName = "ATM_karb_20200525.xlsx";
+        String sheetName = "ADATOK";
+        int i = 2;
 
+        while (ioExcel.getCell(fileName, sheetName, "A" + i) != null || ioExcel.getCell(fileName, sheetName, "A" + i).getStringCellValue() != "") {
+           String client = ioExcel.getCell(fileName, sheetName, "A" + i).getStringCellValue();
+           String clentNumber = ioExcel.getCell(fileName, sheetName, "B" + i).getStringCellValue();
+           String type = ioExcel.getCell(fileName, sheetName, "C" + i).getStringCellValue();
+           String factoryNumber = ioExcel.getCell(fileName, sheetName, "D" + i).getStringCellValue();
+           int zipCode = Integer.parseInt(ioExcel.getCell(fileName, sheetName, "E" + i).getStringCellValue());
+           String city = ioExcel.getCell(fileName, sheetName, "F" + i).getStringCellValue();
+           String address = ioExcel.getCell(fileName, sheetName, "G" + i).getStringCellValue();
+           boolean exist = db.convertBool(ioExcel.getCell(fileName,sheetName,"H"+i).getStringCellValue());
+           int maintenancePerYear = (int) ioExcel.getCell(fileName, sheetName, "I" + i).getNumericCellValue();
+           String field = ioExcel.getCell(fileName, sheetName, "K" + i).getStringCellValue();
+           System.err.println(client+" "+clentNumber+" "+type+" "+factoryNumber+" "+zipCode+" "+city+" "+address+" "+exist+" "+maintenancePerYear+" "+field+"\n");
+           // addText(client+" "+clentNumber+" "+type+" "+factoryNumber+" "+zipCode+" "+city+" "+address+" "+exist+" "+maintenancePerYear+" "+field+"\n");;
+            db.addClient(client,clentNumber,type,factoryNumber,zipCode,city,address,exist,maintenancePerYear,field);
+
+
+            i++;
+
+        }
     }
+
 
 
 
@@ -221,14 +246,7 @@ public class ViewController implements Initializable {
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
 
 
-        for(int i = 1; i<103 ; i++){
-           System.out.println();
-        for(int j=65; j< 77;j++) {
-        //   System.out.println(((char) j)+""+i);
-            System.out.print(ioExcel.getCell("ATM_karb_20200525.xlsx", "ADATOK", (char) j + "" + i));
 
-        }
-      }
 
 
     }
@@ -292,11 +310,11 @@ public class ViewController implements Initializable {
         ugyfCol.setPrefWidth(60);
         tavCol.setResizable(false);
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("ugyfel"));
-        table.getColumns().addAll( datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza, checkMagan);
+        table.getColumns().addAll(datCol, indCol, erkCol, ugyfCol, tavCol, checkTeleph, checkVissza, checkMagan);
         table.setItems(observableList);
     }
 
-    public static void saveFile(String filename, ArrayList<String> list)  {
+    public static void saveFile(String filename, ArrayList<String> list) {
 
 
         PrintWriter writer = null;
@@ -321,8 +339,8 @@ public class ViewController implements Initializable {
         File file = new File(filename);
         try {
             Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()){
-               list.add(sc.nextLine());
+            while (sc.hasNextLine()) {
+                list.add(sc.nextLine());
             }
             sc.close();
             System.out.println(list.toString());
@@ -333,9 +351,9 @@ public class ViewController implements Initializable {
         return list;
     }
 
-    public void checkConfigFile(){
+    public void checkConfigFile() {
         File file = new File("settings.cfg");
-        if (file.exists() ){
+        if (file.exists()) {
             settings = loadFile("settings.cfg");
             System.out.println(settings.toString());
         } else {
@@ -344,23 +362,24 @@ public class ViewController implements Initializable {
         }
     }
 
-    public void setText(){
+    public void setText() {
         //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
-       txfNev.setText(settings.get(0));
-       txfTelep.setText(settings.get(1));
-       txfAuto.setText(settings.get(2));
-       txfRendsz.setText(settings.get(3));
-       txfLoket.setText(settings.get(4));
-       txfElozo.setText(settings.get(6));
-       txfFogyaszt.setText(settings.get(5));
+        txfNev.setText(settings.get(0));
+        txfTelep.setText(settings.get(1));
+        txfAuto.setText(settings.get(2));
+        txfRendsz.setText(settings.get(3));
+        txfLoket.setText(settings.get(4));
+        txfElozo.setText(settings.get(6));
+        txfFogyaszt.setText(settings.get(5));
 
 
     }
 
-    public void setLabel(){
+    public void setLabel() {
         lblName.setText(settings.get(0));
         lblSites.setText(settings.get(1));
         lblKm.setText(settings.get(6));
     }
+
 }
 
