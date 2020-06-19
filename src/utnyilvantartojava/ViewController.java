@@ -1,6 +1,5 @@
 package utnyilvantartojava;
 
-import com.sun.xml.internal.ws.util.pipe.DumpTube;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -91,8 +90,12 @@ public class ViewController implements Initializable {
     @FXML
     TextField txfFogyaszt;
     @FXML
-    TextArea txtExcel;
+    TextField txtFile;
 
+    @FXML
+    RadioButton radioBtnTh;
+    @FXML
+    RadioButton radioBtnFile;
 
     @FXML
     DatePicker datePicker;
@@ -113,13 +116,12 @@ public class ViewController implements Initializable {
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
     ArrayList<String> settings = new ArrayList<>(); //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
+    String remotExcel = loadFile("link.txt").get(0).toString();
+    String localExcel = "ATM_karb_*.xlsx";
+    String excelSource;
 
-    public ViewController() {
 
-    }
-    //
 
-    // String inputLine;
 
     @FXML
     private void btnBevitelClick(ActionEvent event) {
@@ -214,22 +216,18 @@ public class ViewController implements Initializable {
 
         try
         {
-            // Just one line and you are done !
-            // We have given a command to start cmd
-            // /K : Carries out command specified by string
-            Runtime.getRuntime().exec( "cmd /c start cmd.exe /K \"java -jar IoExcel.jar\"");
-
+           Runtime.getRuntime().exec( "cmd /c start cmd.exe /K \"java -jar ExcelToDB.jar "+excelSource+"  ADATOK  2\"");
         }
         catch (Exception e)
         {
-            System.out.println("Nem nyitható meg az IoExcel.jar ! ");
+            System.out.println("Nem érhető el a fájl ! ");
             e.printStackTrace();
         }
 
 
 
 
-        /*String fileName = "ATM_karb_20200525.xlsx";
+        /*
         String sheetName = "ADATOK";
         int i = 2;
 
@@ -255,8 +253,23 @@ public class ViewController implements Initializable {
 
         }*/
     }
+    @FXML
+    private void radioBtnThCheck(ActionEvent event){
+        if(radioBtnTh.isSelected()){
+            txtFile.setText(remotExcel);
+            excelSource= remotExcel;
+
+        }
 
 
+    }
+    @FXML
+    private void radioBtnFileCheck(ActionEvent event){
+        if (radioBtnFile.isSelected()){
+            txtFile.setText(localExcel);
+            excelSource= localExcel;
+        }
+    }
 
 
 
@@ -272,17 +285,13 @@ public class ViewController implements Initializable {
         setLabel();
         IOExcel ioExcel = new IOExcel();
         DbModel db = new DbModel();
+        excelSource=localExcel;
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
         try {
             db.conn.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        txtExcel.appendText("Az adatok beolvasása akár egy óráig is tarthat!!!!!");
-
-
-
-
     }
 
 
@@ -349,8 +358,6 @@ public class ViewController implements Initializable {
     }
 
     public static void saveFile(String filename, ArrayList<String> list) {
-
-
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(filename);
@@ -406,8 +413,6 @@ public class ViewController implements Initializable {
         txfLoket.setText(settings.get(4));
         txfElozo.setText(settings.get(6));
         txfFogyaszt.setText(settings.get(5));
-
-
     }
 
     public void setLabel() {

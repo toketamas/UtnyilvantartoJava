@@ -1,4 +1,4 @@
-package com.company;
+package exceltodb;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
@@ -7,7 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 
 
-public class IOExcel {
+public class ExcelToDB {
 
     public Cell getCell(String fileName, String sheetName, String cellAddr) {
         FileInputStream inputStream = null;

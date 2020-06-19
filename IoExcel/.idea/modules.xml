@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/IoExcel.iml" filepath="$PROJECT_DIR$/IoExcel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExcelToDB.iml" filepath="$PROJECT_DIR$/ExcelToDB.iml" />
     </modules>
   </component>
 </project>
