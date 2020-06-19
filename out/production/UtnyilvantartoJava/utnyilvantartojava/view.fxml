@@ -29,7 +29,7 @@
                   <Label id="lblName" fx:id="lblName" layoutX="66.0" layoutY="14.0" text="Név" />
                   <Label id="lblSites" fx:id="lblSites" layoutX="66.0" layoutY="38.0" text="Telephely" textAlignment="CENTER" />
                   <Label id="lblKm" fx:id="lblKm" layoutX="64.0" layoutY="63.0" text=" Km óra állás" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" />
-                  <CheckBox id="chkSites" fx:id="chkSites" layoutX="19.0" layoutY="236.0" mnemonicParsing="false" text="Indulás a telephelyről" />
+                  <CheckBox id="chkSites" fx:id="chkSites" layoutX="19.0" layoutY="236.0" mnemonicParsing="false" text="Indulás a telephelyről"  />
                   <CheckBox id="chkBack" fx:id="chkBack" layoutX="19.0" layoutY="260.0" mnemonicParsing="false" text="Oda - vissza" />
                   <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="19.0" layoutY="284.0" mnemonicParsing="false" text="Magánhasználat" />
                   <TextField id="txtDistance" fx:id="txtDistance" layoutX="14.0" layoutY="205.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="148.8" promptText="Távolság" />

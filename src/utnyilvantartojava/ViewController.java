@@ -2,6 +2,8 @@ package utnyilvantartojava;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -122,19 +124,22 @@ public class ViewController implements Initializable {
 
 
 
-
     @FXML
     private void btnBevitelClick(ActionEvent event) {
-
-
-        //observableList.add(new Route());
-       /* if (observableList.get(observableList.size() - 2).isMagan()) {
+        DbModel db = new DbModel();
+        if (chkPrivate.isSelected()){
+            observableList.get(observableList.size() - 2).setMagan(true);
             observableList.get(observableList.size() - 2).setIndulas("Magán");
             observableList.get(observableList.size() - 2).setErkezes("Magán");
             observableList.get(observableList.size() - 2).setUgyfel("Magán");
             observableList.get(observableList.size() - 2).setVissza(false);
             observableList.get(observableList.size() - 2).setTelephelyrol(false);
         }
+
+        if (chkSites.isSelected()){
+            txtArrive.setText(settings.get(1));
+        }
+
 
         System.out.print(observableList.get(0).getDatum() + " ");
         System.out.print(observableList.get(observableList.size() - 2).getIndulas() + " ");
@@ -154,7 +159,12 @@ public class ViewController implements Initializable {
                 observableList.get(observableList.size() - 2).isMagan(),
                 observableList.get(observableList.size() - 2).isVissza(),
                 observableList.get(observableList.size() - 2).isTelephelyrol()
-        );*/
+        );
+        try {
+            db.conn.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
 
@@ -165,28 +175,6 @@ public class ViewController implements Initializable {
         System.out.println(url1.toString());
         String content = getURL(url1.toString());
         System.out.println(content);
-     /*
-        System.out.println(url1);
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(url1.openStream()));
-
-
-        while ((inputLine = in.readLine()) != null)
-            System.out.println(inputLine = in.readLine());
-
-            //inputLine = inputLine.substring(0, inputLine.indexOf('<'));
-            in.close();
-
-
-        /*WV.getEngine().load(inputLine);
-
-        String inputLine2;
-       BufferedReader in2 = new BufferedReader(
-                new InputStreamReader(url1.openStream()));
-        while ((inputLine2 = in2.readLine()) != null)
-
-            System.out.println(inputLine2);
-        in.close();*/
     }
 
     @FXML
@@ -200,8 +188,6 @@ public class ViewController implements Initializable {
         settings.add(txfFogyaszt.getText());
         settings.add(txfElozo.getText());
         saveFile("settings.cfg", settings);
-
-
         setLabel();
     }
 
@@ -224,45 +210,15 @@ public class ViewController implements Initializable {
             e.printStackTrace();
         }
 
-
-
-
-        /*
-        String sheetName = "ADATOK";
-        int i = 2;
-
-        while (ioExcel.getCell(fileName, sheetName, "A" + i) != null || ioExcel.getCell(fileName, sheetName, "A" + i).getStringCellValue() != "") {
-           String client = ioExcel.getCell(fileName, sheetName, "A" + i).getStringCellValue();
-           String clentNumber = ioExcel.getCell(fileName, sheetName, "B" + i).getStringCellValue();
-           String type = ioExcel.getCell(fileName, sheetName, "C" + i).getStringCellValue();
-           String factoryNumber = ioExcel.getCell(fileName, sheetName, "D" + i).getStringCellValue();
-           int zipCode = Integer.parseInt(ioExcel.getCell(fileName, sheetName, "E" + i).getStringCellValue());
-           String city = ioExcel.getCell(fileName, sheetName, "F" + i).getStringCellValue();
-           String address = ioExcel.getCell(fileName, sheetName, "G" + i).getStringCellValue();
-           boolean exist = db.convertBool(ioExcel.getCell(fileName,sheetName,"H"+i).getStringCellValue());
-           int maintenancePerYear = (int) ioExcel.getCell(fileName, sheetName, "I" + i).getNumericCellValue();
-           String field = ioExcel.getCell(fileName, sheetName, "K" + i).getStringCellValue();
-           String txt=client+" "+clentNumber+" "+type+" "+factoryNumber+" "+zipCode+" "+city+" "+address+" "+exist+" "+maintenancePerYear+" "+field+"\n";
-
-
-           db.addClient(client,clentNumber,type,factoryNumber,zipCode,city,address,exist,maintenancePerYear,field);
-
-            txtExcel.appendText(txt);
-
-            i++;
-
-        }*/
     }
     @FXML
     private void radioBtnThCheck(ActionEvent event){
         if(radioBtnTh.isSelected()){
             txtFile.setText(remotExcel);
             excelSource= remotExcel;
-
         }
-
-
     }
+
     @FXML
     private void radioBtnFileCheck(ActionEvent event){
         if (radioBtnFile.isSelected()){
@@ -271,9 +227,6 @@ public class ViewController implements Initializable {
         }
     }
 
-
-
-    //private PrintStream ps;
     //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("elindult");
@@ -292,8 +245,13 @@ public class ViewController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        chkSites.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                txtArrive.appendText(settings.get(1));
+            }
+        });
     }
-
 
     public static String getURL(String url) throws Exception {             // URL beolvasása
         URL website = new URL(url);
@@ -310,7 +268,6 @@ public class ViewController implements Initializable {
     }
 
     public void setTableData() {
-
         datCol = new TableColumn("Dátum");
         datCol.setPrefWidth(100);
         datCol.setResizable(false);
@@ -359,10 +316,8 @@ public class ViewController implements Initializable {
 
     public static void saveFile(String filename, ArrayList<String> list) {
         PrintWriter writer = null;
-
         try {
             writer = new PrintWriter(filename);
-            //writer.println(list.size());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -372,7 +327,6 @@ public class ViewController implements Initializable {
         writer.flush();
         writer.close();
     }
-
 
     public static ArrayList loadFile(String filename) {
 
