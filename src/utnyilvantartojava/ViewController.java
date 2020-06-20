@@ -56,10 +56,10 @@ public class ViewController implements Initializable {
     @FXML TextField txtDepart;
     @FXML TextField txtArrive;
     @FXML TextField txtDistance;
-    @FXML TextField txtClient;
         // Beállítás tab
     @FXML TextField txfNev;
     @FXML TextField txfTelep;
+    @FXML TextField txfTelepCim;
     @FXML TextField txfAuto;
     @FXML TextField txfRendsz;
     @FXML TextField txfLoket;
@@ -81,10 +81,17 @@ public class ViewController implements Initializable {
     LocalDate date = LocalDate.now();
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
-    ArrayList<String> settings = new ArrayList<>(); //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
-    String remotExcel = loadFile("link.txt").get(0).toString();
+    ArrayList<String> settings = new ArrayList<>(); //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km.
+    String remoteExcel = loadFile("link.txt").get(0).toString();
     String localExcel = "ATM_karb_*.xlsx";
     String excelSource;
+    String departCity;
+    String departAddress;
+    String arriveCity;
+    String arriveAddress;
+    String client;
+    int distance;
+    LocalDate workDate;
     TableColumn datCol;
     TableColumn checkMagan;
     TableColumn checkVissza;
@@ -158,6 +165,7 @@ public class ViewController implements Initializable {
             settings.clear();
             settings.add(txfNev.getText());
             settings.add(txfTelep.getText());
+            settings.add(txfTelepCim.getText());
             settings.add(txfAuto.getText());
             settings.add(txfRendsz.getText());
             settings.add(txfLoket.getText());
@@ -188,21 +196,19 @@ public class ViewController implements Initializable {
     private void chkCheck(ActionEvent event) {
         if (chkSites.isSelected()) {
             System.out.println(chkSites.getText());
-            txtDepart.setText(settings.get(1));
+            txtDepart.setText("Telephely");
             txtDepart.setDisable(true);
         } else {
             txtDepart.clear();
             txtDepart.setDisable(false);
         }
-
-
     }
 
     @FXML
     private void radioCheck(ActionEvent event) {
         if (radioBtnTh.isSelected()) {
-            txtFile.setText(remotExcel);
-            excelSource = remotExcel;
+            txtFile.setText(remoteExcel);
+            excelSource = remoteExcel;
         }
 
         if (radioBtnFile.isSelected()) {
@@ -210,8 +216,34 @@ public class ViewController implements Initializable {
             excelSource = localExcel;
         }
     }
+    @FXML
+    private void cboxTextChange(ActionEvent event){
+      DbModel db = new DbModel();
+      ArrayList<String> list = null;
+      String targetClient;
+      String startClient;
+        if(cbClient.isManaged()){
+            targetClient=cbClient.getValue().toString();
+            list=db.getClient(targetClient);
+            arriveAddress=list.get(1);
+            arriveCity=list.get(0);
+            txtArrive.clear();
+            System.out.println(arriveCity+" "+arriveAddress);
+            txtArrive.appendText(arriveCity+" "+arriveAddress);
+            if (txtDepart.getText().contentEquals("Telephely")){   //le kell kérni az induló gépszámot aztán megszerezni
+                startClient=settings.get(1)+" "+settings.get(2);        // a cél gépszámot lekérdezni a távot ha nincs meg
+            }else{                                                     //akkor lekérdezni a téképtől beírnia textboxba
+                db.getDistance(db,targetClient)                         // aztán beírni az adatbázisba
 
+            }
 
+        }
+        try {
+            db.conn.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
 
     public static String getURL(String url) throws Exception {             // URL beolvasása
@@ -240,8 +272,10 @@ public class ViewController implements Initializable {
         setLabels();
         cbClient.accessibleTextProperty().setValue("ddd");
         chkSites.setSelected(true);
-        txtDepart.setText(settings.get(1));
+        txtDepart.setText("Telephely");
         txtDepart.setDisable(true);
+        departCity=settings.get(1);
+        departAddress=settings.get(2);
         WV.getEngine().load("https://www.google.hu/maps");                  //betölti a WebViev-ba a térképet
         datePicker.setValue(date);
         excelSource = localExcel;
@@ -349,20 +383,22 @@ public class ViewController implements Initializable {
     }
 
     public void setText() {
-        //0-név,1-telephely,2-auto tip., 3-rendszám,4-lökett., 5-fogyasztás, 6-előző záró km.
+        //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km.
         txfNev.setText(settings.get(0));
         txfTelep.setText(settings.get(1));
-        txfAuto.setText(settings.get(2));
-        txfRendsz.setText(settings.get(3));
-        txfLoket.setText(settings.get(4));
-        txfElozo.setText(settings.get(6));
-        txfFogyaszt.setText(settings.get(5));
+        txfTelepCim.setText(settings.get(2));
+        txfAuto.setText(settings.get(3));
+        txfRendsz.setText(settings.get(4));
+        txfLoket.setText(settings.get(5));
+        txfFogyaszt.setText(settings.get(6));
+        txfElozo.setText(settings.get(7));
+
     }
 
     public void setLabels() {
         lblName.setText("Név: "+settings.get(0));
         lblSites.setText("T.hely: "+settings.get(1));
-        lblKm.setText("Km óra: "+settings.get(6)+" Km");
+        lblKm.setText("Km óra: "+settings.get(7)+" Km");
     }
 
     private void fillField(TextField text, ArrayList list)

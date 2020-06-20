@@ -114,45 +114,6 @@ public class DbModel {
         }
 
     }
-    public void addUser1(String name, String address, int age) {
-
-        try {
-            String sqlQuery = "insert into users values ('" + name + "','" + address + "'," + age + ")";
-            createStatement.execute(sqlQuery);
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
-            System.out.println("" + ex);
-        }
-    }
-
-   public void delSettings(){
-       String sqlQuery="delete from settings where id ='1'";
-       try {
-           createStatement.execute(sqlQuery);
-       } catch (SQLException throwables) {
-           System.out.println("Hiba az adatok törlésekor"+throwables);;
-       }
-   }
-
-
-    public void addSetting(int id,String nev,String telephely,String autoTip,String rendsz,int lokett, int fogy, int zaroKm) {
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?)";
-        try {
-            prep = conn.prepareStatement(sqlQuery);
-            prep.setInt(1,id);
-            prep.setString(2, nev);
-            prep.setString(3, telephely );
-            prep.setString(4, autoTip);
-            prep.setString(5, rendsz);
-            prep.setInt(6, lokett);
-            prep.setInt(7, fogy);
-            prep.setInt(8, zaroKm);
-            prep.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
-            System.out.println("" + ex);
-        }
-    }
 
     // hozzáad egy új utat a routes táblához
     public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, Boolean magan, Boolean odaVissza, Boolean telephelyrol) {
@@ -344,7 +305,24 @@ public class DbModel {
         return clients;
     }
 
-    public ArrayList availableClient(String targetClient) {      //visszaadja  az összes lehetséges célt egy városban
+    public ArrayList getClient(String value) {      //visszaad egy ügyfelet
+        ArrayList<String> list = null;
+        try {
+            String sqlQuery = "select city, address  from clients where clientnumber='"+value+"'";
+            list = new ArrayList<>();
+            rs1 = createStatement.executeQuery(sqlQuery);
+            while (rs1.next()) {
+                list.add(rs1.getString("city"));
+                list.add(rs1.getString("address"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return list;
+    }
+
+    public ArrayList getAvailableClient(String targetClient) {      //visszaadja  az összes lehetséges célt egy városban
         ArrayList<String> clients = null;
         try {
             String sqlQuery = "select clientnumber from clients where city=" + targetClient;
@@ -362,7 +340,7 @@ public class DbModel {
 
 
 
-    public ArrayList availableCity(String startClient) {             // az összes várost ahol
+    public ArrayList getAvailableCity(String startClient) {             // az összes várost ahol
         return null;
     }
 
