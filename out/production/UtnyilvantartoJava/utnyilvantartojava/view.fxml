@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+<?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="1000.0" maxWidth="1200.0" minHeight="910.0" minWidth="1200.0" prefHeight="910.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
-                <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0">
+                <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0">
                     <children>
-                        <TableView id="table" fx:id="table" editable="true" layoutX="190.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="1000" prefHeight="350.0" prefWidth="1000.0" tableMenuButtonVisible="true">
+                        <TableView id="table" fx:id="table" editable="true" layoutX="190.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="1000" prefHeight="470.0" prefWidth="1000.0" tableMenuButtonVisible="true">
 
                             <placeholder>
                                 <Label text="Nincs Adat" />
@@ -19,20 +31,66 @@
 
                             </columns>
                         </TableView>
-                        <Button id="btnUjSor" fx:id="btnBev" layoutX="14.0" layoutY="335.0" mnemonicParsing="false" onAction="#btnBevitelClick" text="Bevitel" />
-                        <Button id="btnSel" fx:id="btnSel" layoutX="80.0" layoutY="335.0" mnemonicParsing="false" onAction="#btnSelClick" text="Select" />
-                        <WebView id="WV" fx:id="WV" layoutX="10" layoutY="370.0" maxHeight="500" maxWidth="1180" minHeight="500" minWidth="1180" prefHeight="480" prefWidth="1180" />
-                  <DatePicker id="datePicker" fx:id="datePicker" layoutX="7.0" layoutY="87.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="174.4" />
-                  <TextField id="txtDepart" fx:id="txtDepart" layoutX="14.0" layoutY="118.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="148.8" promptText="Indulás" />
-                  <TextField id="txtArrive" fx:id="txtArrive" layoutX="14.0" layoutY="147.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="148.8" promptText="Érkezés" />
-                  <TextField id="txtClient" fx:id="txtClient" layoutX="14.0" layoutY="176.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="148.8" promptText="Ügyfél" />
-                  <Label id="lblName" fx:id="lblName" layoutX="66.0" layoutY="14.0" text="Név" />
-                  <Label id="lblSites" fx:id="lblSites" layoutX="66.0" layoutY="38.0" text="Telephely" textAlignment="CENTER" />
-                  <Label id="lblKm" fx:id="lblKm" layoutX="64.0" layoutY="63.0" text=" Km óra állás" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" />
-                  <CheckBox id="chkSites" fx:id="chkSites" layoutX="19.0" layoutY="236.0" mnemonicParsing="false" text="Indulás a telephelyről"  />
-                  <CheckBox id="chkBack" fx:id="chkBack" layoutX="19.0" layoutY="260.0" mnemonicParsing="false" text="Oda - vissza" />
-                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="19.0" layoutY="284.0" mnemonicParsing="false" text="Magánhasználat" />
-                  <TextField id="txtDistance" fx:id="txtDistance" layoutX="14.0" layoutY="205.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="148.8" promptText="Távolság" />
+                        <Button id="btnUjSor" fx:id="btnBev" layoutX="21.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel" />
+                        <Button id="btnSel" fx:id="btnSel" layoutX="87.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Select" />
+                        <WebView id="WV" fx:id="WV" contextMenuEnabled="false" disable="true" layoutX="7.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
+                  <DatePicker id="datePicker" fx:id="datePicker" layoutX="14.0" layoutY="143.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="174.4" />
+                  <TextField id="txtDepart" fx:id="txtDepart" layoutX="15.0" layoutY="188.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="173.0" promptText="Indulás" />
+                  <TextField id="txtArrive" fx:id="txtArrive" layoutX="15.0" layoutY="282.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="173.0" promptText="Érkezés" />
+                  <Label id="lblName" fx:id="lblName" layoutX="18.0" layoutY="67.0" text="Név" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font></Label>
+                  <Label id="lblSites" fx:id="lblSites" layoutX="18.0" layoutY="95.0" text="Telephely" textAlignment="CENTER" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font></Label>
+                  <Label id="lblKm" fx:id="lblKm" layoutX="17.0" layoutY="121.0" text=" Km óra állás" textAlignment="CENTER" textFill="#1017dd" textOverrun="CENTER_WORD_ELLIPSIS">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font></Label>
+                  <CheckBox id="chkSites" fx:id="chkSites" layoutX="26.0" layoutY="361.0" mnemonicParsing="false" onAction="#chkCheck" text="Indulás a telephelyről">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font></CheckBox>
+                  <CheckBox id="chkBack" fx:id="chkBack" layoutX="26.0" layoutY="385.0" mnemonicParsing="false" text="Oda - vissza">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font></CheckBox>
+                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="26.0" layoutY="409.0" mnemonicParsing="false" text="Magánhasználat">
+                     <font>
+                        <Font name="System Bold" size="11.0" />
+                     </font></CheckBox>
+                  <TextField id="txtDistance" fx:id="txtDistance" layoutX="16.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="172.0" promptText="Távolság" />
+                  <Separator layoutX="-29.0" layoutY="91.0" prefWidth="200.0" />
+                  <Separator layoutX="-28.0" layoutY="118.0" prefWidth="200.0" />
+                  <SearchableComboBox id="cbClient" fx:id="cbClient" accessibleHelp="Ügyfél" accessibleText="Ügyfél" editable="true" layoutX="15.0" layoutY="234.0" prefHeight="23.0" prefWidth="173.0" />
+                  <Label layoutX="17.0" layoutY="312.0" text="Távolság" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="17.0" layoutY="266.0" text="Érkezés" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="17.0" layoutY="217.0" text="Ügyfél" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="16.0" layoutY="171.0" text="Indulás" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" layoutY="14.0" text="Hónap választás" textFill="#1017dd">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <DatePicker layoutX="14.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="174.4" />
                     </children></AnchorPane>
       </content>
     </Tab>
@@ -40,34 +98,38 @@
       <content>
         <AnchorPane id="btnReadExcel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TextField id="txfNev" fx:id="txfNev" layoutX="162.0" layoutY="34.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" />
-                  <TextField id="txfTelep" fx:id="txfTelep" layoutX="162.0" layoutY="77.0" prefHeight="25.6" prefWidth="148.8" promptText="Telephely" />
-                  <TextField id="txfAuto" fx:id="txfAuto" layoutX="162.0" layoutY="123.0" prefHeight="25.6" prefWidth="148.8" promptText="Auto Típusa" />
-                  <TextField id="txfRendsz" fx:id="txfRendsz" layoutX="162.0" layoutY="167.0" prefHeight="25.6" prefWidth="148.8" promptText="Rendszám" />
-                  <TextField id="txfLoket" fx:id="txfLoket" layoutX="162.0" layoutY="208.0" prefHeight="25.6" prefWidth="148.8" promptText="Lökettérfogat" />
-                  <TextField id="txfFogyaszt" fx:id="txfFogyaszt" layoutX="162.0" layoutY="252.0" prefHeight="25.6" prefWidth="148.8" promptText="Fogyasztás" />
-                  <TextField id="txfElozo" fx:id="txfElozo" layoutX="447.0" layoutY="38.0" prefHeight="25.6" prefWidth="148.8" promptText="Előző Záró Km" />
-                  <TextField id="textZaro" fx:id="textZaro" disable="true" layoutX="447.0" layoutY="82.0" prefHeight="25.6" prefWidth="148.8" promptText="Jelenlegi Záró Km" />
-                  <Label layoutX="113.0" layoutY="42.0" text="Név" />
-                  <Label layoutX="86.0" layoutY="84.0" text="Telephely" />
-                  <Label layoutX="73.0" layoutY="127.0" text="Auto Típusa" />
-                  <Label layoutX="84.0" layoutY="172.0" text="Rendszám" />
-                  <Label layoutX="66.0" layoutY="212.0" text="Lökettérfogat" />
-                  <Label layoutX="82.0" layoutY="256.0" text="Fogyasztás" />
-                  <Label layoutX="341.0" layoutY="42.0" text="Előző Záró Km" />
-                  <Label layoutX="324.0" layoutY="86.0" text="Jelenlegi Záró Km" />
-                  <Button id="btnSetOk" layoutX="524.0" layoutY="252.0" mnemonicParsing="false" onAction="#setBtnSetOkClick" prefHeight="25.0" prefWidth="59.0" text="OK" />
-                  <Button id="btSet" fx:id="btnSet" layoutX="434.0" layoutY="252.0" mnemonicParsing="false" onAction="#btnSetClick" text="Beállítás" />
-                  <Button id="btnReadExcel" fx:id="btnReadExcel" layoutX="28.0" layoutY="370.0" mnemonicParsing="false" onAction="#btnReadExcelClick" text="Excel beolvasása" />
-                  <Label layoutX="18.0" layoutY="323.0" text="Az Excel file betöltése akár órákig is tarthat!!!" textFill="#f80808" />
-                  <TextField id="txtFile" fx:id="txtFile" layoutX="28.0" layoutY="457.0" prefHeight="26.0" prefWidth="384.0" />
-                  <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="207.0" layoutY="374.0" mnemonicParsing="false" onAction="#radioBtnFileCheck" selected="true" text="Betöltés: File">
+                  <Button id="btnSetOk" fx:id="btnSetOk" layoutX="168.0" layoutY="334.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="70.0" text="Mentés" />
+                  <Button id="btSet" fx:id="btnSet" layoutX="62.0" layoutY="334.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="78.0" text="Beállítás" />
+                  <Button id="btnReadExcel" fx:id="btnReadExcel" layoutX="542.0" layoutY="113.0" mnemonicParsing="false" onAction="#btnClick" text="Excel beolvasása" />
+                  <Label layoutX="546.0" layoutY="66.0" text="Az Excel file betöltése akár órákig is tarthat!!!" textFill="#f80808" />
+                  <TextField id="txtFile" fx:id="txtFile" layoutX="501.0" layoutY="200.0" prefHeight="26.0" prefWidth="384.0" />
+                  <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="695.0" layoutY="117.0" mnemonicParsing="false" onAction="#radioCheck" selected="true" text="Betöltés: File">
                    >
                      <toggleGroup>
                         <ToggleGroup fx:id="radio" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="207.0" layoutY="412.0" mnemonicParsing="false" onAction="#radioBtnThCheck" text="Betöltés: TeamHub" toggleGroup="$radio" />
+                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="695.0" layoutY="155.0" mnemonicParsing="false" onAction="#radioCheck" text="Betöltés: TeamHub" toggleGroup="$radio" />
+                  <AnchorPane id="setPane" fx:id="setPane" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="305.0" prefWidth="308.0">
+                     <children>
+                        <TextField id="txfNev" fx:id="txfNev" layoutX="130.0" layoutY="6.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" />
+                        <TextField id="txfTelep" fx:id="txfTelep" layoutX="130.0" layoutY="42.0" prefHeight="25.6" prefWidth="148.8" promptText="Telephely" />
+                        <TextField id="txfAuto" fx:id="txfAuto" layoutX="130.0" layoutY="78.0" prefHeight="25.6" prefWidth="148.8" promptText="Auto Típusa" />
+                        <TextField id="txfRendsz" fx:id="txfRendsz" layoutX="130.0" layoutY="114.0" prefHeight="25.6" prefWidth="148.8" promptText="Rendszám" />
+                        <TextField id="txfLoket" fx:id="txfLoket" layoutX="130.0" layoutY="150.0" prefHeight="25.6" prefWidth="148.8" promptText="Lökettérfogat" />
+                        <TextField id="txfFogyaszt" fx:id="txfFogyaszt" layoutX="130.0" layoutY="187.0" prefHeight="25.6" prefWidth="148.8" promptText="Fogyasztás" />
+                        <TextField id="txfElozo" fx:id="txfElozo" layoutX="131.0" layoutY="224.0" prefHeight="25.6" prefWidth="148.8" promptText="Előző Záró Km" />
+                        <TextField id="textZaro" fx:id="textZaro" disable="true" layoutX="132.0" layoutY="262.0" prefHeight="25.6" prefWidth="148.8" promptText="Jelenlegi Záró Km" />
+                        <Label layoutX="81.0" layoutY="10.0" text="Név" />
+                        <Label layoutX="54.0" layoutY="45.0" text="Telephely" />
+                        <Label layoutX="41.0" layoutY="81.0" text="Auto Típusa" />
+                        <Label layoutX="50.0" layoutY="118.0" text="Rendszám" />
+                        <Label layoutX="32.0" layoutY="154.0" text="Lökettérfogat" />
+                        <Label layoutX="46.0" layoutY="191.0" text="Fogyasztás" />
+                        <Label layoutX="27.0" layoutY="229.0" text="Előző Záró Km" />
+                        <Label layoutX="10.0" layoutY="266.0" text="Jelenlegi Záró Km" />
+                     </children>
+                  </AnchorPane>
                </children></AnchorPane>
       </content>
     </Tab>

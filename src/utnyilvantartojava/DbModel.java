@@ -312,6 +312,37 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
+    public ArrayList getAllClient() {      //visszaadja  az összes gépszámot
+        ArrayList<String> clients = null;
+        try {
+            String sqlQuery = "select clientnumber from clients";
+            clients = new ArrayList<>();
+            rs1 = createStatement.executeQuery(sqlQuery);
+            while (rs1.next()) {
+                clients.add(rs1.getString("clientnumber"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return clients;
+    }
+
+    public ArrayList getAllCitys() {      //visszaadja  az összes gépszámot
+        ArrayList<String> clients = null;
+        try {
+            String sqlQuery = "select distinct city from clients";
+            clients = new ArrayList<>();
+            rs1 = createStatement.executeQuery(sqlQuery);
+            while (rs1.next()) {
+                clients.add(rs1.getString("city"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return clients;
+    }
 
     public ArrayList availableClient(String targetClient) {      //visszaadja  az összes lehetséges célt egy városban
         ArrayList<String> clients = null;

@@ -141,15 +141,9 @@ public class Route {
         this.telephelyrol.set(telephelyrol);
     }
 
-    private void fillField(TextField text, String fileName) {
-        TextFields.bindAutoCompletion(text, readFile(fileName));
-    }
-
-    private ArrayList fillBox(String fileName) {
 
 
-        return readFile(fileName);
-    }
+
 
 
 

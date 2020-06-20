@@ -14,7 +14,7 @@ public class Main extends Application {
 
 
         primaryStage.setTitle("Útnyilvántartó");
-        primaryStage.setScene(new Scene(root, 1190, 900));
+        primaryStage.setScene(new Scene(root, 1190, 960));
         primaryStage.setResizable(false);
         primaryStage.show();
 
