@@ -233,7 +233,7 @@ public class ViewController implements Initializable {
             if (txtDepart.getText().contentEquals("Telephely")){   //le kell kérni az induló gépszámot aztán megszerezni
                 startClient=settings.get(1)+" "+settings.get(2);        // a cél gépszámot lekérdezni a távot ha nincs meg
             }else{                                                     //akkor lekérdezni a téképtől beírnia textboxba
-                db.getDistance(db,targetClient)                         // aztán beírni az adatbázisba
+                //db.getDistance(db,targetClient)                         // aztán beírni az adatbázisba
 
             }
 
