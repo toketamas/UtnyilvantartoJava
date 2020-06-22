@@ -33,7 +33,7 @@
                         </TableView>
                         <Button id="btnUjSor" fx:id="btnBev" layoutX="21.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel" />
                         <Button id="btnSel" fx:id="btnSel" layoutX="87.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Select" />
-                        <WebView id="WV" fx:id="WV" disable="false" layoutX="7.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
+                        <WebView id="WV" fx:id="WV" disable="true" layoutX="7.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
                   <DatePicker id="datePicker" fx:id="datePicker" layoutX="14.0" layoutY="143.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="174.4" />
                   <TextField id="txtDepart" fx:id="txtDepart" layoutX="15.0" layoutY="188.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="173.0" promptText="Indulás" />
                   <TextField id="txtArrive" fx:id="txtArrive" layoutX="15.0" layoutY="282.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="173.0" promptText="Érkezés" />
