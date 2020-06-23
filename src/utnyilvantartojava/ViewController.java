@@ -95,7 +95,11 @@ public class ViewController implements Initializable {
     String targetAddress;
     String startAddress;
     Integer distance;
-    String selectedClient;
+    String selectedClient;//ide érkezünk
+    String startClient; //innen indulunk
+    boolean priv;
+    boolean sites;
+    boolean back;
     LocalDate workDate;
     TableColumn datCol;
     TableColumn checkMagan;
@@ -119,10 +123,17 @@ public class ViewController implements Initializable {
         if (btnBev.isArmed()) {
 
             DbModel db = new DbModel();
+            if(chkPrivate.isSelected())
+                try {
+                    distance = Integer.parseInt(txtDistance.getText());
+                }catch (Exception e){
+                    txtDistance.setText("Ide csak számot írhatsz!");
+                }
 
 
 
-            if (chkPrivate.isSelected()) {
+
+            /*if (chkPrivate.isSelected()) {
                 txtDistance.setEditable(true);
                 observableList.get(observableList.size() - 1).setMagan(true);
                 observableList.get(observableList.size() - 1).setIndulas("Magán");
@@ -135,9 +146,15 @@ public class ViewController implements Initializable {
 
             if (chkSites.isSelected()) {
                 txtArrive.setText(settings.get(1));
-            }
+            }*/
             observableList.add(new Route(datePicker.getValue().toString(),startAddress,targetAddress,distance,selectedClient,false,chkBack.isSelected(),false));
-
+            txtDistance.clear();
+            txtDepart.setText(targetAddress);
+            startAddress=targetAddress;
+            targetAddress="";
+            startClient=selectedClient;
+            selectedClient="";
+            txtArrive.clear();
            /* System.out.print(observableList.get(0).getDatum() + " ");
             System.out.print(observableList.get(observableList.size() - 2).getIndulas() + " ");
             System.out.print(observableList.get(observableList.size() - 2).getErkezes() + " ");
@@ -212,6 +229,18 @@ public class ViewController implements Initializable {
         } else {
             txtDepart.clear();
             txtDepart.setEditable(true);
+        }
+
+        if (chkPrivate.isSelected()){
+            chkSites.setSelected(false);
+            chkBack.setSelected(false);
+            txtDepart.setText("magán");
+            startAddress="magán használat";
+            targetAddress="magán használat";
+            selectedClient="magán használat";
+            txtArrive.setText("magán");
+            cbClient.getEditor().setText("magán");
+
         }
     }
 
@@ -336,20 +365,27 @@ public class ViewController implements Initializable {
         chkSites.setSelected(true);
         txtDepart.setText("Telephely");
         txtDepart.setDisable(true);
-        departCity=settings.get(1);
-        departAddress=settings.get(2);
+        departCity = settings.get(1);
+        departAddress = settings.get(2);
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebViev-ba a térképet
         datePicker.setValue(date);
         excelSource = localExcel;
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
         cbClient.getItems().addAll(db.getAllClient());
+        //db.getClient("Telephely");
         //fillField(txtClient,db.getAllClient());
-        fillField(txtArrive,db.getAllCitys());
+        fillField(txtArrive, db.getAllCitys());
         try {
             db.conn.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void checkTelephelyInDb(){
+        DbModel db = new DbModel();
+        Clients telephely = db.getClient("Telephely");
+        if (db.getClient("Telephely")!=null&&)
     }
 
     public void setTableData() {
