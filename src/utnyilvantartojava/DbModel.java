@@ -1,7 +1,6 @@
 package utnyilvantartojava;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DbModel {
@@ -16,7 +15,7 @@ public class DbModel {
     Statement createStatement = null;
     DatabaseMetaData dbmeta = null;
     ResultSet rs1 = null;
-    PreparedStatement prep = null;
+    PreparedStatement preparedStatement = null;
 
     public DbModel() {
         try {
@@ -61,23 +60,6 @@ public class DbModel {
             System.out.println("" + ex);
         }
 
-        try {
-            rs1 = dbmeta.getTables(null, "APP", "SETTINGS", null);
-            if (!rs1.next()) {
-                createStatement.execute("create table settings(" +
-                        "id integer primary key," +
-                        "nev text," +
-                        "telephely text," +
-                        "autoTipusa text," +
-                        "rendszam text," +
-                        "loketterfogat integer," +
-                        "fogyasztas integer," +
-                        "elozoZaroKm integer);");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
 
         try {
             rs1 = dbmeta.getTables(null, "APP", "CLIENTS", null);
@@ -103,7 +85,6 @@ public class DbModel {
             rs1 = dbmeta.getTables(null, "APP", "DISTANCES", null);
             if (!rs1.next()) {
                 createStatement.execute("create table distances(" +
-                        "distid integer primary key autoincrement," +
                         "clientid1 text," +
                         "clientid2 text," +
                         "distance integer);");
@@ -119,92 +100,22 @@ public class DbModel {
     public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, Boolean magan, Boolean odaVissza, Boolean telephelyrol) {
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?)";
         try {
-            prep = conn.prepareStatement(sqlQuery);
-            prep.setString(1,null);
-            prep.setString(2, datum.toString());
-            prep.setString(3, indulas);
-            prep.setString(4, erkezes);
-            prep.setInt(5,tavolsag );
-            prep.setString(6, ugyfel);
-            prep.setInt(7, convertBool(magan));
-            prep.setInt(8, convertBool(odaVissza));
-            prep.setInt(9, convertBool(telephelyrol));
-            prep.execute();
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1,null);
+            preparedStatement.setString(2, datum.toString());
+            preparedStatement.setString(3, indulas);
+            preparedStatement.setString(4, erkezes);
+            preparedStatement.setInt(5,tavolsag );
+            preparedStatement.setString(6, ugyfel);
+            preparedStatement.setInt(7, convertBool(magan));
+            preparedStatement.setInt(8, convertBool(odaVissza));
+            preparedStatement.setInt(9, convertBool(telephelyrol));
+            preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
             System.out.println("" + ex);
         }
     }
-
-
-    // hozzáad egy új ügyfelet(gépet) a client táblához
-    public void addClient(String client, String clientnumber,String type, String factorynumber, int zipcode,  String city,  String address, Boolean exist,int maintinanceperyear, String field) {
-        String sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
-        try {
-            prep = conn.prepareStatement(sqlQuery);
-            prep.setString(1, client);
-            prep.setString(2, clientnumber);
-            prep.setString(3, type);
-            prep.setString(4, factorynumber);
-            prep.setInt(5, zipcode);
-            prep.setString(6, city);
-            prep.setString(7, address);
-            prep.setInt(8, convertBool(exist));
-            prep.setInt(9, maintinanceperyear);
-            prep.setString(10, field);
-            prep.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
-            System.out.println("" + ex);
-        }
-    }
-
-    //hozzáad két ügyfél közti távolságot a distances táblához
-    public void addDistance(String clientId1, String clientId2, int distance) {
-        String sqlQuery = "insert into distances values (?,?,?,?)";
-        try {
-            prep = conn.prepareStatement(sqlQuery);
-            prep.setString(1, null);
-            prep.setString(2, clientId1);
-            prep.setString(3, clientId2);
-            prep.setInt(4, distance);
-            prep.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
-            System.out.println("" + ex);
-        }
-    }
-
-    /*public void getUser() {
-        try {
-            String sqlQuery = "select * from users";
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                String name = rs1.getString("name");
-                String address = rs1.getString("address");
-                int age = rs1.getInt("age");
-                System.out.println(name + " | " + address + " | " + age);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
-            System.out.println("" + ex);
-        }
-    }
-    public void getUsersMetadata() {
-        ResultSetMetaData rs1MetaData = null;
-        String sqlQuery = "select * from users";
-
-        try {
-            rs1 = createStatement.executeQuery(sqlQuery);
-            rs1MetaData = rs1.getMetaData();
-            for (int i = 1; i <= rs1MetaData.getColumnCount(); i++) {
-                System.out.print(rs1MetaData.getColumnName(i) + " | ");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
-            System.out.println("" + ex);
-        }
-    }*/
 
     public ArrayList getRoutes(String startDate, String endDate) {      //két dátum közötti utakat adja vissza
         ArrayList<Route> routes = null;
@@ -233,11 +144,36 @@ public class DbModel {
         return routes;
     }
 
-    public int getDistance(String client1, String Client2) {      // a distances listából két ügyfél távolságát adja vissza
-        int distance = 0;
 
+    //hozzáad két ügyfél közti távolságot a distances táblához
+    public void addDistance(String clientId1, String clientId2, int distance) {
+        String sqlQuery = "insert into distances values (?,?,?)";
+        try {
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, clientId1);
+            preparedStatement.setString(2, clientId2);
+            preparedStatement.setInt(3, distance);
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("" + ex);
+        }
+    }
+    public int getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
+        int distance = 0;
+        String sqlQuery = "select distance from distances where clientid1='"+client1+"' and clientid2='"+client2+"'";
+        try {
+            rs1=createStatement.executeQuery(sqlQuery);
+            distance=rs1.getInt("distance");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         return distance;
     }
+
+
+
+
 
     public ArrayList availableDest(String startClient) {// az összes célt amihez megvan a távolság
         ArrayList<Distance> distances = null;
@@ -259,35 +195,20 @@ public class DbModel {
     }
 
     public void setDistance(String clientid1, String clientid2, int distance) { //Beállítja a távolságot a két meglévő helyszín között
-        String sqlQuery = "update distances set distance=" + distance + " where clientid1="
-                + clientid1 + " and clientid2=" + clientid2 + " (?,?,?,?)";
+        String sqlQuery = "insert into distance values (?,?,?)";
         try {
-            prep = conn.prepareStatement(sqlQuery);
-            prep.setString(1, null);
-            prep.setString(2, clientid1);
-            prep.setString(3, clientid2);
-            prep.setInt(4, distance);
-            prep.execute();
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, clientid1);
+            preparedStatement.setString(2, clientid2);
+            preparedStatement.setInt(3, distance);
+            preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
             System.out.println("" + ex);
         }
     }
-    public ArrayList getAllClient() {      //visszaadja  az összes gépszámot
-        ArrayList<String> clients = null;
-        try {
-            String sqlQuery = "select clientnumber from clients";
-            clients = new ArrayList<>();
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                clients.add(rs1.getString("clientnumber"));
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
-            System.out.println("" + ex);
-        }
-        return clients;
-    }
+
+
 
     public ArrayList getAllCitys() {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
@@ -305,21 +226,77 @@ public class DbModel {
         return clients;
     }
 
-    public ArrayList getClient(String value) {      //visszaad egy ügyfelet
-        ArrayList<String> list = null;
+    // hozzáad egy új ügyfelet(gépet) a client táblához
+    public void addClient(String client, String clientnumber,String type, String factorynumber, int zipcode,  String city,  String address, Boolean exist,int maintinanceperyear, String field) {
+        String sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
         try {
-            String sqlQuery = "select city, address  from clients where clientnumber='"+value+"'";
-            list = new ArrayList<>();
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, client);
+            preparedStatement.setString(2, clientnumber);
+            preparedStatement.setString(3, type);
+            preparedStatement.setString(4, factorynumber);
+            preparedStatement.setInt(5, zipcode);
+            preparedStatement.setString(6, city);
+            preparedStatement.setString(7, address);
+            preparedStatement.setInt(8, convertBool(exist));
+            preparedStatement.setInt(9, maintinanceperyear);
+            preparedStatement.setString(10, field);
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("" + ex);
+        }
+    }
+
+    public Client getClient(String value) {      //visszaad egy ügyfelet
+        Client client = null;
+        try {
+            String sqlQuery = "select * from clients where clientnumber='"+value+"'";
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
-                list.add(rs1.getString("city"));
-                list.add(rs1.getString("address"));
+                 client = new Client(
+                        rs1.getString("client"),
+                        rs1.getString("clientnumber"),
+                        rs1.getString("type"),
+                        rs1.getString("factorynumber"),
+                        rs1.getInt("zipcode"),
+                        rs1.getString("city"),
+                        rs1.getString("address"),
+                        convertBool(rs1.getInt("exist")),
+                        rs1.getInt("maintenanceperyear"),
+                        rs1.getString("field")
+                        );
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
             System.out.println("" + ex);
         }
-        return list;
+        return client;
+    }
+
+    public void delClient(String value){
+        String sqlQuery = "delete from clients where clientnumber='"+value+"'";
+        try {
+            preparedStatement=conn.prepareStatement(sqlQuery);
+            preparedStatement.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public ArrayList getAllClient() {      //visszaadja  az összes gépszámot
+        ArrayList<String> clients = null;
+        try {
+            String sqlQuery = "select clientnumber from clients";
+            clients = new ArrayList<>();
+            rs1 = createStatement.executeQuery(sqlQuery);
+            while (rs1.next()) {
+                clients.add(rs1.getString("clientnumber"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return clients;
     }
 
     public ArrayList getAvailableClient(String targetClient) {      //visszaadja  az összes lehetséges célt egy városban

@@ -1,6 +1,6 @@
 package utnyilvantartojava;
 //Ez egy helyszínt reprezentál(egy gépet a clientnumber lesz a gépszám ez lesz elsődleges kulcs )
-public class Clients {
+public class Client {
     private String client;
     private String clientNumber;
     private String type;
@@ -12,7 +12,7 @@ public class Clients {
     private int maintenancePerYear;
     private String field;
 
-    public Clients(String client, String clientNumber, String type, String factoryNumber, int zipCode, String city, String address, boolean exist, int maintenancePerYear, String field) {
+    public Client(String client, String clientNumber, String type, String factoryNumber, int zipCode, String city, String address, boolean exist, int maintenancePerYear, String field) {
         this.client = client;
         this.clientNumber = clientNumber;
         this.type = type;

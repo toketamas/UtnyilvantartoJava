@@ -57,11 +57,14 @@
                      <font>
                         <Font name="System Bold" size="11.0" />
                      </font></CheckBox>
-                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="26.0" layoutY="409.0" mnemonicParsing="false" text="Magánhasználat" onAction="#chkCheck">
+                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="26.0" layoutY="409.0" mnemonicParsing="false" onAction="#chkCheck" text="Magánhasználat">
                      <font>
                         <Font name="System Bold" size="11.0" />
                      </font></CheckBox>
-                  <TextField id="txtDistance" fx:id="txtDistance" layoutX="16.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="172.0" promptText="Távolság" />
+                  <TextField id="txtDistance" fx:id="txtDistance"  layoutX="16.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="172.0" promptText="Távolság">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></TextField>
                   <Separator layoutX="-29.0" layoutY="91.0" prefWidth="200.0" />
                   <Separator layoutX="-28.0" layoutY="118.0" prefWidth="200.0" />
                   <SearchableComboBox id="cbClient" fx:id="cbClient" editable="true" layoutX="15.0" layoutY="234.0" onAction="#cboxTextChange" prefHeight="23.0" prefWidth="173.0" />
