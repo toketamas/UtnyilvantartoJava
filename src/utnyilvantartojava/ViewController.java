@@ -115,6 +115,7 @@ public class ViewController implements Initializable {
 
     //Változók
     URL url1;
+    DbModel db = new DbModel();
     LocalDate date = LocalDate.now();
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
@@ -156,39 +157,40 @@ public class ViewController implements Initializable {
 
         //Bevitel gomb
         if (btnBev.isArmed()) {
+            String date = datePicker.getValue().toString();
+
             if (chkPrivate.isSelected()) {
-                DbModel db = new DbModel();
                 try {
                     distance = Integer.parseInt(txtDistance.getText());
-                    observableList.add(new Route(datePicker.getValue().toString(), "Magánhasználat", "Magánhasználat", distance, "Magánhasználat", false, chkBack.isSelected(), false));
-                    db.addRoute(
-                            observableList.get(observableList.size() - 1).getDatum(),
-                            observableList.get(observableList.size() - 1).getIndulas(),
-                            observableList.get(observableList.size() - 1).getErkezes(),
-                            observableList.get(observableList.size() - 1).getTavolsag(),
-                            observableList.get(observableList.size() - 1).getUgyfel(),
-                            observableList.get(observableList.size() - 1).isMagan(),
-                            observableList.get(observableList.size() - 1).isVissza(),
-                            observableList.get(observableList.size() - 1).isTelephelyrol()
-                    );
+                    observableList.add(new Route(date, "Magánhasználat", "Magánhasználat", distance, "Magánhasználat", false, chkBack.isSelected(), false));
                     chkPrivate.setSelected(false);
                     chkSites.setSelected(true);
                     txtDepart.setText(telephely.getClient());
                     startClient = telephely;
-                    targetClient = null;
-                    txtArrive.clear();
                     cbClient.setDisable(false);
-                    cbClient.setValue("Válaszd ki az ügyfelet");
-                    txtDistance.clear();
-                    db.conn.close();
+                    //cbClient.setValue("Válaszd ki az ügyfelet");
+
                 } catch (NumberFormatException e) {
                     txtDistance.setText("IDE CSAK SZÁMOT ÍRHATSZ!!!");
 
                 }
             } else if (chkBack.isSelected()) {
-                DbModel db = new DbModel();
-                observableList.add(new Route(datePicker.getValue().toString(), startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
-                observableList.add(new Route(datePicker.getValue().toString(), targetAddress, startAddress, distance, telephely.getClient(), false, chkBack.isSelected(), false));
+                observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
+                observableList.add(new Route(date, targetAddress, startAddress, distance, telephely.getClient(), false, chkBack.isSelected(), false));
+
+                chkSites.setSelected(true);
+                txtDepart.setText(telephely.getClient());
+                startClient = telephely;
+
+
+            } else {
+                observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
+                txtDepart.setText(targetAddress);
+                startClient = targetClient;
+                startAddress = targetAddress;
+            }
+
+            if (observableList.get(observableList.size() - 1).isVissza()) {
                 db.addRoute(
                         observableList.get(observableList.size() - 2).getDatum(),
                         observableList.get(observableList.size() - 2).getIndulas(),
@@ -197,63 +199,32 @@ public class ViewController implements Initializable {
                         observableList.get(observableList.size() - 2).getUgyfel(),
                         observableList.get(observableList.size() - 2).isMagan(),
                         observableList.get(observableList.size() - 2).isVissza(),
-                        observableList.get(observableList.size() - 2).isTelephelyrol()
-                );
-                db.addRoute(
-                        observableList.get(observableList.size() - 1).getDatum(),
-                        observableList.get(observableList.size() - 1).getIndulas(),
-                        observableList.get(observableList.size() - 1).getErkezes(),
-                        observableList.get(observableList.size() - 1).getTavolsag(),
-                        observableList.get(observableList.size() - 1).getUgyfel(),
-                        observableList.get(observableList.size() - 1).isMagan(),
-                        observableList.get(observableList.size() - 1).isVissza(),
-                        observableList.get(observableList.size() - 1).isTelephelyrol()
-                );
-
-                txtDistance.clear();
-                chkSites.setSelected(true);
-                targetAddress = "";
-                targetClient = null;
-                txtArrive.clear();
-                db.conn.close();
-
-            } else {
-
-                observableList.add(new Route(datePicker.getValue().toString(), startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
-                //DbModel db1 = new DbModel();
-                // /db1.addDistance(startAddress,targetAddress,distance);
-                // db1.conn.close();
-                DbModel db = new DbModel();
-
-                db.addRoute(
-                        observableList.get(observableList.size() - 1).getDatum(),
-                        observableList.get(observableList.size() - 1).getIndulas(),
-                        observableList.get(observableList.size() - 1).getErkezes(),
-                        observableList.get(observableList.size() - 1).getTavolsag(),
-                        observableList.get(observableList.size() - 1).getUgyfel(),
-                        observableList.get(observableList.size() - 1).isMagan(),
-                        observableList.get(observableList.size() - 1).isVissza(),
-                        observableList.get(observableList.size() - 1).isTelephelyrol()
-                );
+                        observableList.get(observableList.size() - 2).isTelephelyrol());
+            }
+            db.addRoute(
+                    observableList.get(observableList.size() - 1).getDatum(),
+                    observableList.get(observableList.size() - 1).getIndulas(),
+                    observableList.get(observableList.size() - 1).getErkezes(),
+                    observableList.get(observableList.size() - 1).getTavolsag(),
+                    observableList.get(observableList.size() - 1).getUgyfel(),
+                    observableList.get(observableList.size() - 1).isMagan(),
+                    observableList.get(observableList.size() - 1).isVissza(),
+                    observableList.get(observableList.size() - 1).isTelephelyrol()
+            );
 
 
-                db.conn.close();
-                txtDistance.clear();
-                txtDepart.setText(targetAddress);
-                startAddress = targetAddress;
-                targetAddress = "";
-                startClient = targetClient;
-                targetClient = null;
-                txtArrive.clear();
+            if (db.getDistance(startAddress, targetAddress) == 0 && db.getDistance(targetAddress, startAddress) == 0) {
+                System.out.println(db.getDistance(startAddress, targetAddress) + " " + db.getDistance(targetAddress, startAddress));
+                System.out.println(startAddress + " " + targetAddress);
+                db.addDistance(startAddress, targetAddress, distance);
+            }
+            txtDistance.clear();
+            targetAddress = "";
+            targetClient = null;
+            txtArrive.clear();
+            cbClient.setValue("Válaszd ki az ügyfelet");
 
-
-                try {
-                    db.conn.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-
-
+        }
 
        /* if (btnSel.isArmed()) {
             url1 = new URL(WV.getEngine().getLocation());
@@ -262,8 +233,7 @@ public class ViewController implements Initializable {
             System.out.println(content);
         }*/
 
-            }
-        }   //beállít tab gombok
+        //beállít tab gombok
         if (btnSetOk.isArmed()) {
             settings.clear();
             settings.add(txfNev.getText());
@@ -310,9 +280,6 @@ public class ViewController implements Initializable {
         }
 
         if (chkPrivate.isSelected()) {
-            //DbModel db = new DbModel();
-
-            //targetClient=startClient;
             txtDistance.setEditable(true);
             chkSites.setSelected(false);
             chkBack.setSelected(false);
@@ -340,10 +307,9 @@ public class ViewController implements Initializable {
     @FXML
     private void cboxTextChange(ActionEvent event) {
 
-        DbModel db = new DbModel();
+        //DbModel db = new DbModel();
         targetClient = db.getClient(cbClient.getSelectionModel().getSelectedItem().toString());
         txtArrive.clear();
-
 
         //System.out.println(arriveCity+" "+arriveAddress);
         targetAddress = targetClient.getCity() + " " + targetClient.getAddress();
@@ -353,16 +319,10 @@ public class ViewController implements Initializable {
             startAddress = startClient.getCity() + " " + startClient.getAddress();
             chkSites.setSelected(false);
         }
-        try {
-            db.conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
 
 
         WV.getEngine().load("https://www.google.hu/maps/dir/" + startAddress + "/" + targetAddress); // lekérdezi a távolságot a google mapstól
         btnBev.setDisable(true);
-        //cbClient.setDisable(true);
 
         WV.getEngine().getLoadWorker().stateProperty().addListener( //figyeli hogy betöltődött-e az oldal
                 new ChangeListener<Worker.State>() {
@@ -380,7 +340,6 @@ public class ViewController implements Initializable {
                                         .stateProperty()
                                         .removeListener(this);
                         }
-
 
                         if (newValue != Worker.State.SUCCEEDED) {
                             return;
@@ -401,7 +360,6 @@ public class ViewController implements Initializable {
     }
 
     public static String getURL(String url) {             // URL beolvasása
-        int index;
         StringBuilder response = null;
         try {
             URL website = new URL(url);
@@ -424,8 +382,6 @@ public class ViewController implements Initializable {
 
     public void run() {
         System.out.println("elindult");
-        //IOExcel ioExcel = new IOExcel();
-        DbModel db = new DbModel();
         telephely = db.getClient("telephely");
         setTableData();                                                          //beállítja a táblát
         checkConfigFile();                                                       //ellenőrzi a settings.cfg meglétét
@@ -436,24 +392,15 @@ public class ViewController implements Initializable {
         startClient = telephely;                  // !!!!!!telephelyet állítja startclientnek ezt kell módosítani ha lesz mentett előző client  !!!!!!!
         txtDepart.setText(startClient.getClient());
         txtDepart.setDisable(true);
-        //departCity = startClient.getCity();
-        //departAddress = startClient.getAddress();
         cbClient.setValue("Válaszd ki az ügyfelet");
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
         datePicker.setValue(date);
         excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
         observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
         cbClient.getItems().addAll(db.getAllClient());
-
         fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába
-        try {
-            db.conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
         checkSpecialClients(); // ellenőrzi hogy léteznek e a spec cliensek (magán,telephely......)
     }
-
 
     public void setTableData() {
         datCol = new TableColumn("Dátum");
@@ -489,7 +436,7 @@ public class ViewController implements Initializable {
         erkCol.setResizable(false);
         erkCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("erkezes"));
 
-        tavCol = new TableColumn("Távolság");
+        tavCol = new TableColumn("Táv.");
         tavCol.setPrefWidth(60);
         tavCol.setResizable(false);
         tavCol.setCellValueFactory(new PropertyValueFactory<Route, IntegerProperty>("tavolsag"));
@@ -531,7 +478,6 @@ public class ViewController implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         return list;
     }
 
@@ -571,7 +517,6 @@ public class ViewController implements Initializable {
     }
 
     private void checkSpecialClients() {
-        DbModel db = new DbModel();
         Client telephely = db.getClient("telephely");
         if (telephely == null || telephely.getCity() != settings.get(1) || telephely.getAddress() != settings.get(2) || telephely.getField() != settings.get(0)) {
             if (telephely != null) {
@@ -635,11 +580,6 @@ public class ViewController implements Initializable {
                     0,
                     "Magánhasználat"
             );
-        }
-        try {
-            db.conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 }
