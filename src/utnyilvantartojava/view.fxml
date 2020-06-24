@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -22,7 +24,7 @@
             <content>
                 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0">
                     <children>
-                        <TableView id="table" fx:id="table" editable="true" layoutX="190.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="1000" prefHeight="470.0" prefWidth="1000.0" tableMenuButtonVisible="true">
+                        <TableView id="table" fx:id="table" editable="true" layoutX="193.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="1000" prefHeight="470.0" prefWidth="1000.0" tableMenuButtonVisible="true">
 
                             <placeholder>
                                 <Label text="Nincs Adat" />
@@ -32,8 +34,8 @@
                             </columns>
                         </TableView>
                         <Button id="btnUjSor" fx:id="btnBev" layoutX="21.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel" />
-                        <Button id="btnSel" fx:id="btnSel" layoutX="87.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Select" />
-                        <WebView id="WV" fx:id="WV" disable="true" layoutX="7.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
+                        <Button id="btnSel" fx:id="btnSel" layoutX="87.0" layoutY="454.0" mnemonicParsing="false" onAction="#btnClick" text="Újraküld" />
+                        <WebView id="WV" fx:id="WV" disable="true" layoutX="12.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
                   <DatePicker id="datePicker" fx:id="datePicker" layoutX="14.0" layoutY="143.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="174.4" />
                   <TextField id="txtDepart" fx:id="txtDepart" layoutX="15.0" layoutY="188.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="173.0" promptText="Indulás" />
                   <TextField id="txtArrive" fx:id="txtArrive" layoutX="15.0" layoutY="282.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="173.0" promptText="Érkezés" />
@@ -61,13 +63,19 @@
                      <font>
                         <Font name="System Bold" size="11.0" />
                      </font></CheckBox>
-                  <TextField id="txtDistance" fx:id="txtDistance"  layoutX="16.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="172.0" promptText="Távolság">
+                  <TextField id="txtDistance" fx:id="txtDistance" layoutX="16.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="172.0" promptText="Távolság">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></TextField>
                   <Separator layoutX="-29.0" layoutY="91.0" prefWidth="200.0" />
                   <Separator layoutX="-28.0" layoutY="118.0" prefWidth="200.0" />
-                  <SearchableComboBox id="cbClient" fx:id="cbClient" editable="true" layoutX="15.0" layoutY="234.0" onAction="#cboxTextChange" prefHeight="23.0" prefWidth="173.0" />
+                  <SearchableComboBox id="cbClient" fx:id="cbClient" editable="true" layoutX="15.0" layoutY="234.0" onAction="#cboxTextChange" pickOnBounds="false" prefHeight="23.0" prefWidth="173.0">
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></SearchableComboBox>
                   <Label layoutX="17.0" layoutY="312.0" text="Távolság" textFill="#1017dd">
                      <font>
                         <Font name="System Bold" size="10.0" />
@@ -93,7 +101,8 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <DatePicker layoutX="14.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.6" prefWidth="174.4" />
+                  <TextField id="txtDate" fx:id="txtDate" layoutX="15.0" layoutY="38.0" prefHeight="25.0" prefWidth="63.0" promptText="ÉÉÉÉ.HH" text=" " />
+                  <Button id="btnReady" fx:id="btnReady" layoutX="106.0" layoutY="38.0" mnemonicParsing="false" onAction="#btnClick" text="Kész" />
                     </children></AnchorPane>
       </content>
     </Tab>
@@ -109,24 +118,24 @@
                         <Font size="14.0" />
                      </font></Label>
                   <TextField id="txtFile" fx:id="txtFile" layoutX="501.0" layoutY="200.0" prefHeight="26.0" prefWidth="384.0" />
-                  <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="695.0" layoutY="117.0" mnemonicParsing="false" onAction="#radioCheck" selected="true" text="Betöltés: File">
+                  <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="695.0" layoutY="117.0" mnemonicParsing="false" onAction="#chkRabio" selected="true" text="Betöltés: File">
                    >
                      <toggleGroup>
                         <ToggleGroup fx:id="radio" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="695.0" layoutY="155.0" mnemonicParsing="false" onAction="#radioCheck" text="Betöltés: TeamHub" toggleGroup="$radio" />
+                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="695.0" layoutY="155.0" mnemonicParsing="false" onAction="#chkRabio" text="Betöltés: TeamHub" toggleGroup="$radio" />
                   <AnchorPane id="setPane" fx:id="setPane" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="366.0" prefWidth="308.0">
                      <children>
-                        <TextField id="txfNev" fx:id="txfNev" layoutX="130.0" layoutY="6.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" />
-                        <TextField id="txfTelep" fx:id="txfTelep" layoutX="133.0" layoutY="69.0" prefHeight="25.6" prefWidth="148.8" promptText=" Telephely város" />
-                        <TextField id="txfTelepCim" fx:id="txfTelepCim" layoutX="134.0" layoutY="106.0" prefHeight="25.6" prefWidth="148.8" promptText="Telephely cím" />
-                        <TextField id="txfAuto" fx:id="txfAuto" layoutX="135.0" layoutY="161.0" prefHeight="25.6" prefWidth="148.8" promptText="Auto Típusa" />
-                        <TextField id="txfRendsz" fx:id="txfRendsz" layoutX="135.0" layoutY="197.0" prefHeight="25.6" prefWidth="148.8" promptText="Rendszám" />
-                        <TextField id="txfLoket" fx:id="txfLoket" layoutX="135.0" layoutY="233.0" prefHeight="25.6" prefWidth="148.8" promptText="Lökettérfogat" />
-                        <TextField id="txfFogyaszt" fx:id="txfFogyaszt" layoutX="135.0" layoutY="270.0" prefHeight="25.6" prefWidth="148.8" promptText="Fogyasztás" />
-                        <TextField id="txfElozo" fx:id="txfElozo" layoutX="136.0" layoutY="307.0" prefHeight="25.6" prefWidth="148.8" promptText="Előző Záró Km" />
-                        <TextField id="textZaro" fx:id="textZaro" disable="true" layoutX="137.0" layoutY="345.0" prefHeight="25.6" prefWidth="148.8" promptText="Jelenlegi Záró Km" />
+                        <TextField id="txfNev" fx:id="txfNev" layoutX="130.0" layoutY="6.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" text=" " />
+                        <TextField id="txfTelep" fx:id="txfTelep" layoutX="133.0" layoutY="69.0" prefHeight="25.6" prefWidth="148.8" promptText=" Telephely város" text=" " />
+                        <TextField id="txfTelepCim" fx:id="txfTelepCim" layoutX="134.0" layoutY="106.0" prefHeight="25.6" prefWidth="148.8" promptText="Telephely cím" text=" " />
+                        <TextField id="txfAuto" fx:id="txfAuto" layoutX="135.0" layoutY="161.0" prefHeight="25.6" prefWidth="148.8" promptText="Auto Típusa" text=" " />
+                        <TextField id="txfRendsz" fx:id="txfRendsz" layoutX="135.0" layoutY="197.0" prefHeight="25.6" prefWidth="148.8" promptText="Rendszám" text=" " />
+                        <TextField id="txfLoket" fx:id="txfLoket" layoutX="135.0" layoutY="233.0" prefHeight="25.6" prefWidth="148.8" promptText="Lökettérfogat" text=" " />
+                        <TextField id="txfFogyaszt" fx:id="txfFogyaszt" layoutX="135.0" layoutY="270.0" prefHeight="25.6" prefWidth="148.8" promptText="Fogyasztás" text=" " />
+                        <TextField id="txfElozo" fx:id="txfElozo" layoutX="136.0" layoutY="307.0" prefHeight="25.6" prefWidth="148.8" promptText="Előző Záró Km" text=" " />
+                        <TextField id="textZaro" fx:id="textZaro" disable="true" layoutX="137.0" layoutY="345.0" prefHeight="25.6" prefWidth="148.8" promptText="Jelenlegi Záró Km" text=" " />
                         <Label layoutX="81.0" layoutY="10.0" text="Név" />
                         <Label layoutX="28.0" layoutY="42.0" prefHeight="17.0" prefWidth="57.0" text="Telephely" />
                         <Label layoutX="46.0" layoutY="164.0" text="Auto Típusa" />
