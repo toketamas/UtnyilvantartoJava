@@ -18,7 +18,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
@@ -118,7 +118,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </CheckBox>
-                  <Button layoutX="1074.0" layoutY="25.0" mnemonicParsing="false" text="Sorbarendezés">
+                  <Button id="makeExcel" fx:id="makeExcel" layoutX="1074.0" layoutY="25.0" mnemonicParsing="false" text="Excel készítése">
                      <font>
                         <Font size="14.0" />
                      </font>
