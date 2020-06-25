@@ -145,10 +145,7 @@ public class ViewController implements Initializable {
     TableColumn tavCol;
     TableColumn ugyfCol;
 
-    //Itt Indul
-    public void initialize(URL url, ResourceBundle rb) {
-        run();
-    }
+
 
     @FXML
     private void btnClick(ActionEvent event) throws Exception {
@@ -323,6 +320,10 @@ public class ViewController implements Initializable {
         getDistanceFromGmaps(startAddress,targetAddress);
     }
 
+    //Itt Indul
+    public void initialize(URL url, ResourceBundle rb) {
+        run();
+    }
     public void getDistanceFromGmaps(String sAddress, String tAddress){
             WV.getEngine().load("https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress); // lekérdezi a távolságot a google mapstól
             btnBev.setDisable(true);
