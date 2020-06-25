@@ -117,11 +117,12 @@ public class DbModel {
         }
     }
 
-    public ArrayList getRoutes(String startDate, String endDate) {      //két dátum közötti utakat adja vissza
+    public ArrayList getRoutes(String workDate) {      //két dátum közötti utakat adja vissza
         ArrayList<Route> routes = null;
-
+        System.out.println(workDate);
         try {
-            String sqlQuery = "select * from routes where date between \"" + startDate + "\" and \"" + endDate + "\" order by date";
+            String sqlQuery = "select * from routes where date like " + workDate + " order by date";
+
             routes = new ArrayList<>();
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {

@@ -214,6 +214,7 @@ public class ViewController implements Initializable {
             targetClient = null;
             txtArrive.clear();
             cbClient.setValue("Válaszd ki az ügyfelet");
+            table.scrollTo(table.getItems().size()-1);
         }
 
         if (btnSel.isArmed()) {
@@ -263,6 +264,8 @@ public class ViewController implements Initializable {
         if (btnReady.isArmed()){
             workDate=txtDate.getText();
             settings.add(8,workDate);
+            saveFile("settings.cfg",settings);
+            loadFile("settings.cfg");
         }
     }
 
@@ -391,11 +394,13 @@ public class ViewController implements Initializable {
         System.out.println("elindult");
         checkConfigFile();
         telephely = db.getClient("telephely");
+
         setTableColumns();                                                          //beállítja a táblát
                                                                //ellenőrzi a settings.cfg meglétét
-        //loadFile("settings.cfg");
+
         setText();
         setLabels();
+        workDate=settings.get(8);
         chkSites.setSelected(true);
         startClient = telephely;                  // !!!!!!telephelyet állítja startclientnek ezt kell módosítani ha lesz mentett előző client  !!!!!!!
         txtDepart.setText(startClient.getClient());
@@ -404,10 +409,11 @@ public class ViewController implements Initializable {
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
         datePicker.setValue(date);
         excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
-        observableList.addAll(db.getRoutes("2020-06-01", "2020-06-07"));         // betölti az adatokat az adatbázisból
+        observableList.addAll(db.getRoutes("'"+workDate+"-%%'"));         // betölti az adatokat az adatbázisból
         cbClient.getItems().addAll(db.getAllClient());
         fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába
         checkSpecialClients(); // ellenőrzi hogy léteznek e a spec cliensek (magán,telephely......)
+        table.scrollTo(table.getItems().size()-1);
     }
     public void setTableColumns() {
         datCol = new TableColumn("Dátum");
