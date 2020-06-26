@@ -66,7 +66,7 @@
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></Label>
-                  <CheckBox id="chkSites" fx:id="chkSites" layoutX="12.0" layoutY="184.0" mnemonicParsing="false" onAction="#chkCheck" text="Indulás a telephelyről" textFill="#d66211">
+                  <CheckBox id="chkSites" fx:id="chkSites" layoutX="12.0" layoutY="184.0" mnemonicParsing="false" onAction="#chkCheck" text="Indulás a telephelyről" textFill="#1aa10e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></CheckBox>
@@ -74,7 +74,7 @@
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></CheckBox>
-                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="14.0" layoutY="392.0" mnemonicParsing="false" onAction="#chkCheck" text="Magánhasználat" textFill="#840acf">
+                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="14.0" layoutY="392.0" mnemonicParsing="false" onAction="#chkCheck" text="Magánhasználat" textFill="#1aa10e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></CheckBox>
@@ -91,7 +91,7 @@
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></SearchableComboBox>
-                  <Label layoutX="69.0" layoutY="341.0" text="Km" textFill="#28a705">
+                  <Label layoutX="69.0" layoutY="341.0" text="Km" textFill="#a405a6">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -113,12 +113,12 @@
                   </Label>
                   <TextField id="txtDate" fx:id="txtDate" layoutX="15.0" layoutY="38.0" prefHeight="26.0" prefWidth="86.0" promptText="ÉÉÉÉ.HH" text=" " />
                   <Button id="btnReady" fx:id="btnReady" layoutX="118.0" layoutY="38.0" mnemonicParsing="false" onAction="#btnClick" text="Kész" />
-                  <CheckBox layoutX="12.0" layoutY="272.0" mnemonicParsing="false" text="Érkezés a telephelyre" textFill="#d66211">
+                  <CheckBox id="chkBackToSites" fx:id="chkBackToSites" layoutX="12.0" layoutY="272.0" mnemonicParsing="false" onAction="#chkCheck" text="Érkezés a telephelyre" textFill="#1aa10e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </CheckBox>
-                  <Button id="makeExcel" fx:id="makeExcel" layoutX="1074.0" layoutY="25.0" mnemonicParsing="false" text="Excel készítése">
+                  <Button id="makeExcel" fx:id="makeExcel" layoutX="1074.0" layoutY="25.0" mnemonicParsing="false" onAction="#btnClick" text="Excel készítése">
                      <font>
                         <Font size="14.0" />
                      </font>

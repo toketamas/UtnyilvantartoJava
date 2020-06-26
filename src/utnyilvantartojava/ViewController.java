@@ -16,7 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
-
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -30,17 +29,19 @@ public class ViewController implements Initializable {
     @FXML
     TabPane tabPane;
     @FXML
-    Tab tabNyilv;
-    @FXML
-    Tab tabBeallit;
-    @FXML
-    WebView WV;
-    @FXML
     AnchorPane setPane;
 
     //Tábla
     @FXML
     TableView table;
+    @FXML
+    Tab tabNyilv;
+    @FXML
+    Tab tabBeallit;
+
+    //webview
+    @FXML
+    WebView WV;
 
     // gombok
     @FXML
@@ -53,11 +54,10 @@ public class ViewController implements Initializable {
     Button btnSel;
     @FXML
     Button btnReadExcel;
-    @FXML Button btnReady;
-
-
-
-
+    @FXML
+    Button btnReady;
+    @FXML
+    Button makeExcel;
 
     // Checkboxok
     @FXML
@@ -66,6 +66,9 @@ public class ViewController implements Initializable {
     CheckBox chkSites;
     @FXML
     CheckBox chkPrivate;
+    @FXML
+    CheckBox chkBackToSites;
+
 
     // Labelek
     @FXML
@@ -170,16 +173,15 @@ public class ViewController implements Initializable {
             } else if (chkBack.isSelected()) {
                 observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
                 observableList.add(new Route(date, targetAddress, startAddress, distance, telephely.getClient(), false, chkBack.isSelected(), false));
-
                 chkSites.setSelected(true);
                 txtDepart.setText(telephely.getClient());
                 startClient = telephely;
-
             } else {
                 observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
                 txtDepart.setText(targetAddress);
                 startClient = targetClient;
                 startAddress = targetAddress;
+                chkSites.setSelected(false);
             }
 
             if (observableList.get(observableList.size() - 1).isVissza()) {
@@ -208,6 +210,11 @@ public class ViewController implements Initializable {
                 System.out.println(db.getDistance(startAddress, targetAddress) + " " + db.getDistance(targetAddress, startAddress));
                 System.out.println(startAddress + " " + targetAddress);
                 db.addDistance(startAddress, targetAddress, distance);
+            }
+            if (chkBackToSites.isSelected()){
+                chkSites.setSelected(true);
+                chkBackToSites.setSelected(false);
+                txtDepart.setText(telephely.getClient());
             }
             txtDistance.clear();
             targetAddress = "";
@@ -272,23 +279,41 @@ public class ViewController implements Initializable {
     @FXML
     private void chkCheck(ActionEvent event) {
         if (chkSites.isSelected()) {
-            System.out.println(chkSites.getText());
             txtDepart.setText("Telephely");
             txtDepart.setEditable(false);
+            chkBackToSites.setSelected(false);
         } else {
-            txtDepart.clear();
+            //txtDepart.clear();
             txtDepart.setEditable(true);
         }
 
         if (chkPrivate.isSelected()) {
             txtDistance.setEditable(true);
             chkSites.setSelected(false);
+            chkBackToSites.setSelected(false);
             chkBack.setSelected(false);
             cbClient.setDisable(true);
+            txtArrive.setEditable(false);
             txtDepart.setText("Magánhasználat");
             txtArrive.setText("Magánhasználat");
             startAddress = "";
             targetAddress = "";
+        }else if (chkBackToSites.isSelected()){
+            txtArrive.setText("Telephely");
+            txtArrive.setEditable(false);
+            chkSites.setSelected(false);
+            targetClient=telephely;
+            startAddress=startClient.getCity()+" "+startClient.getAddress();
+            targetAddress=telephely.getCity()+" "+telephely.getAddress();
+            getDistanceFromGmaps(startAddress,targetAddress);
+
+        }else {
+            txtArrive.clear();
+            txtArrive.setEditable(true);
+
+
+
+
         }
     }
 
@@ -318,7 +343,7 @@ public class ViewController implements Initializable {
 
         if (chkSites.isSelected()) {   //le kell kérni az induló gépszámot aztán megszerezni a cél gépszámot lekérdezni a távot ha nincs meg akkor lekérdezni a téképtől beírnia textboxba aztán beírni az adatbázisba
             startAddress = startClient.getCity() + " " + startClient.getAddress();
-            chkSites.setSelected(false);
+
         }
         getDistanceFromGmaps(startAddress,targetAddress);
     }
@@ -404,7 +429,7 @@ public class ViewController implements Initializable {
         chkSites.setSelected(true);
         startClient = telephely;                  // !!!!!!telephelyet állítja startclientnek ezt kell módosítani ha lesz mentett előző client  !!!!!!!
         txtDepart.setText(startClient.getClient());
-        txtDepart.setDisable(true);
+        txtDepart.setEditable(false);
         cbClient.setValue("Válaszd ki az ügyfelet");
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
         datePicker.setValue(date);

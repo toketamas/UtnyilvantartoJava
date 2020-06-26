@@ -10,7 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 
 
-public class IOExcel {
+public class MakeExcel {
 
     public Cell getCell(String fileName, String sheetName, String cellAddr) {
         FileInputStream inputStream = null;
