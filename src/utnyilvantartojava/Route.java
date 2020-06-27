@@ -19,24 +19,23 @@ public class Route {
     private final IntegerProperty tavolsag;
     private final StringProperty ugyfel;
     private final BooleanProperty magan;
-    //private final BooleanProperty vissza;
-    //private final BooleanProperty telephelyrol;
+    private final BooleanProperty odaVissza;
     private final IntegerProperty spedometer;
     private final DoubleProperty fueling;
 
 
 
-    public Route(String datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza, Boolean telephelyrol, Integer spedometer, Double fueling) {
+    public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel,Integer spedometer,Double tankolas,Integer tavolsag, Boolean odaVissza) {
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
         this.erkezes = new SimpleStringProperty(erkezes);
         this.tavolsag = new SimpleIntegerProperty(tavolsag);
         this.ugyfel = new SimpleStringProperty(ugyfel);
         this.magan = new SimpleBooleanProperty(magan);
-        //this.vissza = new SimpleBooleanProperty(vissza);
-        //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
+        this.odaVissza = new SimpleBooleanProperty(odaVissza);
+       //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
         this.spedometer = new SimpleIntegerProperty(spedometer);
-        this.fueling = new SimpleDoubleProperty(fueling);
+        this.fueling = new SimpleDoubleProperty(tankolas);
     }
     public Route(IntegerProperty spedometer, DoubleProperty fueling) {
         this.spedometer = spedometer;
@@ -47,7 +46,7 @@ public class Route {
         this.tavolsag = new SimpleIntegerProperty();
         this.ugyfel = new SimpleStringProperty("");
         this.magan = new SimpleBooleanProperty();
-        //this.vissza = new SimpleBooleanProperty();
+        this.odaVissza = new SimpleBooleanProperty();
         //this.telephelyrol = new SimpleBooleanProperty();
     }
 
@@ -146,19 +145,20 @@ public class Route {
     public void setFueling(double fueling) {
         this.fueling.set(fueling);
     }
- /*  public boolean isVissza() {
-        return vissza.get();
+
+    public boolean isVissza() {
+        return odaVissza.get();
     }
 
     public BooleanProperty visszaProperty() {
-        return vissza;
+        return odaVissza;
     }
 
     public void setVissza(boolean vissza) {
-        this.vissza.set(vissza);
+        this.odaVissza.set(vissza);
     }
 
-    public boolean isTelephelyrol() {
+  /*  public boolean isTelephelyrol() {
         return telephelyrol.get();
     }
 

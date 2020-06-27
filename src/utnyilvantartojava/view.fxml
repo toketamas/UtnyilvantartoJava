@@ -18,7 +18,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
@@ -54,17 +54,17 @@
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></TextField>
-                  <Label id="lblName" fx:id="lblName" layoutX="227.0" layoutY="31.0" text="Név" textFill="#1017dd">
+                  <Label id="lblName" fx:id="lblName" layoutX="384.0" layoutY="15.0" text="Név" textFill="#6a6b7c">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <Label id="lblSites" fx:id="lblSites" layoutX="377.0" layoutY="31.0" text="Telephely" textAlignment="CENTER" textFill="#1017dd">
+                  <Label id="lblSites" fx:id="lblSites" layoutX="384.0" layoutY="45.0" text="Telephely" textAlignment="CENTER" textFill="#6a6b7c">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <Label id="lblKm" fx:id="lblKm" layoutX="542.0" layoutY="31.0" text=" Km óra állás" textAlignment="CENTER" textFill="#1017dd" textOverrun="CENTER_WORD_ELLIPSIS">
+                  <Label id="lblKm" fx:id="lblKm" layoutX="582.0" layoutY="45.0" text=" Km óra állás" textAlignment="CENTER" textFill="#6a6b7c" textOverrun="CENTER_WORD_ELLIPSIS">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font></Label>
                   <CheckBox id="chkSites" fx:id="chkSites" layoutX="12.0" layoutY="184.0" mnemonicParsing="false" onAction="#chkCheck" text="Indulás a telephelyről" textFill="#1aa10e">
                      <font>
@@ -131,6 +131,16 @@
                   <Separator layoutX="15.0" layoutY="158.0" prefWidth="200.0" />
                   <Separator layoutX="13.0" layoutY="244.0" prefWidth="200.0" />
                   <Separator layoutX="13.0" layoutY="330.0" prefWidth="200.0" />
+                  <Label id="lblKezdo" fx:id="lblKezdo" layoutX="585.0" layoutY="15.0" text="Kezdő Km" textFill="#6a6b7c">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label id="lblMegtett" fx:id="lblMegtett" layoutX="797.0" layoutY="15.0" text="Megtett Km" textFill="#6a6b7c">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
                     </children></AnchorPane>
       </content>
     </Tab>

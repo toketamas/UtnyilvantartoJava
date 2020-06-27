@@ -47,13 +47,14 @@ public class DbModel {
                 createStatement.execute("create table routes(" +
                         "routeid integer primary key autoincrement," +
                         "date text," +
+                        "private integer," +
                         "depart text," +
                         "arrive text," +
-                        "distance integer," +
                         "client text," +
-                        "private integer," +
-                        "backandforth integer," +
-                        "sites integer);");
+                        "spedometer integer," +
+                        "fueling double," +
+                        "distance integer," +
+                        "backandforth intege);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -97,19 +98,20 @@ public class DbModel {
     }
 
     // hozzáad egy új utat a routes táblához
-    public void addRoute(String datum, String indulas, String erkezes, int tavolsag, String ugyfel, Boolean magan, Boolean odaVissza, Boolean telephelyrol) {
-        String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?)";
+    public void addRoute(String datum, Boolean magan, String indulas, String erkezes,String ugyfel,int spedometer,double fuelig, int tavolsag, boolean odaVissza) {
+        String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1,null);
             preparedStatement.setString(2, datum.toString());
-            preparedStatement.setString(3, indulas);
-            preparedStatement.setString(4, erkezes);
-            preparedStatement.setInt(5,tavolsag );
+            preparedStatement.setInt(3, convertBool(magan));
+            preparedStatement.setString(4, indulas);
+            preparedStatement.setString(5,erkezes);
             preparedStatement.setString(6, ugyfel);
-            preparedStatement.setInt(7, convertBool(magan));
-            preparedStatement.setInt(8, convertBool(odaVissza));
-            preparedStatement.setInt(9, convertBool(telephelyrol));
+            preparedStatement.setInt(7, spedometer);
+            preparedStatement.setDouble(8,fuelig );
+            preparedStatement.setInt(9, tavolsag);
+            preparedStatement.setInt(10,convertBool(odaVissza));
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -127,15 +129,17 @@ public class DbModel {
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
                 String date = rs1.getString("date");
+                boolean priv = convertBool(rs1.getInt("private"));
                 String depart = rs1.getString("depart");
                 String arrive = rs1.getString("arrive");
-                int distance = rs1.getInt("distance");
                 String client = rs1.getString("client");
-                boolean priv = convertBool(rs1.getInt("private"));
+                int spedometer=rs1.getInt("spedometer");
+                double fueling=rs1.getDouble("fueling");
+                int distance = rs1.getInt("distance");
                 boolean backandforth = convertBool(rs1.getInt("backandforth"));
-                boolean sites = convertBool(rs1.getInt("sites"));
 
-                routes.add(new Route(date, depart, arrive, distance, client, priv, backandforth, sites, spedometer, fueling));
+
+                routes.add(new Route(date,priv, depart, arrive,client,spedometer,fueling, distance, backandforth));
                 System.out.println(date);
             }
         } catch (SQLException ex) {
@@ -143,6 +147,19 @@ public class DbModel {
             System.out.println("" + ex);
         }
         return routes;
+    }
+    public int getSpedometer(String workDate) {      // a routes listából a havi összes távolságot adja vissza
+        int value = 0;
+        String sqlQuery = "select sum(distance) from routes where date like '"+workDate+"-%%' " ;
+        System.out.println(sqlQuery);
+        try {
+            rs1=createStatement.executeQuery(sqlQuery);
+        value=rs1.getInt("sum(distance)");
+            System.out.println(value);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return value;
     }
 
 
