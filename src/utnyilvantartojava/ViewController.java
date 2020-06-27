@@ -57,7 +57,7 @@ public class ViewController implements Initializable {
     @FXML
     Button btnReady;
     @FXML
-    Button makeExcel;
+    Button btnMakeExcel;
 
     // Checkboxok
     @FXML
@@ -120,8 +120,6 @@ public class ViewController implements Initializable {
     @FXML
     SearchableComboBox <String> cbClient;
 
-
-
     DbModel db = new DbModel();
     LocalDate date = LocalDate.now();
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
@@ -161,7 +159,7 @@ public class ViewController implements Initializable {
             if (chkPrivate.isSelected()) {
                 try {
                     distance = Integer.parseInt(txtDistance.getText());
-                    observableList.add(new Route(date, "Magánhasználat", "Magánhasználat", distance, "Magánhasználat", false, chkBack.isSelected(), false));
+                    observableList.add(new Route(date, "Magánhasználat", "Magánhasználat", distance, "Magánhasználat", false, chkBack.isSelected(), false, spedometer, fueling));
                     chkPrivate.setSelected(false);
                     chkSites.setSelected(true);
                     txtDepart.setText(telephely.getClient());
@@ -171,13 +169,13 @@ public class ViewController implements Initializable {
                     txtDistance.setText("IDE CSAK SZÁMOT ÍRHATSZ!!!");
                 }
             } else if (chkBack.isSelected()) {
-                observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
-                observableList.add(new Route(date, targetAddress, startAddress, distance, telephely.getClient(), false, chkBack.isSelected(), false));
+                observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false, spedometer, fueling));
+                observableList.add(new Route(date, targetAddress, startAddress, distance, telephely.getClient(), false, chkBack.isSelected(), false, spedometer, fueling));
                 chkSites.setSelected(true);
                 txtDepart.setText(telephely.getClient());
                 startClient = telephely;
             } else {
-                observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false));
+                observableList.add(new Route(date, startAddress, targetAddress, distance, targetClient.getClient(), false, chkBack.isSelected(), false, spedometer, fueling));
                 txtDepart.setText(targetAddress);
                 startClient = targetClient;
                 startAddress = targetAddress;
@@ -273,6 +271,10 @@ public class ViewController implements Initializable {
             settings.add(8,workDate);
             saveFile("settings.cfg",settings);
             loadFile("settings.cfg");
+        }
+
+        if (btnMakeExcel.isArmed()) {
+            makeExcel("üres.xlsx","nyomtat");
         }
     }
 
@@ -614,6 +616,22 @@ public class ViewController implements Initializable {
                     "Magánhasználat"
             );
         }
+    }
+    public void makeExcel(String fileName, String sheetName){
+        for (int i = 0;i<observableList.size();i++){
+        RowToExcel row = new RowToExcel(observableList.get(i).getDatum(),
+                "hibajavítás",
+                observableList.get(i).getIndulas(),
+                observableList.get(i).getErkezes(),
+                observableList.get(i).getUgyfel(),
+                "55565",
+                "",
+                observableList.get(i).getTavolsag(),
+                "C");
+        System.out.println(row.getDepart());
+
+        row.setRow("üres.xlsx","nyomtat",9);
+    }
     }
 }
 

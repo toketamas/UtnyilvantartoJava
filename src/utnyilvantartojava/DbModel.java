@@ -135,7 +135,7 @@ public class DbModel {
                 boolean backandforth = convertBool(rs1.getInt("backandforth"));
                 boolean sites = convertBool(rs1.getInt("sites"));
 
-                routes.add(new Route(date, depart, arrive, distance, client, priv, backandforth, sites));
+                routes.add(new Route(date, depart, arrive, distance, client, priv, backandforth, sites, spedometer, fueling));
                 System.out.println(date);
             }
         } catch (SQLException ex) {

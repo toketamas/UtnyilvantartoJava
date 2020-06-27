@@ -1,8 +1,6 @@
 package utnyilvantartojava;
 
 import javafx.beans.property.*;
-import javafx.scene.control.TextField;
-import org.controlsfx.control.textfield.TextFields;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,28 +19,36 @@ public class Route {
     private final IntegerProperty tavolsag;
     private final StringProperty ugyfel;
     private final BooleanProperty magan;
-    private final BooleanProperty vissza;
-    private final BooleanProperty telephelyrol;
+    //private final BooleanProperty vissza;
+    //private final BooleanProperty telephelyrol;
+    private final IntegerProperty spedometer;
+    private final DoubleProperty fueling;
 
-    public Route(String datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza, Boolean telephelyrol) {
+
+
+    public Route(String datum, String indulas, String erkezes, Integer tavolsag, String ugyfel, Boolean magan, Boolean vissza, Boolean telephelyrol, Integer spedometer, Double fueling) {
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
         this.erkezes = new SimpleStringProperty(erkezes);
         this.tavolsag = new SimpleIntegerProperty(tavolsag);
         this.ugyfel = new SimpleStringProperty(ugyfel);
         this.magan = new SimpleBooleanProperty(magan);
-        this.vissza = new SimpleBooleanProperty(vissza);
-        this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
+        //this.vissza = new SimpleBooleanProperty(vissza);
+        //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
+        this.spedometer = new SimpleIntegerProperty(spedometer);
+        this.fueling = new SimpleDoubleProperty(fueling);
     }
-    public Route() {
+    public Route(IntegerProperty spedometer, DoubleProperty fueling) {
+        this.spedometer = spedometer;
+        this.fueling = new SimpleDoubleProperty(0);
         this.datum = new SimpleStringProperty("");
         this.indulas = new SimpleStringProperty("");
         this.erkezes = new SimpleStringProperty("");
         this.tavolsag = new SimpleIntegerProperty();
         this.ugyfel = new SimpleStringProperty("");
         this.magan = new SimpleBooleanProperty();
-        this.vissza = new SimpleBooleanProperty();
-        this.telephelyrol = new SimpleBooleanProperty();
+        //this.vissza = new SimpleBooleanProperty();
+        //this.telephelyrol = new SimpleBooleanProperty();
     }
 
     public String getDatum() {
@@ -117,7 +123,30 @@ public class Route {
         this.magan.set(magan);
     }
 
-    public boolean isVissza() {
+    public int getSpedometer() {
+        return spedometer.get();
+    }
+
+    public IntegerProperty spedometerProperty() {
+        return spedometer;
+    }
+
+    public void setSpedometer(int spedometer) {
+        this.spedometer.set(spedometer);
+    }
+
+    public double getFueling() {
+        return fueling.get();
+    }
+
+    public DoubleProperty fuelingProperty() {
+        return fueling;
+    }
+
+    public void setFueling(double fueling) {
+        this.fueling.set(fueling);
+    }
+ /*  public boolean isVissza() {
         return vissza.get();
     }
 
@@ -139,7 +168,7 @@ public class Route {
 
     public void setTelephelyrol(boolean telephelyrol) {
         this.telephelyrol.set(telephelyrol);
-    }
+    }*/
 
 
 
