@@ -174,7 +174,7 @@ public class ViewController implements Initializable {
                     spedometer = spedometer + distance;
                     setLabels();
                     observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", spedometer, fueling, distance, false));
-                    settings.add(9,"Telephely");
+                    settings.add(9,"telephely");
                     saveFile("settings.cfg",settings);
                     chkPrivate.setSelected(false);
                     chkSites.setSelected(true);
@@ -190,7 +190,7 @@ public class ViewController implements Initializable {
                 spedometer = spedometer + distance;
                 setLabels();
                 observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber()+"/"+startClient.getClient(), spedometer, fueling, distance, chkBack.isSelected()));
-                settings.add(9,"Telephely");
+                settings.add(9,"telephely");
                 saveFile("settings.cfg",settings);
                 chkSites.setSelected(true);
                 txtDepart.setText(telephely.getClient());
@@ -199,7 +199,7 @@ public class ViewController implements Initializable {
                 spedometer = spedometer + distance;
                 setLabels();
                 observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber()+"/"+targetClient.getClient(), spedometer, fueling, distance, chkBack.isSelected()));
-                settings.add(9,startClient.getClientNumber());
+                settings.add(9,targetClient.getClientNumber());
                 saveFile("settings.cfg",settings);
                 txtDepart.setText(targetAddress);
                 startClient = targetClient;
@@ -475,8 +475,15 @@ public class ViewController implements Initializable {
         observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));         // betölti az adatokat az adatbázisból
         
 
-        startClient = telephely;                  // !!!!!!telephelyet állítja startclientnek ezt kell módosítani ha lesz mentett előző client  !!!!!!!
-        txtDepart.setText(startClient.getClient());
+        startClient = db.getClient(settings.get(9));                  // !!!!!!telephelyet állítja startclientnek ezt kell módosítani ha lesz mentett előző client  !!!!!!!
+        if (startClient.getClient().toLowerCase().startsWith("telephely")) {
+            txtDepart.setText(startClient.getClient());
+            chkSites.setSelected(true);
+        }
+        else {
+            txtDepart.setText(startClient.getCity() + " " + startClient.getAddress());
+            chkSites.setSelected(false);
+        }
         txtDepart.setEditable(false);
         cbClient.getItems().addAll(db.getAllClient());
         fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába

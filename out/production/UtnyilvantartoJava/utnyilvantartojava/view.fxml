@@ -18,7 +18,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
@@ -40,7 +40,7 @@
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                        <Button id="btnSel" fx:id="btnSel" layoutX="122.0" layoutY="436.0" mnemonicParsing="false" onAction="#btnClick" text="Újraküld">
+                        <Button id="btnSel" fx:id="btnSel" accessibleHelp="ghdghdfhdfhdfh" layoutX="122.0" layoutY="436.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság ?" textFill="RED">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
