@@ -14,13 +14,15 @@ class RowToExcel {
     private String depart;
     private String arrive;
     private String client;
-    private String speedometer;
-    private String fueling;
-    private int distance;
+    private Integer speedometer;
+    private Double fueling;
+    private Integer distance;
     private String mORc;
     private int rowLength=9;
+    public RowToExcel(){
 
-    public RowToExcel(String date, String travelType, String depart, String arrive, String client, String speedometer, String fueling, int distance, String mORc) {
+    }
+    public RowToExcel(String date, String travelType, String depart, String arrive, String client, Integer speedometer, Double fueling, Integer distance, String mORc) {
         this.date = date;
         this.travelType = travelType;
         this.depart = depart;
@@ -73,19 +75,19 @@ class RowToExcel {
         this.client = client;
     }
 
-    public String getSpeedometer() {
+    public Integer getSpeedometer() {
         return speedometer;
     }
 
-    public void setSpeedometer(String speedometer) {
+    public void setSpeedometer(Integer speedometer) {
         this.speedometer = speedometer;
     }
 
-    public String getFueling() {
+    public Double getFueling() {
         return fueling;
     }
 
-    public void setFueling(String fueling) {
+    public void setFueling(Double fueling) {
         this.fueling = fueling;
     }
 
@@ -113,7 +115,21 @@ class RowToExcel {
         this.rowLength = rowLength;
     }
 
-
+    public void createNewExcelFile(String fileName){
+        FileInputStream file = null;
+        try {
+            file = new FileInputStream("blank.xlsx");
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            FileOutputStream outFile =new FileOutputStream(new File(fileName));
+            workbook.write(outFile);
+            outFile.close();
+            file.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setRow (String fileName, String sheetName, int rowNumber) {
 
@@ -145,14 +161,13 @@ class RowToExcel {
             cell.setCellValue(this.distance);
             cell= row.getCell(9);
             cell.setCellValue(this.mORc);
-            System.out.println(this.depart);
 
 
-            file.close();
 
             FileOutputStream outFile =new FileOutputStream(new File(fileName));
             workbook.write(outFile);
             outFile.close();
+            file.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -165,6 +180,7 @@ class RowToExcel {
 
     public void setCell (String fileName, String sheetName, String cellAddr, String value) {
 
+        //fileName="proba.xlsx";
         try {
             FileInputStream file = new FileInputStream(fileName);
 
@@ -175,9 +191,8 @@ class RowToExcel {
             Row row = sheet.getRow(cellAddress.getRow());
 
             //Update the value of cell
-           cell = row.getCell(cellAddress.getRow());
+           cell = row.getCell(cellAddress.getColumn());
             cell.setCellValue(value);
-
             file.close();
 
             FileOutputStream outFile =new FileOutputStream(new File(fileName));

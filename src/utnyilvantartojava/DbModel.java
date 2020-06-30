@@ -45,16 +45,16 @@ public class DbModel {
             rs1 = dbmeta.getTables(null, "APP", "ROUTES", null);
             if (!rs1.next()) {
                 createStatement.execute("create table routes(" +
-                        "routeid integer primary key autoincrement," +
-                        "date text," +
+                        "routeid integer primary key autoincrement not null," +
+                        "date text not null," +
                         "private integer," +
-                        "depart text," +
-                        "arrive text," +
-                        "client text," +
-                        "spedometer integer," +
-                        "fueling double," +
-                        "distance integer," +
-                        "backandforth intege);");
+                        "depart text not null," +
+                        "arrive text not null," +
+                        "client text not null," +
+                        "spedometer integer not null," +
+                        "fueling double not null," +
+                        "distance integer not null," +
+                        "backandforth intege not null);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -123,7 +123,7 @@ public class DbModel {
         ArrayList<Route> routes = null;
         System.out.println(workDate);
         try {
-            String sqlQuery = "select * from routes where date like " + workDate + " order by date";
+            String sqlQuery = "select * from routes where date like " + workDate + " order by spedometer";
 
             routes = new ArrayList<>();
             rs1 = createStatement.executeQuery(sqlQuery);
