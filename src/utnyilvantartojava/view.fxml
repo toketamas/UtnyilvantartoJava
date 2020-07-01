@@ -18,13 +18,13 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
                 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0">
                     <children>
-                        <TableView id="table" fx:id="table" editable="true" layoutX="227.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="966.0" prefHeight="403.0" prefWidth="966.0" tableMenuButtonVisible="true">
+                        <TableView id="table" fx:id="table" editable="true" layoutX="227.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="966.0"  prefHeight="403.0" prefWidth="966.0" tableMenuButtonVisible="true">
 
                             <placeholder>
                                 <Label text="Nincs Adat" />
@@ -144,7 +144,7 @@
                     </children></AnchorPane>
       </content>
     </Tab>
-    <Tab id="tabBeallit" fx:id="tabBeallit" text="Beállítás">
+        <Tab id="tabBeallit" fx:id="tabBeallit" text="Beállítás">
       <content>
         <AnchorPane id="btnReadExcel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -192,5 +192,23 @@
                </children></AnchorPane>
       </content>
     </Tab>
+        <Tab id="tadAbout" fx:id="tabAbout" text="Készítette">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="510.0" layoutY="122.0" text="Készitette: Tőke Tamás">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="510.0" layoutY="178.0" text="email: tfsoft2020@gmail.com">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="534.0" layoutY="875.0" text="© Minden jog fenntartva" />
+               </children>
+            </AnchorPane>
+         </content></Tab>
   </tabs>
 </TabPane>

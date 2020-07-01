@@ -17,6 +17,7 @@ import javafx.scene.web.WebView;
 import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.beans.EventHandler;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -174,7 +175,7 @@ public class ViewController implements Initializable {
                     spedometer = spedometer + distance;
                     setLabels();
                     observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", spedometer, fueling, distance, false));
-                    settings.add(9,"telephely");
+                    settings.set(9,"telephely");
                     saveFile("settings.cfg",settings);
                     chkPrivate.setSelected(false);
                     chkSites.setSelected(true);
@@ -190,7 +191,7 @@ public class ViewController implements Initializable {
                 spedometer = spedometer + distance;
                 setLabels();
                 observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber()+"/"+startClient.getClient(), spedometer, fueling, distance, chkBack.isSelected()));
-                settings.add(9,"telephely");
+                settings.set(9,"telephely");
                 saveFile("settings.cfg",settings);
                 chkSites.setSelected(true);
                 txtDepart.setText(telephely.getClient());
@@ -199,7 +200,7 @@ public class ViewController implements Initializable {
                 spedometer = spedometer + distance;
                 setLabels();
                 observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber()+"/"+targetClient.getClient(), spedometer, fueling, distance, chkBack.isSelected()));
-                settings.add(9,targetClient.getClientNumber());
+                settings.set(9,targetClient.getClientNumber());
                 saveFile("settings.cfg",settings);
                 txtDepart.setText(targetAddress);
                 startClient = targetClient;
@@ -264,15 +265,15 @@ public class ViewController implements Initializable {
         //beállít tab gombok
         if (btnSetOk.isArmed()) {
             settings.clear();
-            settings.add(0,txfNev.getText());
-            settings.add(1,txfTelep.getText());
-            settings.add(2,txfTelepCim.getText());
-            settings.add(3,txfAuto.getText());
-            settings.add(4,txfRendsz.getText());
-            settings.add(5,txfLoket.getText());
-            settings.add(6,txfFogyaszt.getText());
-            settings.add(7,txfElozo.getText());
-            settings.add(8,txtDate.getText());
+            settings.set(0,txfNev.getText());
+            settings.set(1,txfTelep.getText());
+            settings.set(2,txfTelepCim.getText());
+            settings.set(3,txfAuto.getText());
+            settings.set(4,txfRendsz.getText());
+            settings.set(5,txfLoket.getText());
+            settings.set(6,txfFogyaszt.getText());
+            settings.set(7,txfElozo.getText());
+            settings.set(8,txtDate.getText());
             saveFile("settings.cfg", settings);
             checkSpecialClients();
             setPane.setDisable(true);
@@ -296,9 +297,11 @@ public class ViewController implements Initializable {
         }
         if (btnReady.isArmed()) {
             workDate = txtDate.getText();
-            settings.add(8, workDate);
+            settings.set(8, workDate);
             saveFile("settings.cfg", settings);
-            loadFile("settings.cfg");
+            observableList.clear();
+            observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
+            //loadFile("settings.cfg");
         }
 
         if (btnMakeExcel.isArmed()) {
@@ -375,6 +378,18 @@ public class ViewController implements Initializable {
 
         }
         getDistanceFromGmaps(startAddress, targetAddress);
+    }
+
+    @FXML
+    private void rowClicked(ActionEvent event) {
+
+
+        //System.out.println(table.getSelectionModel().getSelectedIndex());
+        //Route selectedItems = observableList.get(table.getSelectionModel().getSelectedIndex());
+        //System.out.println(selectedItems.getUgyfel());
+
+       // System.out.println(selectedItems.toString());
+
     }
 
     //Itt Indul
@@ -514,10 +529,13 @@ public class ViewController implements Initializable {
         tankolCol.setResizable(false);
         tankolCol.setCellValueFactory(new PropertyValueFactory<Route, Double>("spedometer"));
 
+
         spedometerCol = new TableColumn("Tankol");
         spedometerCol.setPrefWidth(57);
         spedometerCol.setResizable(false);
         spedometerCol.setCellValueFactory(new PropertyValueFactory<Route, Double>("fueling"));
+
+
 
         indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
         indCol.setPrefWidth(220);        //oszlop min szélesség beállítása 200 pixelre
@@ -547,7 +565,7 @@ public class ViewController implements Initializable {
     public static void saveFile(String filename, ArrayList<String> list) {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(filename);
+              writer = new PrintWriter(filename);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

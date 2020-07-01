@@ -167,7 +167,9 @@ class RowToExcel {
             FileOutputStream outFile =new FileOutputStream(new File(fileName));
             workbook.write(outFile);
             outFile.close();
+
             file.close();
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
