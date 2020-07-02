@@ -25,7 +25,7 @@ public class Route {
 
 
 
-    public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel,Integer spedometer,Double tankolas,Integer tavolsag, Boolean odaVissza) {
+    public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza) {
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
         this.erkezes = new SimpleStringProperty(erkezes);

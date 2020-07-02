@@ -24,7 +24,7 @@
             <content>
                 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0">
                     <children>
-                        <TableView id="table" fx:id="table" editable="true" layoutX="227.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="966.0"  prefHeight="403.0" prefWidth="966.0" tableMenuButtonVisible="true">
+                        <TableView id="table" fx:id="table" editable="true" layoutX="227.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="350" minWidth="966.0" prefHeight="403.0" prefWidth="966.0" tableMenuButtonVisible="true">
 
                             <placeholder>
                                 <Label text="Nincs Adat" />
@@ -40,7 +40,7 @@
                      <font>
                         <Font size="14.0" />
                      </font></Button>
-                        <Button id="btnSel" fx:id="btnSel" accessibleHelp="ghdghdfhdfhdfh" layoutX="122.0" layoutY="436.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság ?" textFill="RED">
+                        <Button id="btnSel" fx:id="btnSel" layoutX="86.0" layoutY="436.0" mnemonicParsing="false" onAction="#btnClick" text="Táv ?" textFill="RED">
                      <font>
                         <Font size="14.0" />
                      </font></Button>
@@ -70,11 +70,11 @@
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></CheckBox>
-                  <CheckBox id="chkBack" fx:id="chkBack" layoutX="115.0" layoutY="340.0" mnemonicParsing="false" text="Oda - vissza" textFill="#4aa0fd">
+                  <CheckBox id="chkBack" fx:id="chkBack" layoutX="113.0" layoutY="392.0" mnemonicParsing="false" text="Oda - vissza" textFill="#4aa0fd">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></CheckBox>
-                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="14.0" layoutY="392.0" mnemonicParsing="false" onAction="#chkCheck" text="Magánhasználat" textFill="#1aa10e">
+                  <CheckBox id="chkPrivate" fx:id="chkPrivate" layoutX="14.0" layoutY="392.0" mnemonicParsing="false" onAction="#chkCheck" text="Magán" textFill="#1aa10e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font></CheckBox>
@@ -141,6 +141,21 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
+                  <TextField id="txtFueling" fx:id="txtFueling" layoutX="102.0" layoutY="338.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="73.0" promptText="Tankolás">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextField>
+                  <Label layoutX="179.0" layoutY="340.0" text="Liter" textFill="#ee540d">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Button id="btnMod" fx:id="btnMod" disable="true" layoutX="171.0" layoutY="436.0" mnemonicParsing="false" text="Javít" onAction="#btnClick">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                     </children></AnchorPane>
       </content>
     </Tab>
@@ -210,5 +225,8 @@
                </children>
             </AnchorPane>
          </content></Tab>
+        <Tab id="modify" fx:id="modify" text="Módosítás">
+
+        </Tab>
   </tabs>
 </TabPane>
