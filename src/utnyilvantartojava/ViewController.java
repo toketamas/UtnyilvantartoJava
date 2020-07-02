@@ -156,6 +156,9 @@ public class ViewController implements Initializable {
 
     Double fueling = 0.0;
 
+    int selectedClientSpedometer;
+    boolean selectedClientOdaVissza;
+
     Integer distance;
     Integer spedometer;
     Integer megtettKM;
@@ -320,6 +323,24 @@ public class ViewController implements Initializable {
             makeExcel(excelName, "nyomtat");
         }
         if (btnMod.isArmed()){
+
+            selectedRoute.setDatum(datePicker.getValue().toString());
+            selectedRoute.setUgyfel(cbClient.getValue());
+            selectedRoute.setIndulas(txtDepart.getText());
+            selectedRoute.setErkezes(txtArrive.getText());
+            selectedRoute.setTavolsag(Integer.parseInt(txtDistance.getText()));
+            selectedRoute.setMagan(chkPrivate.isSelected());
+            selectedRoute.setFueling(Double.parseDouble(txtFueling.getText()));
+            selectedRoute.setVissza(chkBack.isSelected());
+            selectedRoute.setSpedometer(selectedClientSpedometer);
+            selectedRoute.setVissza(selectedClientOdaVissza);
+            observableList.set(selctedRow,selectedRoute);
+
+            txtArrive.clear();;
+            txtDistance.clear();
+            
+
+
             btnMod.setDisable(true);
             btnBev.setDisable(false);
         }
@@ -571,6 +592,8 @@ public class ViewController implements Initializable {
         txtArrive.setText(selectedRoute.getErkezes());
         txtDistance.setText(String.valueOf(selectedRoute.getTavolsag()));
         chkPrivate.setSelected(selectedRoute.isMagan());
+        selectedClientSpedometer=selectedRoute.getSpedometer();
+        selectedClientOdaVissza=selectedRoute.isVissza();
         txtFueling.setText(String.valueOf(selectedRoute.getFueling()));
         btnBev.setDisable(true);
         btnMod.setDisable(false);
