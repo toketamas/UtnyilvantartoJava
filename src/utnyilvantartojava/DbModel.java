@@ -128,6 +128,7 @@ public class DbModel {
             routes = new ArrayList<>();
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
+                Integer routeId=rs1.getInt("routeid");
                 String date = rs1.getString("date");
                 boolean priv = convertBool(rs1.getInt("private"));
                 String depart = rs1.getString("depart");

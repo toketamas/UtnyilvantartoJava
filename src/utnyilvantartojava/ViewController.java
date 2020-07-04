@@ -143,16 +143,16 @@ public class ViewController implements Initializable {
     String remoteExcel = loadFile("link.txt").get(0).toString();
     String localExcel = "ATM_karb_*.xlsx";
     String excelSource;
-    String targetAddress;
-    String startAddress;
-    String workDate;
+    String targetAddress;        // érkezés címe
+    String startAddress;         // indulás címe
+    String workDate;            //a hónap amivel dolgozunk
     String excelName;
 
-    Client startClient;
-    Client targetClient;
-    Client telephely;
+    Client startClient;             // induló kliens
+    Client targetClient;            // cél kliens
+    Client telephely;                // telephely kliens
 
-    Route selectedRoute;
+    Route selectedRoute;            // a táblából kiválasztott út
 
     Double fueling = 0.0;
 

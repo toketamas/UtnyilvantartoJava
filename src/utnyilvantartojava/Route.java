@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class Route {
 
 // private LocalDate datum;
-
+    private Integer routeId;
     private final StringProperty datum;
     private final StringProperty indulas;
     private final StringProperty erkezes;
@@ -24,6 +24,19 @@ public class Route {
     private final DoubleProperty fueling;
 
 
+    public Route(int routeId, String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza) {
+        this.routeId=routeId;
+        this.datum = new SimpleStringProperty(datum);
+        this.indulas = new SimpleStringProperty(indulas);
+        this.erkezes = new SimpleStringProperty(erkezes);
+        this.tavolsag = new SimpleIntegerProperty(tavolsag);
+        this.ugyfel = new SimpleStringProperty(ugyfel);
+        this.magan = new SimpleBooleanProperty(magan);
+        this.odaVissza = new SimpleBooleanProperty(odaVissza);
+        //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
+        this.spedometer = new SimpleIntegerProperty(spedometer);
+        this.fueling = new SimpleDoubleProperty(tankolas);
+    }
 
     public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza) {
         this.datum = new SimpleStringProperty(datum);
@@ -37,8 +50,8 @@ public class Route {
         this.spedometer = new SimpleIntegerProperty(spedometer);
         this.fueling = new SimpleDoubleProperty(tankolas);
     }
-    public Route(IntegerProperty spedometer, DoubleProperty fueling) {
-        this.spedometer = spedometer;
+    public Route() {
+        this.spedometer = new SimpleIntegerProperty(0);
         this.fueling = new SimpleDoubleProperty(0);
         this.datum = new SimpleStringProperty("");
         this.indulas = new SimpleStringProperty("");
@@ -47,7 +60,16 @@ public class Route {
         this.ugyfel = new SimpleStringProperty("");
         this.magan = new SimpleBooleanProperty();
         this.odaVissza = new SimpleBooleanProperty();
+
         //this.telephelyrol = new SimpleBooleanProperty();
+    }
+
+    public Integer getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(Integer routeId) {
+        this.routeId = routeId;
     }
 
     public String getDatum() {
@@ -188,7 +210,7 @@ public class Route {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DbModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // list.sort(Comparator.naturalOrder());
+
         return list;
     }
 }
