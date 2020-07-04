@@ -54,7 +54,8 @@ public class DbModel {
                         "spedometer integer not null," +
                         "fueling double not null," +
                         "distance integer not null," +
-                        "backandforth intege not null);");
+                        "backandforth integer not null," +
+                        "cellid integer not null);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -98,8 +99,8 @@ public class DbModel {
     }
 
     // hozzáad egy új utat a routes táblához
-    public void addRoute(String datum, Boolean magan, String indulas, String erkezes,String ugyfel,int spedometer,double fuelig, int tavolsag, boolean odaVissza) {
-        String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?)";
+    public void addRoute(String datum, Boolean magan, String indulas, String erkezes,String ugyfel,int spedometer,double fuelig, int tavolsag, boolean odaVissza, int cellId) {
+        String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1,null);
@@ -112,6 +113,7 @@ public class DbModel {
             preparedStatement.setDouble(8,fuelig );
             preparedStatement.setInt(9, tavolsag);
             preparedStatement.setInt(10,convertBool(odaVissza));
+            preparedStatement.setInt(11,cellId);
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -138,9 +140,10 @@ public class DbModel {
                 double fueling=rs1.getDouble("fueling");
                 int distance = rs1.getInt("distance");
                 boolean backandforth = convertBool(rs1.getInt("backandforth"));
+                int cellId = rs1.getInt("cellId");
 
 
-                routes.add(new Route(date,priv, depart, arrive,client,fueling,spedometer, distance, backandforth));
+                routes.add(new Route(routeId,date,priv, depart, arrive,client,fueling,spedometer, distance, backandforth,cellId));
                 System.out.println(date);
             }
         } catch (SQLException ex) {

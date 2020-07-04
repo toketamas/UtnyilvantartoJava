@@ -22,9 +22,9 @@ public class Route {
     private final BooleanProperty odaVissza;
     private final IntegerProperty spedometer;
     private final DoubleProperty fueling;
+    private int cellId;
 
-
-    public Route(int routeId, String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza) {
+    public Route(int routeId, String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int celId) {
         this.routeId=routeId;
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
@@ -36,9 +36,10 @@ public class Route {
         //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
         this.spedometer = new SimpleIntegerProperty(spedometer);
         this.fueling = new SimpleDoubleProperty(tankolas);
+        this.cellId=celId;
     }
 
-    public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza) {
+    public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int cellId) {
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
         this.erkezes = new SimpleStringProperty(erkezes);
@@ -49,6 +50,7 @@ public class Route {
        //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
         this.spedometer = new SimpleIntegerProperty(spedometer);
         this.fueling = new SimpleDoubleProperty(tankolas);
+        this.cellId=cellId;
     }
     public Route() {
         this.spedometer = new SimpleIntegerProperty(0);
@@ -180,7 +182,15 @@ public class Route {
         this.odaVissza.set(vissza);
     }
 
-  /*  public boolean isTelephelyrol() {
+    public void setCellId(int cellId) {
+        this.cellId = cellId;
+    }
+
+    public int getCellId() {
+        return cellId;
+    }
+
+    /*  public boolean isTelephelyrol() {
         return telephelyrol.get();
     }
 

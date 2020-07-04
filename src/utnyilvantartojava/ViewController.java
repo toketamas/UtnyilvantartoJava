@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
@@ -34,6 +35,10 @@ public class ViewController implements Initializable {
     TabPane tabPane;
     @FXML
     AnchorPane setPane;
+    @FXML
+    Pane paneRep;
+    @FXML
+    Pane paneNormal;
 
     //Tábla
     @FXML
@@ -55,7 +60,7 @@ public class ViewController implements Initializable {
     @FXML
     Button btnSet;
     @FXML
-    Button btnSel;
+    Button btnDistance;
     @FXML
     Button btnReadExcel;
     @FXML
@@ -63,7 +68,13 @@ public class ViewController implements Initializable {
     @FXML
     Button btnMakeExcel;
     @FXML
-    Button btnMod;
+    Button btnSave;
+    @FXML
+    Button btnInsert;
+    @FXML
+    Button btnDelete;
+    @FXML
+    Button btnCancel;
 
     // Checkboxok
     @FXML
@@ -188,7 +199,7 @@ public class ViewController implements Initializable {
                     distance = parseInt(txtDistance.getText());
                     spedometer = spedometer + distance;
                     setLabels();
-                    observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", fueling, spedometer, distance, false));
+                    observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", fueling, spedometer, distance, false,observableList.size()));
                     settings.set(9, "telephely");
                     saveFile("settings.cfg", settings);
                     chkPrivate.setSelected(false);
@@ -201,10 +212,10 @@ public class ViewController implements Initializable {
                 }
             } else if (chkBack.isSelected()) {
                 spedometer = spedometer + distance;
-                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected()));
+                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(),observableList.size()));
                 spedometer = spedometer + distance;
                 setLabels();
-                observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber() + "/" + startClient.getClient(), fueling, spedometer, distance, chkBack.isSelected()));
+                observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber() + "/" + startClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(),observableList.size()));
                 settings.set(9, "telephely");
                 saveFile("settings.cfg", settings);
                 chkSites.setSelected(true);
@@ -213,7 +224,7 @@ public class ViewController implements Initializable {
             } else {
                 spedometer = spedometer + distance;
                 setLabels();
-                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected()));
+                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(),observableList.size()));
                 settings.set(9, targetClient.getClientNumber());
                 saveFile("settings.cfg", settings);
                 txtDepart.setText(targetAddress);
@@ -232,7 +243,8 @@ public class ViewController implements Initializable {
                         observableList.get(observableList.size() - 2).getSpedometer(),
                         observableList.get(observableList.size() - 2).getFueling(),
                         observableList.get(observableList.size() - 2).getTavolsag(),
-                        observableList.get(observableList.size() - 2).isVissza()
+                        observableList.get(observableList.size() - 2).isVissza(),
+                        observableList.get(observableList.size() - 2).getCellId()
                 );
             }
             db.addRoute(
@@ -244,7 +256,8 @@ public class ViewController implements Initializable {
                     observableList.get(observableList.size() - 1).getSpedometer(),
                     observableList.get(observableList.size() - 1).getFueling(),
                     observableList.get(observableList.size() - 1).getTavolsag(),
-                    observableList.get(observableList.size() - 1).isVissza());
+                    observableList.get(observableList.size() - 1).isVissza(),
+                    observableList.get(observableList.size() - 1).getCellId());
 
 
             if (db.getDistance(startAddress, targetAddress) == 0 && db.getDistance(targetAddress, startAddress) == 0) {
@@ -265,7 +278,7 @@ public class ViewController implements Initializable {
             table.scrollTo(table.getItems().size() - 1);
         }
 
-        if (btnSel.isArmed()) {
+        if (btnDistance.isArmed()) {
             startAddress = txtDepart.getText();
             if (txtDepart.getText().toLowerCase().equals("telephely")) {
                 startAddress = telephely.getCity() + " " + telephely.getAddress();
@@ -322,27 +335,10 @@ public class ViewController implements Initializable {
             excelName = workDate + "_" + settings.get(0) + "_" + settings.get(4) + "_gkelsz.xlsx";
             makeExcel(excelName, "nyomtat");
         }
-        if (btnMod.isArmed()){
-
-            selectedRoute.setDatum(datePicker.getValue().toString());
-            selectedRoute.setUgyfel(cbClient.getValue());
-            selectedRoute.setIndulas(txtDepart.getText());
-            selectedRoute.setErkezes(txtArrive.getText());
-            selectedRoute.setTavolsag(Integer.parseInt(txtDistance.getText()));
-            selectedRoute.setMagan(chkPrivate.isSelected());
-            selectedRoute.setFueling(Double.parseDouble(txtFueling.getText()));
-            selectedRoute.setVissza(chkBack.isSelected());
-            selectedRoute.setSpedometer(selectedClientSpedometer);
-            selectedRoute.setVissza(selectedClientOdaVissza);
-            observableList.set(selctedRow,selectedRoute);
-
-            txtArrive.clear();;
-            txtDistance.clear();
-            
-
-
-            btnMod.setDisable(true);
-            btnBev.setDisable(false);
+                
+        if (btnCancel.isArmed()){
+            paneNormal.setVisible(true);
+            paneRep.setVisible(false);
         }
     }
 
@@ -427,7 +423,7 @@ public class ViewController implements Initializable {
         if (txtDistance.getText()!=""||txtDistance!=null)
         WV.getEngine().load("https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress); // lekérdezi a távolságot a google mapstól
         btnBev.setDisable(true);
-        btnSel.setDisable(true);
+        btnDistance.setDisable(true);
 
         WV.getEngine().getLoadWorker().stateProperty().addListener( //figyeli hogy betöltődött-e az oldal
                 new ChangeListener<Worker.State>() {
@@ -437,7 +433,7 @@ public class ViewController implements Initializable {
                             Worker.State oldValue, Worker.State newValue) {
                         switch (newValue) {
                             case SUCCEEDED:
-                                btnSel.setDisable(false);
+                                btnDistance.setDisable(false);
                                 btnBev.setDisable(false);
                                 break;
                             case FAILED:
@@ -596,7 +592,9 @@ public class ViewController implements Initializable {
         selectedClientOdaVissza=selectedRoute.isVissza();
         txtFueling.setText(String.valueOf(selectedRoute.getFueling()));
         btnBev.setDisable(true);
-        btnMod.setDisable(false);
+
+        paneRep.setVisible(true);
+        paneNormal.setVisible(false);
 
         // selectedRoute.getErkezes());
     }

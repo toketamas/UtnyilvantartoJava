@@ -14,6 +14,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
@@ -36,14 +37,6 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                         </TableView>
-                        <Button id="btnUjSor" fx:id="btnBev" layoutX="18.0" layoutY="436.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Button>
-                        <Button id="btnSel" fx:id="btnSel" layoutX="86.0" layoutY="436.0" mnemonicParsing="false" onAction="#btnClick" text="Táv ?" textFill="RED">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Button>
                         <WebView id="WV" fx:id="WV" disable="true" layoutX="12.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
                   <DatePicker id="datePicker" fx:id="datePicker" layoutX="73.0" layoutY="84.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="136.0" />
                   <TextField id="txtDepart" fx:id="txtDepart" layoutX="12.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="208.0" promptText="Indulás">
@@ -151,11 +144,44 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Button id="btnMod" fx:id="btnMod" disable="true" layoutX="171.0" layoutY="436.0" mnemonicParsing="false" text="Javít" onAction="#btnClick">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
+                  <Pane id="paneRep" fx:id="paneRep" focusTraversable="true" layoutX="-1.0" layoutY="415.0" prefHeight="75.0" prefWidth="226.0" visible="false">
+                     <children>
+                        <Button id="btnDelete" fx:id="btnDelete" layoutX="160.0" layoutY="3.0" mnemonicParsing="false" text="Törlés" textFill="#c60b0b">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button id="btnInsert" fx:id="btnInsert" layoutX="78.0" layoutY="3.0" mnemonicParsing="false" text="Beszúrás" textFill="#04b224">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button id="btnCancel" fx:id="btnCancel" layoutX="84.0" layoutY="39.0" mnemonicParsing="false" onAction="#btnClick" text="Mégse">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button id="btnSave" fx:id="btnSave" layoutX="5.0" layoutY="3.0" mnemonicParsing="false" text="Mentés" textFill="#2a03ee">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane id="paneNormal" fx:id="paneNormal" layoutX="9.0" layoutY="429.0" prefHeight="46.0" prefWidth="216.0">
+                     <children>
+                              <Button id="btnUjSor" fx:id="btnBev" layoutX="22.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                              <Button id="btnDistance" fx:id="btnDistance" layoutX="127.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság" textFill="RED">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
                     </children></AnchorPane>
       </content>
     </Tab>
