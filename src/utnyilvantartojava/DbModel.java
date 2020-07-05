@@ -152,6 +152,17 @@ public class DbModel {
         }
         return routes;
     }
+
+    public void delRoute(int routeId){
+        String sqlQuery = "delete from routes where routeid="+routeId+";";
+        try {
+            preparedStatement=conn.prepareStatement(sqlQuery);
+            preparedStatement.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     public int getSpedometer(String workDate) {      // a routes listából a havi összes távolságot adja vissza
         int value = 0;
         String sqlQuery = "select sum(distance) from routes where date like '"+workDate+"-%%' " ;
@@ -181,6 +192,7 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
+
     public int getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
         int distance = 0;
         String sqlQuery = "select distance from distances where clientid1='"+client1+"' and clientid2='"+client2+"'";
@@ -192,10 +204,6 @@ public class DbModel {
         }
         return distance;
     }
-
-
-
-
 
     public ArrayList availableDest(String startClient) {// az összes célt amihez megvan a távolság
         ArrayList<Distance> distances = null;
@@ -229,8 +237,6 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
-
-
 
     public ArrayList getAllCitys() {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
@@ -270,10 +276,17 @@ public class DbModel {
         }
     }
 
-    public Client getClient(String value) {      //visszaad egy ügyfelet
+   public Client getClient(String value){
+       return queryClient("select * from clients where clientnumber='"+value+"';");
+   }
+
+   public Client getClientFromAddress(String value){
+       return queryClient("select * from clients where city || ' ' || address='"+value+"';");
+   }
+
+    private Client queryClient(String sqlQuery) {      //visszaad egy ügyfelet
         Client client = null;
         try {
-            String sqlQuery = "select * from clients where clientnumber='"+value+"'";
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
                  client = new Client(
@@ -305,6 +318,7 @@ public class DbModel {
             throwables.printStackTrace();
         }
     }
+
     public ArrayList getAllClient() {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
         try {
@@ -337,13 +351,6 @@ public class DbModel {
         return clients;
     }
 
-
-
-    public ArrayList getAvailableCity(String startClient) {             // az összes várost ahol
-        return null;
-    }
-
-
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
     public int convertBool(Boolean value){
         int convertedValue;
@@ -352,6 +359,7 @@ public class DbModel {
         else
             return  0;
     }
+
     private Boolean convertBool(int value) {
         if (value==1)
             return true;

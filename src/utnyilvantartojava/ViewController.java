@@ -18,7 +18,6 @@ import javafx.scene.web.WebView;
 import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.beans.EventHandler;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -36,7 +35,7 @@ public class ViewController implements Initializable {
     @FXML
     AnchorPane setPane;
     @FXML
-    Pane paneRep;
+    Pane paneCorr;
     @FXML
     Pane paneNormal;
 
@@ -162,6 +161,8 @@ public class ViewController implements Initializable {
     Client startClient;             // induló kliens
     Client targetClient;            // cél kliens
     Client telephely;                // telephely kliens
+    Client startClientTemp;         //itt tárolja  a startklienst amikor egy másikat módosít a felhasználó
+    Client targetClientTemp;        //ugyanaz mint feljebb a célklienssel
 
     Route selectedRoute;            // a táblából kiválasztott út
 
@@ -337,9 +338,17 @@ public class ViewController implements Initializable {
         }
                 
         if (btnCancel.isArmed()){
+            startClient=startClientTemp;
+            targetClient=targetClientTemp;
             paneNormal.setVisible(true);
-            paneRep.setVisible(false);
+            paneCorr.setVisible(false);
         }
+        if (btnDelete.isArmed()){
+            db.delRoute(selectedRoute.getRouteId());
+            observableList.clear();
+            observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
+        }
+
     }
 
     @FXML
@@ -583,7 +592,11 @@ public class ViewController implements Initializable {
         selectedRoute=table.getSelectionModel().getSelectedItem();
         selctedRow=table.getSelectionModel().getSelectedIndex();
         datePicker.setValue(LocalDate.parse(selectedRoute.getDatum()));
-        cbClient.setValue(selectedRoute.getUgyfel().substring(0,selectedRoute.getUgyfel().indexOf("/")));
+        if (!selectedRoute.isMagan()) {
+            cbClient.setValue(selectedRoute.getUgyfel().substring(0, selectedRoute.getUgyfel().indexOf("/")));
+        }else{
+            cbClient.setValue(selectedRoute.getUgyfel());
+        }
         txtDepart.setText(selectedRoute.getIndulas());
         txtArrive.setText(selectedRoute.getErkezes());
         txtDistance.setText(String.valueOf(selectedRoute.getTavolsag()));
@@ -591,9 +604,11 @@ public class ViewController implements Initializable {
         selectedClientSpedometer=selectedRoute.getSpedometer();
         selectedClientOdaVissza=selectedRoute.isVissza();
         txtFueling.setText(String.valueOf(selectedRoute.getFueling()));
-        btnBev.setDisable(true);
-
-        paneRep.setVisible(true);
+        startClientTemp=startClient;
+        targetClientTemp=targetClient;
+        startClient=db.getClientFromAddress(selectedRoute.getIndulas());
+        targetClient=db.getClientFromAddress(selectedRoute.getErkezes());
+        paneCorr.setVisible(true);
         paneNormal.setVisible(false);
 
         // selectedRoute.getErkezes());
@@ -772,6 +787,12 @@ public class ViewController implements Initializable {
                     observableList.get(i).getTavolsag(),
                     mORc);
             row.setRow(fileName, sheetName, i + 9);
+        }
+    }
+
+    public void rebuildSpedometer(){
+        for (int i=0;i<observableList.size();i++){
+            observableList.set(i,spedometer=observableList.) observableList.get()
         }
     }
 }
