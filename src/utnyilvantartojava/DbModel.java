@@ -98,8 +98,9 @@ public class DbModel {
 
     }
 
-    // hozzáad egy új utat a routes táblához
+    //routes táblához tartozó lekérdezések
     public void addRoute(String datum, Boolean magan, String indulas, String erkezes,String ugyfel,int spedometer,double fuelig, int tavolsag, boolean odaVissza, int cellId) {
+
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -177,8 +178,29 @@ public class DbModel {
         return value;
     }
 
+    public void updateRoute(Route route,int routeId){
+        String sqlQuery="update routes set " +
+                "date="+route.getDatum()+
+                ", private="+convertBool(route.isMagan())+
+                ", depart="+route.getIndulas()+
+                ", arrive="+route.getErkezes()+
+                ", client="+route.getUgyfel()+
+                ", spedometer="+route.getSpedometer()+
+                ", fueling="+route.getFueling()+
+                ", distance="+route.getTavolsag()+
+                ", backandforth="+convertBool(route.isVissza())+
+                ", cellid="+route.getCellId()+
+        "where routeid = "+routeId+" ;";
 
-    //hozzáad két ügyfél közti távolságot a distances táblához
+        try {
+            preparedStatement=conn.prepareStatement(sqlQuery);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
+    //distances táblához tartozó lekérdezések
     public void addDistance(String clientId1, String clientId2, int distance) {
         String sqlQuery = "insert into distances values (?,?,?)";
         try {
@@ -205,25 +227,6 @@ public class DbModel {
         return distance;
     }
 
-    public ArrayList availableDest(String startClient) {// az összes célt amihez megvan a távolság
-        ArrayList<Distance> distances = null;
-        try {
-            String sqlQuery = "select * from distances where distance is not null";
-            distances = new ArrayList<>();
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                String clientid1 = rs1.getString("clientid1");
-                String clientid2 = rs1.getString("clientid2");
-                int distance = rs1.getInt("distance");
-                distances.add(new Distance(clientid1, clientid2, distance));
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
-            System.out.println("" + ex);
-        }
-        return distances;
-    }
-
     public void setDistance(String clientid1, String clientid2, int distance) { //Beállítja a távolságot a két meglévő helyszín között
         String sqlQuery = "insert into distance values (?,?,?)";
         try {
@@ -238,23 +241,9 @@ public class DbModel {
         }
     }
 
-    public ArrayList getAllCitys() {      //visszaadja  az összes gépszámot
-        ArrayList<String> clients = null;
-        try {
-            String sqlQuery = "select distinct city from clients";
-            clients = new ArrayList<>();
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                clients.add(rs1.getString("city"));
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
-            System.out.println("" + ex);
-        }
-        return clients;
-    }
 
-    // hozzáad egy új ügyfelet(gépet) a client táblához
+
+    //  client táblához kapcsolódó lekérdezések
     public void addClient(String client, String clientnumber,String type, String factorynumber, int zipcode,  String city,  String address, Boolean exist,int maintinanceperyear, String field) {
         String sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
         try {
@@ -276,11 +265,11 @@ public class DbModel {
         }
     }
 
-   public Client getClient(String value){
+    public Client getClient(String value){
        return queryClient("select * from clients where clientnumber='"+value+"';");
    }
 
-   public Client getClientFromAddress(String value){
+    public Client getClientFromAddress(String value){
        return queryClient("select * from clients where city || ' ' || address='"+value+"';");
    }
 
@@ -335,14 +324,14 @@ public class DbModel {
         return clients;
     }
 
-    public ArrayList getAvailableClient(String targetClient) {      //visszaadja  az összes lehetséges célt egy városban
+    public ArrayList getAllCitys() {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
         try {
-            String sqlQuery = "select clientnumber from clients where city=" + targetClient;
+            String sqlQuery = "select distinct city from clients";
             clients = new ArrayList<>();
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
-                clients.add(rs1.getString("clientnumber"));
+                clients.add(rs1.getString("city"));
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");

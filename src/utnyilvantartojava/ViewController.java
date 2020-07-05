@@ -345,9 +345,10 @@ public class ViewController implements Initializable {
         }
         if (btnDelete.isArmed()){
             db.delRoute(selectedRoute.getRouteId());
-            observableList.clear();
-            observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
+            rebuildSpedometer();
         }
+
+        //if (btn)
 
     }
 
@@ -791,9 +792,18 @@ public class ViewController implements Initializable {
     }
 
     public void rebuildSpedometer(){
+        int currentValue=Integer.parseInt(settings.get(7));
+        System.out.println(currentValue);
         for (int i=0;i<observableList.size();i++){
-            observableList.set(i,spedometer=observableList.) observableList.get()
+            Route route=observableList.get(i);
+
+            System.out.println(currentValue);
+            route.setSpedometer(currentValue);
+            currentValue=currentValue+route.getTavolsag();
+            db.updateRoute(route,route.getRouteId());
         }
+        observableList.clear();
+        observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
     }
 }
 
