@@ -345,6 +345,7 @@ public class ViewController implements Initializable {
         }
         if (btnDelete.isArmed()){
             db.delRoute(selectedRoute.getRouteId());
+            System.out.println(selectedRoute.getRouteId());
             rebuildSpedometer();
         }
 
