@@ -146,7 +146,7 @@
                   </Label>
                   <Pane id="paneCorr" fx:id="paneCorr" focusTraversable="true" layoutX="-1.0" layoutY="415.0" prefHeight="75.0" prefWidth="226.0" visible="false">
                      <children>
-                        <Button id="btnDelete" fx:id="btnDelete" layoutX="160.0" layoutY="3.0" mnemonicParsing="false" text="Törlés" textFill="#c60b0b" onAction="#btnClick">
+                        <Button id="btnDelete" fx:id="btnDelete" layoutX="160.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnClick" text="Törlés" textFill="#c60b0b">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -190,7 +190,7 @@
         <AnchorPane id="btnReadExcel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <Button id="btnSetOk" fx:id="btnSetOk" layoutX="168.0" layoutY="419.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="70.0" text="Mentés" />
-                  <Button id="btSet" fx:id="btnSet" layoutX="62.0" layoutY="419.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="78.0" text="Beállítás" />
+                  <Button id="btnSet" fx:id="btnSet" layoutX="62.0" layoutY="419.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="78.0" text="Beállítás" />
                   <Button id="btnReadExcel" fx:id="btnReadExcel" layoutX="542.0" layoutY="113.0" mnemonicParsing="false" onAction="#btnClick" text="Excel beolvasása" />
                   <Label layoutX="522.0" layoutY="66.0" prefHeight="20.0" prefWidth="319.0" text="Az Excel file betöltése akár több óráig is tarthat!!!" textFill="#f80808">
                      <font>

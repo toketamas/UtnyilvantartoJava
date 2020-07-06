@@ -293,15 +293,15 @@ public class ViewController implements Initializable {
         //beállít tab gombok
         if (btnSetOk.isArmed()) {
             settings.clear();
-            settings.set(0, txfNev.getText());
-            settings.set(1, txfTelep.getText());
-            settings.set(2, txfTelepCim.getText());
-            settings.set(3, txfAuto.getText());
-            settings.set(4, txfRendsz.getText());
-            settings.set(5, txfLoket.getText());
-            settings.set(6, txfFogyaszt.getText());
-            settings.set(7, txfElozo.getText());
-            settings.set(8, txtDate.getText());
+            settings.add(0, txfNev.getText());
+            settings.add(1, txfTelep.getText());
+            settings.add(2, txfTelepCim.getText());
+            settings.add(3, txfAuto.getText());
+            settings.add(4, txfRendsz.getText());
+            settings.add(5, txfLoket.getText());
+            settings.add(6, txfFogyaszt.getText());
+            settings.add(7, txfElozo.getText());
+            settings.add(8, txtDate.getText());
             saveFile("settings.cfg", settings);
             checkSpecialClients();
             setPane.setDisable(true);
@@ -313,8 +313,8 @@ public class ViewController implements Initializable {
         if (btnSet.isArmed()) {
             setPane.setDisable(false);
             setLabels();
-
         }
+
         if (btnReadExcel.isArmed()) {
             try {
                 Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"java -jar ExcelToDB.jar " + excelSource + "  ADATOK  2\"");
@@ -323,6 +323,7 @@ public class ViewController implements Initializable {
                 e.printStackTrace();
             }
         }
+
         if (btnReady.isArmed()) {
             workDate = txtDate.getText();
             settings.set(8, workDate);
@@ -343,6 +344,7 @@ public class ViewController implements Initializable {
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
         }
+
         if (btnDelete.isArmed()){
             db.delRoute(selectedRoute.getRouteId());
             System.out.println(selectedRoute.getRouteId());
