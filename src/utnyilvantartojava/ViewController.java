@@ -147,10 +147,10 @@ public class ViewController implements Initializable {
     LocalDate date = LocalDate.now();
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
-    ArrayList<String> settings = new ArrayList<>(); //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap
+    String[] settings = new String[10]; //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
     //Változók
     URL url1;
-    String remoteExcel = loadFile("link.txt").get(0).toString();
+    String remoteExcel = loadFile("link.txt")[0];
     String localExcel = "ATM_karb_*.xlsx";
     String excelSource;
     String targetAddress;        // érkezés címe
@@ -170,6 +170,7 @@ public class ViewController implements Initializable {
 
     int selectedClientSpedometer;
     boolean selectedClientOdaVissza;
+    boolean confCheck;   // rendben van e a konfig
 
     Integer distance;
     Integer spedometer;
@@ -200,8 +201,8 @@ public class ViewController implements Initializable {
                     distance = parseInt(txtDistance.getText());
                     spedometer = spedometer + distance;
                     setLabels();
-                    observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", fueling, spedometer, distance, false,observableList.size()));
-                    settings.set(9, "telephely");
+                    observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", fueling, spedometer, distance, false, observableList.size()));
+                    settings[9] = "telephely";
                     saveFile("settings.cfg", settings);
                     chkPrivate.setSelected(false);
                     chkSites.setSelected(true);
@@ -213,11 +214,11 @@ public class ViewController implements Initializable {
                 }
             } else if (chkBack.isSelected()) {
                 spedometer = spedometer + distance;
-                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(),observableList.size()));
+                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
                 spedometer = spedometer + distance;
                 setLabels();
-                observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber() + "/" + startClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(),observableList.size()));
-                settings.set(9, "telephely");
+                observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber() + "/" + startClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
+                settings[9] = "telephely";
                 saveFile("settings.cfg", settings);
                 chkSites.setSelected(true);
                 txtDepart.setText(telephely.getClient());
@@ -225,8 +226,8 @@ public class ViewController implements Initializable {
             } else {
                 spedometer = spedometer + distance;
                 setLabels();
-                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(),observableList.size()));
-                settings.set(9, targetClient.getClientNumber());
+                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
+                settings[9] = targetClient.getClientNumber();
                 saveFile("settings.cfg", settings);
                 txtDepart.setText(targetAddress);
                 startClient = targetClient;
@@ -292,22 +293,16 @@ public class ViewController implements Initializable {
 
         //beállít tab gombok
         if (btnSetOk.isArmed()) {
-            settings.clear();
-            settings.add(0, txfNev.getText());
-            settings.add(1, txfTelep.getText());
-            settings.add(2, txfTelepCim.getText());
-            settings.add(3, txfAuto.getText());
-            settings.add(4, txfRendsz.getText());
-            settings.add(5, txfLoket.getText());
-            settings.add(6, txfFogyaszt.getText());
-            settings.add(7, txfElozo.getText());
-            settings.add(8, txtDate.getText());
-            saveFile("settings.cfg", settings);
-            checkSpecialClients();
-            setPane.setDisable(true);
-            selectionModel = tabPane.getSelectionModel();
-            selectionModel.select(0);
-            setLabels();
+            //settings.clear();
+            settings[0] = txfNev.getText();
+            settings[1] = txfTelep.getText();
+            settings[2] = txfTelepCim.getText();
+            settings[3] = txfAuto.getText();
+            settings[4] = txfRendsz.getText();
+            settings[5] = txfLoket.getText();
+            settings[6] = txfFogyaszt.getText();
+            settings[7] = txfElozo.getText();
+            settings[8] = txtDate.getText();
         }
 
         if (btnSet.isArmed()) {
@@ -326,7 +321,7 @@ public class ViewController implements Initializable {
 
         if (btnReady.isArmed()) {
             workDate = txtDate.getText();
-            settings.set(8, workDate);
+            settings[8] = workDate;
             saveFile("settings.cfg", settings);
             observableList.clear();
             observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
@@ -334,24 +329,25 @@ public class ViewController implements Initializable {
         }
 
         if (btnMakeExcel.isArmed()) {
-            excelName = workDate + "_" + settings.get(0) + "_" + settings.get(4) + "_gkelsz.xlsx";
+            excelName = workDate + "_" + settings[0] + "_" + settings[4] + "_gkelsz.xlsx";
             makeExcel(excelName, "nyomtat");
         }
-                
-        if (btnCancel.isArmed()){
-            startClient=startClientTemp;
-            targetClient=targetClientTemp;
+
+        if (btnCancel.isArmed()) {
+            startClient = startClientTemp;
+            targetClient = targetClientTemp;
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
         }
 
-        if (btnDelete.isArmed()){
-            db.delRoute(selectedRoute.getRouteId());
+        if (btnDelete.isArmed()) {
+            System.out.println(selectedRoute.getRouteId());
+            //db.delRoute(selectedRoute.getRouteId());
             System.out.println(selectedRoute.getRouteId());
             rebuildSpedometer();
         }
 
-        //if (btn)
+        chkBack.setSelected(false);
 
     }
 
@@ -433,8 +429,8 @@ public class ViewController implements Initializable {
     public void getDistanceFromGmaps(String sAddress, String tAddress) {
         sAddress = sAddress.replaceAll("/", "");
         tAddress = tAddress.replaceAll("/", "");
-        if (txtDistance.getText()!=""||txtDistance!=null)
-        WV.getEngine().load("https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress); // lekérdezi a távolságot a google mapstól
+        if (txtDistance.getText() != "" || txtDistance != null)
+            WV.getEngine().load("https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress); // lekérdezi a távolságot a google mapstól
         btnBev.setDisable(true);
         btnDistance.setDisable(true);
 
@@ -500,11 +496,40 @@ public class ViewController implements Initializable {
 
     public void run() {
         System.out.println("elindult");
-        checkConfigFile();                                              //ellenőrzi a settings.cfg meglétét
+
+        checkConfigFile();           //ellenőrzi a settings.cfg meglétét
+        do {
+            if (settings[7] == null || settings[7] == "" )
+                settings[7]="0000.00";
+             if (
+                    settings[0] == null || settings[0] == "" ||
+                    settings[1] == null || settings[1] == "" ||
+                    settings[2] == null || settings[2] == "" ||
+                    settings[3] == null || settings[3] == "" ||
+                    settings[4] == null || settings[4] == "" ||
+                    settings[5] == null || settings[5] == "" ||
+                    settings[6] == null || settings[6] == ""
+            ) {
+                confCheck = false;
+                selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(1);
+                saveFile("settings.cfg",settings);
+            } else {
+                setPane.setDisable(true);
+                selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(0);
+                setLabels();
+                confCheck = true;
+                 saveFile("settings.cfg",settings);
+            }
+        }
+        while (confCheck);
+        checkSpecialClients(); // ellenőrzi hogy léteznek e a spec cliensek (magán,telephely......)
+
         telephely = db.getClient("telephely");
         setTableColumns();                                                          //beállítja a táblát
-        workDate = settings.get(8);
-        spedometer = Integer.parseInt(settings.get(7));
+        workDate = settings[8];
+        spedometer = Integer.parseInt(settings[7]);
         megtettKM = db.getSpedometer(workDate);
         spedometer = spedometer + megtettKM;
         setText();
@@ -516,7 +541,9 @@ public class ViewController implements Initializable {
         datePicker.setValue(date);
         excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
         observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));         // betölti az adatokat az adatbázisból
-        startClient = db.getClient(settings.get(9));                  // beállítja startclientnek az utolsó érkezés helyét
+        //System.out.println("ezaz "+settings.get(9));
+        startClient = db.getClient(settings[9]);                  // beállítja startclientnek az utolsó érkezés helyét
+        System.out.println(startClient.getClientNumber());
         if (startClient.getClient().toLowerCase().startsWith("telephely")) {
             txtDepart.setText(startClient.getClient());
             chkSites.setSelected(true);
@@ -527,7 +554,7 @@ public class ViewController implements Initializable {
         txtDepart.setEditable(false);
         cbClient.getItems().addAll(db.getAllClient());
         fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába
-        checkSpecialClients(); // ellenőrzi hogy léteznek e a spec cliensek (magán,telephely......)
+
         table.scrollTo(table.getItems().size() - 1);
     }
 
@@ -583,7 +610,6 @@ public class ViewController implements Initializable {
         ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("ugyfel"));
 
 
-
         table.getColumns().addAll(datCol, maganCol, indCol, erkCol, ugyfCol, spedometerCol, tankolCol, tavCol, odaVisszaCol);
         table.setItems(observableList);
 
@@ -593,32 +619,32 @@ public class ViewController implements Initializable {
     }
 
     public void tableSelected() {
-        selectedRoute=table.getSelectionModel().getSelectedItem();
-        selctedRow=table.getSelectionModel().getSelectedIndex();
+        selectedRoute = table.getSelectionModel().getSelectedItem();
+        selctedRow = table.getSelectionModel().getSelectedIndex();
         datePicker.setValue(LocalDate.parse(selectedRoute.getDatum()));
         if (!selectedRoute.isMagan()) {
             cbClient.setValue(selectedRoute.getUgyfel().substring(0, selectedRoute.getUgyfel().indexOf("/")));
-        }else{
+        } else {
             cbClient.setValue(selectedRoute.getUgyfel());
         }
         txtDepart.setText(selectedRoute.getIndulas());
         txtArrive.setText(selectedRoute.getErkezes());
         txtDistance.setText(String.valueOf(selectedRoute.getTavolsag()));
         chkPrivate.setSelected(selectedRoute.isMagan());
-        selectedClientSpedometer=selectedRoute.getSpedometer();
-        selectedClientOdaVissza=selectedRoute.isVissza();
+        selectedClientSpedometer = selectedRoute.getSpedometer();
+        selectedClientOdaVissza = selectedRoute.isVissza();
         txtFueling.setText(String.valueOf(selectedRoute.getFueling()));
-        startClientTemp=startClient;
-        targetClientTemp=targetClient;
-        startClient=db.getClientFromAddress(selectedRoute.getIndulas());
-        targetClient=db.getClientFromAddress(selectedRoute.getErkezes());
+        startClientTemp = startClient;
+        targetClientTemp = targetClient;
+        startClient = db.getClientFromAddress(selectedRoute.getIndulas());
+        targetClient = db.getClientFromAddress(selectedRoute.getErkezes());
         paneCorr.setVisible(true);
         paneNormal.setVisible(false);
 
         // selectedRoute.getErkezes());
     }
 
-    public static void saveFile(String filename, ArrayList<String> list) {
+    public static void saveFile(String filename, String[] list) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(filename);
@@ -626,21 +652,21 @@ public class ViewController implements Initializable {
             e.printStackTrace();
         }
         writer.print("");
-        for (int i = 0; i < list.size(); i++)
-            writer.println(list.get(i));
+        for (int i = 0; i < list.length; i++)
+            writer.println(list[i]);
         writer.flush();
         writer.close();
     }
 
-    public static ArrayList loadFile(String filename) {
+    public static String[] loadFile(String filename) {
 
-        ArrayList<String> list = new ArrayList<>();
+        String[] list = new String[10];
         int rowNumber;
         File file = new File(filename);
         try {
             Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                list.add(sc.nextLine());
+            for (int i = 0; i < list.length; i++) {
+                list[i] = sc.nextLine();
             }
             sc.close();
             System.out.println(list.toString());
@@ -653,35 +679,44 @@ public class ViewController implements Initializable {
     public void checkConfigFile() {
         File file = new File("settings.cfg");
         if (!file.exists()) {
-            selectionModel = tabPane.getSelectionModel();
-            saveFile("settings.cfg", null);
-            selectionModel.select(1);
-        } else {
-
-            settings = loadFile("settings.cfg");
-            System.out.println(settings.toString());
+            settings[0] = null;
+            settings[1] = null;
+            settings[2] = null;
+            settings[3] = null;
+            settings[4] = null;
+            settings[5] = null;
+            settings[6] = null;
+            settings[8] = null;
+            settings[9] = "telephely";
+            settings[7] = "0";
+            saveFile("settings.cfg", settings);
+        }else{
+            if (settings[9]==null||settings[9]=="")
+                settings[9]="telephely";
+            if (settings[7]==null||settings[7]=="")
+                settings[7]="0";
         }
     }
 
     public void setText() {
         //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap
-        txfNev.setText(settings.get(0));
-        txfTelep.setText(settings.get(1));
-        txfTelepCim.setText(settings.get(2));
-        txfAuto.setText(settings.get(3));
-        txfRendsz.setText(settings.get(4));
-        txfLoket.setText(settings.get(5));
-        txfFogyaszt.setText(settings.get(6));
-        txfElozo.setText(settings.get(7));
-        txtDate.setText(settings.get(8));
+        txfNev.setText(settings[0]);
+        txfTelep.setText(settings[1]);
+        txfTelepCim.setText(settings[2]);
+        txfAuto.setText(settings[3]);
+        txfRendsz.setText(settings[4]);
+        txfLoket.setText(settings[5]);
+        txfFogyaszt.setText(settings[6]);
+        txfElozo.setText(settings[7]);
+        txtDate.setText(settings[8]);
         textZaro.setText(spedometer.toString());
 
     }
 
     public void setLabels() {
-        lblName.setText("Név: " + settings.get(0));
-        lblSites.setText("T.hely: " + settings.get(1));
-        lblKezdo.setText("Kezdő: " + settings.get(7) + " Km");
+        lblName.setText("Név: " + settings[0]);
+        lblSites.setText("T.hely: " + settings[1]);
+        lblKezdo.setText("Kezdő: " + settings[7] + " Km");
         lblKm.setText("Jelenlegi záró: " + spedometer.toString() + " Km");
         lblMegtett.setText("Megtett út: " + megtettKM.toString() + " Km");
     }
@@ -692,7 +727,7 @@ public class ViewController implements Initializable {
 
     private void checkSpecialClients() {
         Client telephely = db.getClient("telephely");
-        if (telephely == null || telephely.getCity() != settings.get(1) || telephely.getAddress() != settings.get(2) || telephely.getField() != settings.get(0)) {
+        if (telephely == null || telephely.getCity() != settings[1] || telephely.getAddress() != settings[2] || telephely.getField() != settings[0]) {
             if (telephely != null) {
                 db.delClient("telephely");
             }
@@ -702,11 +737,11 @@ public class ViewController implements Initializable {
                     "telephely",
                     "telephely",
                     0,
-                    settings.get(1),
-                    settings.get(2),
+                    settings[1],
+                    settings[2],
                     true,
                     0,
-                    settings.get(0)
+                    settings[0]
             );
         }
         Client diebold = db.getClient("DieboldNixdorf");
@@ -762,12 +797,12 @@ public class ViewController implements Initializable {
         RowToExcel rowToExcel = new RowToExcel();
         rowToExcel.createNewExcelFile(fileName);
         rowToExcel.setCell(fileName, sheetName, "D2", workDate);
-        rowToExcel.setCell(fileName, sheetName, "C3", settings.get(3));
-        rowToExcel.setCell(fileName, sheetName, "C4", settings.get(4));
-        rowToExcel.setCell(fileName, sheetName, "C5", settings.get(7));
+        rowToExcel.setCell(fileName, sheetName, "C3", settings[3]);
+        rowToExcel.setCell(fileName, sheetName, "C4", settings[4]);
+        rowToExcel.setCell(fileName, sheetName, "C5", settings[7]);
         rowToExcel.setCell(fileName, sheetName, "C6", spedometer.toString());
-        rowToExcel.setCell(fileName, sheetName, "G3", settings.get(5));
-        rowToExcel.setCell(fileName, sheetName, "G4", settings.get(6));
+        rowToExcel.setCell(fileName, sheetName, "G3", settings[5]);
+        rowToExcel.setCell(fileName, sheetName, "G4", settings[6]);
         rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
 
         for (int i = 0; i < observableList.size(); i++) {
@@ -794,16 +829,16 @@ public class ViewController implements Initializable {
         }
     }
 
-    public void rebuildSpedometer(){
-        int currentValue=Integer.parseInt(settings.get(7));
+    public void rebuildSpedometer() {
+        int currentValue = Integer.parseInt(settings[7]);
         System.out.println(currentValue);
-        for (int i=0;i<observableList.size();i++){
-            Route route=observableList.get(i);
+        for (int i = 0; i < observableList.size(); i++) {
+            Route route = observableList.get(i);
 
             System.out.println(currentValue);
             route.setSpedometer(currentValue);
-            currentValue=currentValue+route.getTavolsag();
-            db.updateRoute(route,route.getRouteId());
+            currentValue = currentValue + route.getTavolsag();
+            db.updateRoute(route, route.getRouteId());
         }
         observableList.clear();
         observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));

@@ -298,6 +298,26 @@ public class DbModel {
         return client;
     }
 
+    public void updateClient(Client client,String clientNumber){
+        String sqlQuery="update clients set " +
+                "client="+client.getClient()+
+                ", clientnumber="+client.getClientNumber()+
+                ", type="+client.getType()+
+                ", factorynumber="+client.getFactoryNumber()+
+                ", zipcode="+client.getZipCode()+
+                ", city="+client.getCity()+
+                ", address="+client.getAddress()+
+                ", exist="+convertBool(client.getExist())+
+                ", maintenanceperyear="+client.getMaintenancePerYear()+
+                ", field="+client.getField()+" ;";
+        try {
+            preparedStatement=conn.prepareStatement(sqlQuery);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
     public void delClient(String value){
         String sqlQuery = "delete from clients where clientnumber='"+value+"'";
         try {
