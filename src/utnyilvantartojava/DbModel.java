@@ -100,7 +100,7 @@ public class DbModel {
             rs1 = dbmeta.getTables(null, "APP", "SETTINGS", null);
             if (!rs1.next()) {
                 createStatement.execute("create table settings(" +
-                        "id integer ," +
+                        "id integer primary key  ," +
                         "nev text," +
                         "varos text," +
                         "cim text," +
@@ -146,7 +146,6 @@ public class DbModel {
 
     public void updateSettings(Settings settings) {
         String sqlQuery = "update settings set " +
-                "id = 1," +
                 "nev= '" + settings.getNev() +"',"+
                 "varos='" +settings.getVaros()+"',"+
                 "cim='" +settings.getCim() +"',"+
@@ -154,13 +153,14 @@ public class DbModel {
                 "rendszam='" + settings.getRendszam() +"',"+
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
-                "elozo_zaro='" + settings.getElozo_zaro() +"',"+
+                "elozo_zaro=" + settings.getElozo_zaro() +","+
                 "aktualis_honap='" + settings.getAktualis_honap() +"',"+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "'"+
                 " where id = 1;";
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -276,19 +276,20 @@ public class DbModel {
     public void updateRoute(Route route, int routeId) {
         String sqlQuery = "update routes set " +
                 "date='" + route.getDatum() +"',"+
-                "private='" + convertBool(route.isMagan()) +"',"+
-                "depart'=" + route.getIndulas() +"',"+
-                "arrive'=" + route.getErkezes() +"',"+
-                "client'=" + route.getUgyfel() +"',"+
-                "spedometer='" + route.getSpedometer() +"',"+
-                "fueling='" + route.getFueling() +"',"+
-                "distance='" + route.getTavolsag() +"',"+
-                "backandforth'=" + convertBool(route.isVissza()) +"',"+
-                "cellid='" + route.getCellId() +"',"+
-                "where routeid = " + routeId + "';";
+                "private=" + convertBool(route.isMagan()) +","+
+                "depart='" + route.getIndulas() +"',"+
+                "arrive='" + route.getErkezes() +"',"+
+                "client='" + route.getUgyfel() +"',"+
+                "spedometer=" + route.getSpedometer() +","+
+                "fueling=" + route.getFueling() +","+
+                "distance=" + route.getTavolsag() +","+
+                "backandforth=" + convertBool(route.isVissza()) +","+
+                "cellid=" + route.getCellId() +","+
+                "where routeid = '" + routeId + "';";
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -394,18 +395,20 @@ public class DbModel {
 
     public void updateClient(Client client, String clientNumber) {
         String sqlQuery = "update clients set " +
-                "client=" + client.getClient() +
-                ", clientnumber=" + client.getClientNumber() +
-                ", type=" + client.getType() +
-                ", factorynumber=" + client.getFactoryNumber() +
-                ", zipcode=" + client.getZipCode() +
-                ", city=" + client.getCity() +
-                ", address=" + client.getAddress() +
-                ", exist=" + convertBool(client.getExist()) +
-                ", maintenanceperyear=" + client.getMaintenancePerYear() +
-                ", field=" + client.getField() + " ;";
+                "client='" + client.getClient() +"',"+
+                //"clientnumber='" + client.getClientNumber() +"',"+
+                "type='" + client.getType() + "',"+
+                "factorynumber='" + client.getFactoryNumber() +"',"+
+                "zipcode=" + client.getZipCode() +","+
+                "city='" + client.getCity() +"',"+
+                "address='" + client.getAddress() +"',"+
+                "exist=" + convertBool(client.getExist()) +","+
+                "maintenanceperyear=" + client.getMaintenancePerYear() +","+
+                "field='" + client.getField() + "';";
+        System.out.println(sqlQuery);
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
