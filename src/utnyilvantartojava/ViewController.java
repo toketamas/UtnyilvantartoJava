@@ -343,17 +343,22 @@ public class ViewController implements Initializable {
         if (btnDelete.isArmed()) {
             System.out.println(selectedRoute.getRouteId());
             observableList.remove(selectedRoute);
-            System.out.println(selectedRoute.getRouteId());
+            System.out.println("route_id = "+selectedRoute.getRouteId());
             db.delRoute(selectedRoute.getRouteId());
             System.out.println(selectedRoute.getRouteId());
-            //rebuildSpedometer();
+            rebuildSpedometer();
             setLabels();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
+            chkBack.setSelected(false);
+            chkPrivate.setSelected(false);
             startClient=startClientTemp;
+            txtDepart.setText(startClient.getCity()+" "+startClient.getAddress());
             targetClient=targetClientTemp;
+            txtArrive.setText(targetClient.getCity()+" "+targetClient.getAddress());
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
+            selectedRoute=null;
         }
         chkBack.setSelected(false);
     }

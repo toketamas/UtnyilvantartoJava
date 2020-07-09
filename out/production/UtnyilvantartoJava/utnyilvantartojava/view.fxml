@@ -156,7 +156,7 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button id="btnCancel" fx:id="btnCancel" layoutX="84.0" layoutY="39.0" mnemonicParsing="false" onAction="#btnClick" text="Mégse">
+                        <Button id="btnCancel" fx:id="btnCancel" layoutX="84.0" layoutY="39.0" mnemonicParsing="false" onAction="#btnClick" text="Kész">
                            <font>
                               <Font size="14.0" />
                            </font>
