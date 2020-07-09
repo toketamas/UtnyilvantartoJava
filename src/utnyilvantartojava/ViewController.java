@@ -97,6 +97,9 @@ public class ViewController implements Initializable {
     Label lblMegtett;
     @FXML
     Label lblKezdo;
+    @FXML
+    static
+    Label lblVer;
 
     //textfildek
     // Utnyilvántartó tab
@@ -426,11 +429,14 @@ public class ViewController implements Initializable {
     private void cboxTextChange(ActionEvent event) {
 
         //DbModel db = new DbModel();
-        targetClient = db.getClient(cbClient.getSelectionModel().getSelectedItem());
+        targetClient = db.getClient(cbClient.getValue());
+        System.out.println(db.getClient(cbClient.getSelectionModel().getSelectedItem()).getCity());
         txtArrive.clear();
 
-        //System.out.println(arriveCity+" "+arriveAddress);
+        System.out.println(targetClient.getClientNumber());
         targetAddress = targetClient.getCity() + " " + targetClient.getAddress();
+        System.out.println(targetClient.getCity() + " " + targetClient.getAddress());
+        System.out.println(targetAddress);
         txtArrive.appendText(targetAddress);
 
         if (chkSites.isSelected()) {   //le kell kérni az induló gépszámot aztán megszerezni a cél gépszámot lekérdezni a távot ha nincs meg akkor lekérdezni a téképtől beírnia textboxba aztán beírni az adatbázisba
@@ -835,6 +841,11 @@ public class ViewController implements Initializable {
                     observableList.get(i).getTavolsag(),
                     mORc);
             row.setRow(fileName, sheetName, i + 9);
+        }
+        try {
+            Runtime.getRuntime().exec(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
