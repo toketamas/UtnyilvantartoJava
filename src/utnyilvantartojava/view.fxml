@@ -197,13 +197,13 @@
                         <Font size="14.0" />
                      </font></Label>
                   <TextField id="txtFile" fx:id="txtFile" layoutX="501.0" layoutY="200.0" prefHeight="26.0" prefWidth="384.0" />
-                  <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="695.0" layoutY="117.0" mnemonicParsing="false" onAction="#chkRabio" selected="true" text="Betöltés: File">
+                  <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="695.0" layoutY="117.0" mnemonicParsing="false" onAction="#chkRadio" selected="true" text="Betöltés: File">
                    >
                      <toggleGroup>
                         <ToggleGroup fx:id="radio" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="695.0" layoutY="155.0" mnemonicParsing="false" onAction="#chkRabio" text="Betöltés: TeamHub" toggleGroup="$radio" />
+                  <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="695.0" layoutY="155.0" mnemonicParsing="false" onAction="#chkRadio" text="Betöltés: TeamHub" toggleGroup="$radio" />
                   <AnchorPane id="setPane" fx:id="setPane" disable="true" layoutX="14.0" layoutY="14.0" prefHeight="366.0" prefWidth="308.0">
                      <children>
                         <TextField id="txfNev" fx:id="txfNev" layoutX="130.0" layoutY="6.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" text=" " />

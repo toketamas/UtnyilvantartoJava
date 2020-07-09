@@ -116,8 +116,6 @@ public class DbModel {
             System.out.println("Hiba!");
             System.out.println("" + ex);
         }
-
-
     }
 
     //settings táblához tartozó lekérdezések
@@ -191,25 +189,22 @@ public class DbModel {
         }
         return settings;
     }
-
-
-    //routes táblához tartozó lekérdezések
-    public void addRoute(String datum, Boolean magan, String indulas, String erkezes, String ugyfel, int spedometer, double fuelig, int tavolsag, boolean odaVissza, int cellId) {
+    public void addRoute(Route route) {
 
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, null);
-            preparedStatement.setString(2, datum.toString());
-            preparedStatement.setInt(3, convertBool(magan));
-            preparedStatement.setString(4, indulas);
-            preparedStatement.setString(5, erkezes);
-            preparedStatement.setString(6, ugyfel);
-            preparedStatement.setInt(7, spedometer);
-            preparedStatement.setDouble(8, fuelig);
-            preparedStatement.setInt(9, tavolsag);
-            preparedStatement.setInt(10, convertBool(odaVissza));
-            preparedStatement.setInt(11, cellId);
+            preparedStatement.setString(2, route.getDatum());
+            preparedStatement.setInt(3, convertBool(route.isMagan()));
+            preparedStatement.setString(4, route.getIndulas());
+            preparedStatement.setString(5, route.getErkezes());
+            preparedStatement.setString(6, route.getUgyfel());
+            preparedStatement.setInt(7, route.getSpedometer());
+            preparedStatement.setDouble(8, route.getFueling());
+            preparedStatement.setInt(9, route.getTavolsag());
+            preparedStatement.setInt(10, convertBool(route.isVissza()));
+            preparedStatement.setInt(11, route.getCellId());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -250,7 +245,7 @@ public class DbModel {
     }
 
     public void delRoute(int routeId) {
-        String sqlQuery = "delete from routes where routeid=" + routeId + ";";
+        String sqlQuery = "delete from routes where routeid='" + routeId + "';";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
@@ -285,7 +280,8 @@ public class DbModel {
                 "distance=" + route.getTavolsag() +","+
                 "backandforth=" + convertBool(route.isVissza()) +","+
                 "cellid=" + route.getCellId() +","+
-                "where routeid = '" + routeId + "';";
+                "where routeid = " + routeId + ";";
+        System.out.println(sqlQuery);
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -482,7 +478,7 @@ public class DbModel {
             return false;
     }
 }
-//Lekérdezéseket írni a javításokhoz
+
 
 
 
