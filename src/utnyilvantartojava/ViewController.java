@@ -61,6 +61,8 @@ public class ViewController implements Initializable {
     @FXML
     Button btnDistance;
     @FXML
+    Button btnDistance1;
+    @FXML
     Button btnReadExcel;
     @FXML
     Button btnReady;
@@ -147,7 +149,7 @@ public class ViewController implements Initializable {
     SearchableComboBox<String> cbClient;
 
     DbModel db = new DbModel();
-    LocalDate date = LocalDate.now();
+
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
     Settings settings = new Settings(); //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
@@ -197,70 +199,20 @@ public class ViewController implements Initializable {
 
         //Bevitel gomb
         if (btnBev.isArmed()) {
-            String date = datePicker.getValue().toString();
-
-            if (chkPrivate.isSelected()) {
-                try {
-                    distance = parseInt(txtDistance.getText());
-                    //spedometer = spedometer + distance;
-                    setLabels();
-                    observableList.add(new Route(date, chkPrivate.isSelected(), "Magánhasználat", "Magánhasználat", "Magánhasználat", fueling, spedometer, distance, false, observableList.size()));
-                    settings.setUtolso_ugyfel("telephely");
-                    db.updateSettings(settings);
-                    chkPrivate.setSelected(false);
-                    chkSites.setSelected(true);
-                    txtDepart.setText(telephely.getClient());
-                    startClient = telephely;
-                    cbClient.setDisable(false);
-                } catch (NumberFormatException e) {
-                    txtDistance.setText("IDE CSAK SZÁMOT ÍRHATSZ!!!");
-                }
-            } else if (chkBack.isSelected()) {
-                spedometer = spedometer + distance;
-                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
-                //spedometer = spedometer + distance;
-                setLabels();
-                observableList.add(new Route(date, chkPrivate.isSelected(), targetAddress, startAddress, startClient.getClientNumber() + "/" + startClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
-                settings.setUtolso_ugyfel("telephely");
-                db.updateSettings(settings);
-                chkSites.setSelected(true);
-                txtDepart.setText(telephely.getClient());
-                startClient = telephely;
+            dataIn();
+        }
+        if (btnDistance.isArmed()) {
+            startAddress = txtDepart.getText();
+            if (txtDepart.getText().toLowerCase().equals("telephely")) {
+                startAddress = telephely.getCity() + " " + telephely.getAddress();
             } else {
-                //spedometer = spedometer + distance;
-                setLabels();
-                observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
-                settings.setUtolso_ugyfel(targetClient.getClientNumber());
-                db.updateSettings(settings);
-                txtDepart.setText(targetAddress);
-                startClient = targetClient;
-                startAddress = targetAddress;
-                chkSites.setSelected(false);
+                startAddress = txtDepart.getText();
             }
-
-            if (observableList.get(observableList.size() - 1).isVissza()) {
-                db.addRoute(observableList.get(observableList.size()-2));
-            }
-            db.addRoute(observableList.get(observableList.size()-1));
-
-
-            if (db.getDistance(startAddress, targetAddress) == 0 && db.getDistance(targetAddress, startAddress) == 0) {
-                db.addDistance(startAddress, targetAddress, distance);
-            }
-            if (chkBackToSites.isSelected()) {
-                chkSites.setSelected(true);
-                chkBackToSites.setSelected(false);
-                txtDepart.setText(telephely.getClient());
-            }
-            txtDistance.clear();
-            targetAddress = "";
-            targetClient = null;
-            txtArrive.clear();
-            cbClient.setValue("Válaszd ki az ügyfelet");
-            table.scrollTo(table.getItems().size() - 1);
+            targetAddress = txtArrive.getText();
+            getDistanceFromGmaps(startAddress, targetAddress);
         }
 
-        if (btnDistance.isArmed()) {
+        if (btnDistance1.isArmed()) {
             startAddress = txtDepart.getText();
             if (txtDepart.getText().toLowerCase().equals("telephely")) {
                 startAddress = telephely.getCity() + " " + telephely.getAddress();
@@ -359,6 +311,25 @@ public class ViewController implements Initializable {
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
             selectedRoute=null;
+        }
+
+        if (btnSave.isArmed()){
+            selectedRoute.setDatum(datePicker.getValue().toString());
+            selectedRoute.setIndulas(txtDepart.getText());
+            selectedRoute.setErkezes(txtArrive.getText());
+            selectedRoute.setTavolsag(Integer.parseInt(txtDistance.getText()));
+            selectedRoute.setUgyfel(cbClient.getValue());
+            selectedRoute.setVissza(chkBack.isSelected());
+            selectedRoute.setMagan(chkPrivate.isSelected());
+            selectedRoute.setFueling(Double.parseDouble(txtFueling.getText()));
+            observableList.set(selectedRoute.getCellId(), selectedRoute);
+            db.updateRoute(selectedRoute,selectedRoute.getRouteId());
+            startClient = startClientTemp;
+            targetClient = targetClientTemp;
+            txtDepart.setText(startClient.getCity()+""+startClient.getAddress());
+            txtArrive.clear();
+            paneNormal.setVisible(true);
+            paneCorr.setVisible(false);
         }
         chkBack.setSelected(false);
     }
@@ -530,7 +501,7 @@ public class ViewController implements Initializable {
         chkSites.setSelected(true);
         cbClient.setValue("Válaszd ki az ügyfelet");
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
-        datePicker.setValue(date);
+        datePicker.setValue(LocalDate.now());
         excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
         observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));         // betölti az adatokat az adatbázisból
         startClient = db.getClient(settings.getUtolso_ugyfel());                  // beállítja startclientnek az utolsó érkezés helyét
@@ -813,5 +784,114 @@ public class ViewController implements Initializable {
         //spedometer=currentValue;
         setLabels();
     }
+
+    public void dataIn(){                                       // Adatbevitel a bevitel gombra kattintva
+        String date = datePicker.getValue().toString();         //dátum beolvasás
+        if (chkPrivate.isSelected()) {                          //magánút?
+            try {                                                // a parseInt miatt
+                distance = parseInt(txtDistance.getText());
+                setLabels();                                     // beállítja a címkéket az útnyilvántartó oldalon
+                observableList.add(new Route(                   //hozzáad a táblához egy új utat a mezőkből kinyert adatokkal
+                        datePicker.getValue().toString(),
+                        chkPrivate.isSelected(),
+                        "Magánhasználat",
+                        "Magánhasználat",
+                        "Magánhasználat",
+                        fueling,
+                        spedometer,
+                        distance,
+                        false,
+                        observableList.size()));
+                settings.setUtolso_ugyfel("telephely");            //beállítja utolsó ügyfélnek a telephelyet ez lesz a következő út kezdőpontja
+                db.updateSettings(settings);                       // frissíti a beállításokat az utolsó ügyfél változás miatt
+                setBoxesValue();
+
+            } catch (NumberFormatException e) {
+                txtDistance.setText("IDE CSAK SZÁMOT ÍRHATSZ!!!");  //Ha sikertelen a parseInt
+            }
+        } else if (chkBack.isSelected()) {
+            observableList.add(
+                    new Route(
+                            date,
+                            chkPrivate.isSelected(),
+                            startAddress, targetAddress,
+                            targetClient.getClientNumber() + "/" + targetClient.getClient(),
+                            fueling,
+                            spedometer,
+                            distance,
+                            chkBack.isSelected(),
+                            observableList.size()));
+            setLabels();
+            observableList.add(
+                    new Route(
+                            date,
+                            chkPrivate.isSelected(),
+                            targetAddress, startAddress,
+                            startClient.getClientNumber() + "/" + startClient.getClient(),
+                            fueling,
+                            spedometer,
+                            distance,
+                            chkBack.isSelected(),
+                            observableList.size()));
+            settings.setUtolso_ugyfel("telephely");
+            db.updateSettings(settings);
+            startClient = telephely;
+            setBoxesValue();
+        } else {
+            setLabels();
+            observableList.add(new Route(date, chkPrivate.isSelected(), startAddress, targetAddress, targetClient.getClientNumber() + "/" + targetClient.getClient(), fueling, spedometer, distance, chkBack.isSelected(), observableList.size()));
+            settings.setUtolso_ugyfel(targetClient.getClientNumber());
+            db.updateSettings(settings);
+            txtDepart.setText(targetAddress);
+            startClient = targetClient;
+            startAddress = targetAddress;
+            setBoxesValue();
+        }
+
+        if (observableList.get(observableList.size() - 1).isVissza()) {
+            db.addRoute(observableList.get(observableList.size()-2));
+        }
+        db.addRoute(observableList.get(observableList.size()-1));
+
+
+        if (db.getDistance(startAddress, targetAddress) == 0 && db.getDistance(targetAddress, startAddress) == 0) {
+            db.addDistance(startAddress, targetAddress, distance);
+        }
+        if (chkBackToSites.isSelected()) {
+            chkSites.setSelected(true);
+            chkBackToSites.setSelected(false);
+            txtDepart.setText(telephely.getClient());
+        }
+        targetAddress = "";
+        targetClient = null;
+        table.scrollTo(table.getItems().size() - 1);
+        setBoxesValue();
+    }
+
+    public void setBoxesValue(){             // text-, check-, és egyéb boxot a start és a targetClientnek megfelelő állapotba állít
+        if (db.getClient(settings.getUtolso_ugyfel())==null) {
+            settings.setUtolso_ugyfel("telephely");
+        }
+        startClient = db.getClient(settings.getUtolso_ugyfel());
+        if (startClient.getClientNumber().toLowerCase()=="telephely"){
+            chkPrivate.setSelected(false);
+            chkBack.setSelected(false);
+            chkSites.setSelected(true);
+            chkBackToSites.setSelected(false);
+            txtDepart.setText(startClient.getClientNumber());
+        }else{
+            chkSites.setSelected(false);
+        }
+
+        if (targetClient== null){
+             txtArrive.clear();
+        }else{
+            cbClient.setValue("Válaszd ki az ügyfelet");
+        }
+
+    }
+
+
+
 }
 

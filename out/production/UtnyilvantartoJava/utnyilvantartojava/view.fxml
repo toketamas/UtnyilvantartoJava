@@ -156,19 +156,24 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button id="btnCancel" fx:id="btnCancel" layoutX="84.0" layoutY="39.0" mnemonicParsing="false" onAction="#btnClick" text="Kész">
+                        <Button id="btnCancel" fx:id="btnCancel" layoutX="127.0" layoutY="38.0" mnemonicParsing="false" onAction="#btnClick" text="Kész">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button id="btnSave" fx:id="btnSave" layoutX="5.0" layoutY="3.0" mnemonicParsing="false" text="Mentés" textFill="#2a03ee">
+                        <Button id="btnSave" fx:id="btnSave" layoutX="5.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnClick" text="Mentés" textFill="#2a03ee">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button id="btnDistance" fx:id="btnDistance1" layoutX="33.0" layoutY="38.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság" textFill="RED">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
                      </children>
                   </Pane>
-                  <Pane id="paneNormal" fx:id="paneNormal" layoutX="9.0" layoutY="429.0" prefHeight="46.0" prefWidth="216.0">
+                  <Pane id="paneNormal" fx:id="paneNormal" layoutX="7.0" layoutY="430.0" prefHeight="46.0" prefWidth="216.0">
                      <children>
                               <Button id="btnUjSor" fx:id="btnBev" layoutX="22.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel">
                            <font>
