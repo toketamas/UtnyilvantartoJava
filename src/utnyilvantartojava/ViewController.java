@@ -276,12 +276,12 @@ public class ViewController implements Initializable {
             db.updateSettings(settings);
             observableList.clear();
             observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
-        }
+        }           //Éppen aktuális hónap kiválasztása
 
         if (btnMakeExcel.isArmed()) {
             excelName = workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx";
             makeExcel(excelName, "nyomtat");
-        }
+        }       //Excel készítése
 
         if (btnCancel.isArmed()) {
             startClient = startClientTemp;
@@ -290,14 +290,12 @@ public class ViewController implements Initializable {
             txtArrive.clear();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
-        }
+        }           //Kész gomb az út módosításnál
 
-        if (btnDelete.isArmed()) {
-            System.out.println(selectedRoute.getRouteId());
+        if (btnDelete.isArmed()) {               // Törlés gomb az út módosításnál
             observableList.remove(selectedRoute);
             System.out.println("route_id = "+selectedRoute.getRouteId());
             db.delRoute(selectedRoute.getRouteId());
-            System.out.println(selectedRoute.getRouteId());
             rebuildSpedometer();
             setLabels();
             paneNormal.setVisible(true);
@@ -330,6 +328,7 @@ public class ViewController implements Initializable {
             txtArrive.clear();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
+            setBoxesValue();
         }
         chkBack.setSelected(false);
     }
@@ -339,9 +338,10 @@ public class ViewController implements Initializable {
         if (chkSites.isSelected()) {
             txtDepart.setText("Telephely");
             txtDepart.setEditable(false);
-            chkBackToSites.setSelected(false);
+            //chkBackToSites.setSelected(false);
             startClient=telephely;
             targetClient=null;
+            setBoxesValue();
         } else {
             //txtDepart.clear();
             txtDepart.setEditable(true);
