@@ -390,6 +390,10 @@ public class ViewController implements Initializable {
     private void cboxTextChange(ActionEvent event) {
 
         targetClient = db.getClient(cbClient.getValue());
+        if (targetClient==null){
+
+
+        }else{
         txtArrive.clear();
         targetAddress = targetClient.getCity() + " " + targetClient.getAddress();
         txtArrive.appendText(targetAddress);
@@ -398,6 +402,7 @@ public class ViewController implements Initializable {
             startAddress = startClient.getCity() + " " + startClient.getAddress();
         }
         getDistanceFromGmaps(startAddress, targetAddress);
+        }
     }
 
     //Itt Indul
