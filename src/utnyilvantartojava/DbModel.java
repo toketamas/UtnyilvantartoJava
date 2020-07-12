@@ -165,7 +165,7 @@ public class DbModel {
     }
 
     public Settings getSettings() {      //visszaad egy ügyfelet
-        String sqlQuery="select * from settings where id='1'";
+        String sqlQuery="select * from settings where id=1";
         Settings settings = null;
         try {
             rs1 = createStatement.executeQuery(sqlQuery);
@@ -216,7 +216,7 @@ public class DbModel {
         ArrayList<Route> routes = null;
         System.out.println(workDate);
         try {
-            String sqlQuery = "select * from routes where date like " + workDate + " order by cellid";
+            String sqlQuery = "select * from routes where date like '" + workDate + "-%%' order by date , routeid";
 
             routes = new ArrayList<>();
             rs1 = createStatement.executeQuery(sqlQuery);
@@ -279,7 +279,7 @@ public class DbModel {
                 "fueling=" + route.getFueling() +","+
                 "distance=" + route.getTavolsag() +","+
                 "backandforth=" + convertBool(route.isVissza()) +","+
-                "cellid=" + route.getCellId() +","+
+                "cellid=" + route.getCellId() +" "+
                 "where routeid = " + routeId + ";";
         System.out.println(sqlQuery);
 
@@ -307,15 +307,19 @@ public class DbModel {
         }
     }
 
-    public int getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
-        int distance = 0;
+    public Distance getDistance(String client1,String client2) {      // a distances listából két ügyfél távolságát adja vissza
+        Distance distance=new Distance(client1,client2);
         String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "'";
         try {
-            rs1 = createStatement.executeQuery(sqlQuery);
-            distance = rs1.getInt("distance");
-        } catch (SQLException throwables) {
+            preparedStatement=conn.prepareStatement(sqlQuery);
+            rs1=preparedStatement.executeQuery();
+
+            distance.setDistance(rs1.getInt("distance"));
+
+            } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return distance;
     }
 

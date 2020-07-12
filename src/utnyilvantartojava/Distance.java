@@ -5,6 +5,11 @@ public class Distance {
     private String clientid2;
     private int distance;
 
+    public Distance(String clientid1, String clientid2) {
+        this.clientid1 = clientid1;
+        this.clientid2 = clientid2;
+    }
+
     public Distance(String clientid1, String clientid2, int distance) {
         this.clientid1 = clientid1;
         this.clientid2 = clientid2;
