@@ -100,7 +100,7 @@ public class DbModel {
             rs1 = dbmeta.getTables(null, "APP", "SETTINGS", null);
             if (!rs1.next()) {
                 createStatement.execute("create table settings(" +
-                        "id integer primary key  ," +
+                        "id integer primary key autoincrement not null  ," +
                         "nev text," +
                         "varos text," +
                         "cim text," +
@@ -109,7 +109,7 @@ public class DbModel {
                         "loketterfogat text," +
                         "fogyasztas text," +
                         "elozo_zaro integer," +
-                        "aktualis_honap text," +
+                        "aktualis_honap text primary key not null," +
                         "utolso_ugyfel text);");
             }
         } catch (SQLException ex) {
@@ -124,7 +124,7 @@ public class DbModel {
         String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setInt(1, 1);
+            preparedStatement.setString(1, null);
             preparedStatement.setString(2, settings.getNev());
             preparedStatement.setString(3, settings.getVaros());
             preparedStatement.setString(4, settings.getCim());
@@ -142,7 +142,7 @@ public class DbModel {
         }
     }
 
-    public void updateSettings(Settings settings) {
+    public void updateSettings(Settings settings,String dateValue) {
         String sqlQuery = "update settings set " +
                 "nev= '" + settings.getNev() +"',"+
                 "varos='" +settings.getVaros()+"',"+
@@ -152,9 +152,9 @@ public class DbModel {
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
-                "aktualis_honap='" + settings.getAktualis_honap() +"',"+
+                //"aktualis_honap='" + settings.getAktualis_honap() +"',"+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "'"+
-                " where id = 1;";
+                " where aktualis-honap = '"+dateValue+"';";
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
