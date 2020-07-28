@@ -158,7 +158,7 @@ public class ViewController implements Initializable {
     String remoteExcel = loadFile("link.txt")[0];
     String localExcel = "ATM_karb_*.xlsx";
     String excelSource;
-    String workDate = LocalDate.now().toString().substring(0,7);            //a hónap amivel dolgozunk
+    String workDate;//= LocalDate.now().toString().substring(0,7);            //a hónap amivel dolgozunk
     String excelName;
 
     Client startClient;             // induló kliens
@@ -176,7 +176,7 @@ public class ViewController implements Initializable {
 
     Integer distance;
     Integer spedometer;
-   // Integer megtettKM;
+    // Integer megtettKM;
     int selctedRow;
 
     TableColumn datCol;
@@ -231,7 +231,7 @@ public class ViewController implements Initializable {
                 //setLabels();
                 chkPrivate.setSelected(false);
                 chkSites.setSelected(true);
-                startClient=telephely;
+                startClient = telephely;
                 txtDepart.setText(telephely.getClientNumber());
                 txtDistance.clear();
                 txtArrive.clear();
@@ -251,7 +251,7 @@ public class ViewController implements Initializable {
                                 distance,
                                 chkBack.isSelected(),
                                 observableList.size()));
-               // rebuildSpedometer();
+                // rebuildSpedometer();
                 //setLabels();
                 Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
                 Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
@@ -274,7 +274,7 @@ public class ViewController implements Initializable {
                                 observableList.size()));
                 settings.setUtolso_ugyfel("telephely");
                 db.updateSettings(settings, workDate);
-               // rebuildSpedometer();
+                // rebuildSpedometer();
                 //setLabels();
                 startClient = telephely;
                 chkSites.setSelected(true);
@@ -299,7 +299,7 @@ public class ViewController implements Initializable {
                 settings.setUtolso_ugyfel(targetClient.getClientNumber());
                 db.updateSettings(settings, workDate);
                 txtDepart.setText(getClientFullAddress(targetClient));
-               // rebuildSpedometer();
+                // rebuildSpedometer();
                 //setLabels();
                 Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
                 Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
@@ -308,14 +308,14 @@ public class ViewController implements Initializable {
                     db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
                     btnBev.setDisable(false);
                     btnDistance.setDisable(true);
-                   // rebuildSpedometer();
+                    // rebuildSpedometer();
                     //setLabels();
                 }
                 startClient = targetClient;
                 targetClient = null;
-               // rebuildSpedometer();
-              //  setLabels();
-             }
+                // rebuildSpedometer();
+                //  setLabels();
+            }
 
             if (observableList.get(observableList.size() - 1).isVissza()) {
                 db.addRoute(observableList.get(observableList.size() - 2));
@@ -366,6 +366,9 @@ public class ViewController implements Initializable {
             db.updateSettings(settings, workDate);
             setLabels();
             setText();
+            setPane.setDisable(true);
+            btnSet.setDisable(false);
+            btnSetOk.setDisable(true);
             tabNyilv.setDisable(false);
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(0);
@@ -479,7 +482,7 @@ public class ViewController implements Initializable {
             chkBack.setSelected(false);
         }
 
-      //  chkBack.setSelected(false);
+        //  chkBack.setSelected(false);
 
     }
 
@@ -508,8 +511,8 @@ public class ViewController implements Initializable {
             chkBackToSites.setSelected(false);
             startClient = telephely;
             targetClient = null;
-           txtArrive.clear();
-           txtDistance.clear();
+            txtArrive.clear();
+            txtDistance.clear();
         } else {
             //txtDepart.clear();
             txtDepart.setEditable(true);
@@ -627,6 +630,13 @@ public class ViewController implements Initializable {
     }
 
     public void start() {
+        if (db.getLastRoute() == null)
+            workDate = LocalDate.now().toString().substring(0, 7);
+        else
+            workDate = db.getLastRoute().toString().substring(0,7);
+        System.out.println(workDate);
+        System.out.println(workDate);
+        settings.setAktualis_honap(workDate);
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
         rebuildSpedometer();
@@ -649,7 +659,7 @@ public class ViewController implements Initializable {
         workDate = settings.getAktualis_honap();
 
         spedometer = settings.getElozo_zaro();
-       // megtettKM = db.getSpedometer(workDate);
+        // megtettKM = db.getSpedometer(workDate);
         //spedometer = spedometer + megtettKM;
         setText();
         setLabels();
@@ -899,7 +909,7 @@ public class ViewController implements Initializable {
         rowToExcel.setCell(fileName, sheetName, "D4", settings.getNev());
         rowToExcel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
         rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
-        rowToExcel.setCell(fileName, sheetName, "G5",  megtettKM.toString());
+        rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
 
         for (int i = 0; i < observableList.size(); i++) {
             String utCelja;

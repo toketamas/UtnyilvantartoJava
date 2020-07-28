@@ -151,11 +151,12 @@ public class DbModel {
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
-               // "aktualis_honap='" + settings.getAktualis_honap() +"',"+
+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "'"+
-                " where aktualis-honap = '"+dateValue+"';";
+                " where aktualis_honap = '"+dateValue+"';";
 
         try {
+            System.out.println(sqlQuery);
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
         } catch (SQLException throwables) {
@@ -261,6 +262,21 @@ public class DbModel {
             rs1 = createStatement.executeQuery(sqlQuery);
             value = rs1.getInt("sum(distance)");
             System.out.println(value);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return value;
+    }
+
+    public Object getLastRoute(){
+        Object value=null ;
+        String sqlQuery = "select * from routes\n" +
+                "where routeid = (select max (routeid) from routes);\n" +
+                "; ";
+        try {
+            rs1 = createStatement.executeQuery(sqlQuery);
+            value = rs1.getString("date");
+            System.out.println(value.toString());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

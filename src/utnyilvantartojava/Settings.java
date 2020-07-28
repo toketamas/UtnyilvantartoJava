@@ -1,7 +1,7 @@
 package utnyilvantartojava;
 
 public class Settings {
-  private final int id=1;
+
     private String nev;
     private String varos;
     private String cim;
@@ -54,9 +54,7 @@ public class Settings {
 
 
 
-    public int getId() {
-        return id;
-    }
+
 
     public String getNev() {
         return nev;
