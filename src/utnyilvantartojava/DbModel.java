@@ -100,7 +100,7 @@ public class DbModel {
             rs1 = dbmeta.getTables(null, "APP", "SETTINGS", null);
             if (!rs1.next()) {
                 createStatement.execute("create table settings(" +
-                        "id integer primary key autoincrement not null  ," +
+
                         "nev text," +
                         "varos text," +
                         "cim text," +
@@ -121,20 +121,19 @@ public class DbModel {
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
 
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, null);
-            preparedStatement.setString(2, settings.getNev());
-            preparedStatement.setString(3, settings.getVaros());
-            preparedStatement.setString(4, settings.getCim());
-            preparedStatement.setString(5, settings.getAuto());
-            preparedStatement.setString(6, settings.getRendszam());
-            preparedStatement.setString(7, settings.getLoketterfogat());
-            preparedStatement.setString(8, settings.getFogyasztas());
-            preparedStatement.setInt(9, settings.getElozo_zaro());
-            preparedStatement.setString(10, settings.getAktualis_honap());
-            preparedStatement.setString(11, settings.getUtolso_ugyfel());
+            preparedStatement.setString(1, settings.getNev());
+            preparedStatement.setString(2, settings.getVaros());
+            preparedStatement.setString(3, settings.getCim());
+            preparedStatement.setString(4, settings.getAuto());
+            preparedStatement.setString(5, settings.getRendszam());
+            preparedStatement.setString(6, settings.getLoketterfogat());
+            preparedStatement.setString(7, settings.getFogyasztas());
+            preparedStatement.setInt(8, settings.getElozo_zaro());
+            preparedStatement.setString(9, settings.getAktualis_honap());
+            preparedStatement.setString(10, settings.getUtolso_ugyfel());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -152,7 +151,7 @@ public class DbModel {
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
-                //"aktualis_honap='" + settings.getAktualis_honap() +"',"+
+               // "aktualis_honap='" + settings.getAktualis_honap() +"',"+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "'"+
                 " where aktualis-honap = '"+dateValue+"';";
 
@@ -164,8 +163,8 @@ public class DbModel {
         }
     }
 
-    public Settings getSettings() {      //visszaad egy ügyfelet
-        String sqlQuery="select * from settings where id=1";
+    public Settings getSettings(String month) {
+        String sqlQuery="select * from settings where aktualis_honap='"+month+"'";
         Settings settings = null;
         try {
             rs1 = createStatement.executeQuery(sqlQuery);
@@ -363,6 +362,7 @@ public class DbModel {
     public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
     }
+
 
     public Client getClientFromAddress(String value) {
         return queryClient("select * from clients where city || ' ' || address='" + value + "';");
