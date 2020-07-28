@@ -398,12 +398,14 @@ public class ViewController implements Initializable {
             db.addSettings(settings);
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate));
+
         }           //Éppen aktuális hónap kiválasztása
 
         if (btnMakeExcel.isArmed()) {               //Excel készítése
             excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
             System.out.println(excelName);
             makeExcel(excelName, "nyomtat");
+
             try {
 
                 Runtime.getRuntime().exec("cmd /c start excel /r " + excelName);

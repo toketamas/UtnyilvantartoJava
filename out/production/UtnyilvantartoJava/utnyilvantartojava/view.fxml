@@ -11,10 +11,12 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
@@ -37,7 +39,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                         </TableView>
-                        <WebView id="WV" fx:id="WV" disable="true" layoutX="12.0" layoutY="488.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
+                        <WebView id="WV" fx:id="WV" disable="true" layoutX="10.0" layoutY="490.0" maxHeight="500" maxWidth="1180" minHeight="439.0" minWidth="1180" prefHeight="439.0" prefWidth="1180" />
                   <DatePicker id="datePicker" fx:id="datePicker" layoutX="73.0" layoutY="84.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="136.0" />
                   <TextField id="txtDepart" fx:id="txtDepart" layoutX="12.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="208.0" promptText="Indulás">
                      <font>
@@ -185,6 +187,18 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="456.0" layoutY="364.0" prefHeight="200.0" prefWidth="362.0" visible="false">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f1f2" height="200.0" stroke="BLACK" strokeType="INSIDE" width="362.0" />
+                        <Button layoutX="194.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Rendben" />
+                        <Button layoutX="98.0" layoutY="152.0" mnemonicParsing="false" text="Mégse" />
+                        <TextArea id="txtArea" fx:id="txtArea" editable="false" layoutX="11.0" layoutY="14.0" prefHeight="114.0" prefWidth="340.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </TextArea>
                      </children>
                   </Pane>
                     </children></AnchorPane>
