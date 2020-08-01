@@ -21,7 +21,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <tabs>
         <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
             <content>
@@ -193,7 +193,7 @@
                      <children>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f1f2" height="200.0" stroke="BLACK" strokeType="INSIDE" width="362.0" />
                         <Button layoutX="194.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Rendben" />
-                        <Button layoutX="98.0" layoutY="152.0" mnemonicParsing="false" text="Mégse" />
+                        <Button id="alertCancel" layoutX="98.0" layoutY="152.0" mnemonicParsing="false" text="Mégse" />
                         <TextArea id="txtArea" fx:id="txtArea" editable="false" layoutX="11.0" layoutY="14.0" prefHeight="114.0" prefWidth="340.0">
                            <font>
                               <Font size="18.0" />
