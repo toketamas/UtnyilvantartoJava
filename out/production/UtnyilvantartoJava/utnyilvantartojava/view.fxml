@@ -16,14 +16,17 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+    <children>
+<TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
     <tabs>
-        <Tab id="tabNyilv" fx:id="tabNyilv" text="Útnyilvántartó">
+        <Tab id="tabNyilv" fx:id="tabNyilv" closable="false" text="Útnyilvántartó">
             <content>
                 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0">
                     <children>
@@ -189,18 +192,6 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Pane layoutX="456.0" layoutY="364.0" prefHeight="200.0" prefWidth="362.0" visible="false">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f1f2" height="200.0" stroke="BLACK" strokeType="INSIDE" width="362.0" />
-                        <Button layoutX="194.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Rendben" />
-                        <Button layoutX="98.0" layoutY="152.0" mnemonicParsing="false" text="Mégse" />
-                        <TextArea id="txtArea" fx:id="txtArea" editable="false" layoutX="11.0" layoutY="14.0" prefHeight="114.0" prefWidth="340.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </TextArea>
-                     </children>
-                  </Pane>
                     </children></AnchorPane>
       </content>
     </Tab>
@@ -278,3 +269,33 @@
 
   </tabs>
 </TabPane>
+<Pane id="alertPane" fx:id="alertPane" layoutX="426.0" layoutY="303.0" prefHeight="200.0" prefWidth="362.0" visible="false">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bbbdbf" height="200.0" stroke="#f0f0f0" strokeType="INSIDE" width="362.0" />
+      <TextArea id="alertTextArea" fx:id="alertTextArea" editable="false" layoutX="11.0" layoutY="31.0" prefHeight="114.0" prefWidth="340.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextArea>
+      <AnchorPane id="paneDualButton" fx:id="paneDualButton" layoutX="81.0" layoutY="138.0" prefHeight="52.0" prefWidth="200.0">
+         <children>
+            <Button id="btnAlertDoubleCancel" fx:id="btnAlertDoubleCancel" layoutX="10.0" layoutY="19.0" mnemonicParsing="false" onAction="#btnClick" text="Mégse" />
+            <Button id="btnAlertDoubleOk" fx:id="btnAlertDoubleOk" layoutX="125.0" layoutY="19.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="25.0" prefWidth="65.0" text="Ok" />
+         </children>
+      </AnchorPane>
+      <AnchorPane id="paneSingleButton" fx:id="paneSingleButton" layoutX="81.0" layoutY="137.0" prefHeight="54.0" prefWidth="200.0" visible="false">
+         <children>
+            <Button id="btnAlertSingleOK" fx:id="btnAlertSingleOK" layoutX="63.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="63.0" text="Ok" />
+         </children>
+      </AnchorPane>
+      <Rectangle id="alertRectangle" fx:id="alertRectangle" arcHeight="5.0" arcWidth="5.0" fill="#bbbdbf" height="34.0" layoutX="1.0" stroke="#bbbdbf" strokeType="INSIDE" width="360.0" />
+      <Label id="lblAlert" fx:id="lblAlert" layoutX="12.0" layoutY="3.0" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Circle id="alertCircle" fx:id="alertCircle" fill="#bbbdbf" layoutX="321.0" layoutY="169.0" radius="11.0" stroke="#bbbdbf" strokeType="INSIDE" />
+   </children>
+</Pane>
+    </children>
+</AnchorPane>
