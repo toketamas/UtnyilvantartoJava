@@ -96,6 +96,10 @@ public class ViewController implements Initializable {
     Button btnAlertDoubleOk;
     @FXML
     Button btnAlertSingleOK;
+    @FXML
+    Button btnPlus;
+    @FXML
+    Button btnMinus;
 
     // Checkboxok
     @FXML
@@ -199,6 +203,7 @@ public class ViewController implements Initializable {
 
     boolean selectedClientOdaVissza;
     boolean alertOkOrCancel;
+    boolean alertClick;
 
     Integer distance;
     Integer spedometer;
@@ -230,9 +235,9 @@ public class ViewController implements Initializable {
             btnDistance.setDisable(false);
             if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
                 insertRoute();
-            }else{
+            } else {
                 showAlert("A dátum és a hónap amivel \ndolgozol nem egyezik!! \n" +
-                        "Kérlek állítsd be a megfelelő \nértéket!", true,"warn");
+                        "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
             }
         }
 
@@ -289,25 +294,24 @@ public class ViewController implements Initializable {
         }
 
         if (btnReady.isArmed()) {
-            workDate = txtDate.getText();
-            settings.setAktualis_honap(workDate);
-            db.addSettings(settings);
-            observableList.clear();
-            observableList.addAll(db.getRoutes(workDate));
-
-        }           //Éppen aktuális hónap kiválasztása
+            setWorkdate();
+        }
 
         if (btnMakeExcel.isArmed()) {               //Excel készítése
-            excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
-            System.out.println(excelName);
-            makeExcel(excelName, "nyomtat");
+            // showAlert("Mielőtt elkészíted az excelt le \nkell zárnod a hónapot! Lezárod ?", false, "info");
 
-            try {
+            if (alertOkOrCancel) {
+                excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
+                System.out.println(excelName);
+                makeExcel(excelName, "nyomtat");
 
-                Runtime.getRuntime().exec("cmd /c start excel /r " + excelName);
-            } catch (Exception e) {
-                System.out.println("Nem érhető el a fájl ! ");
-                e.printStackTrace();
+                try {
+
+                    Runtime.getRuntime().exec("cmd /c start excel /r " + excelName);
+                } catch (Exception e) {
+                    System.out.println("Nem érhető el a fájl ! ");
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -352,6 +356,8 @@ public class ViewController implements Initializable {
                 txtDistance.clear();
                 txtDepart.setText(startClient.getClientNumber());
                 cbClient.setValue("Válaszd ki az ügyfelet");
+                settings.setUtolso_ugyfel(telephely.getClientNumber());
+                db.updateSettings(settings, workDate);
 
                 //     setBoxesValue();
             }
@@ -382,18 +388,31 @@ public class ViewController implements Initializable {
         }
 
         if (btnAlertSingleOK.isArmed()) {
+            alertClick = true;
             alertOkOrCancel = true;
             alertPane.setVisible(false);
         }
 
-        if (btnAlertDoubleOk.isArmed()) {
+       /* if (btnAlertDoubleOk.isArmed()) {
+            alertClick =true;
             alertOkOrCancel = true;
             alertPane.setVisible(false);
         }
 
         if (btnAlertDoubleCancel.isArmed()) {
+            alertClick =true;
             alertOkOrCancel = false;
             alertPane.setVisible(false);
+        }*/
+
+        if (btnPlus.isArmed()) {
+            workDate=workDateDecOrInc("+");
+           setWorkdate();
+
+        }
+        if (btnMinus.isArmed()) {
+            workDate=workDateDecOrInc("-");
+            setWorkdate();
         }
 
     }
@@ -404,7 +423,7 @@ public class ViewController implements Initializable {
             distance = parseInt(txtDistance.getText());
         } catch (NumberFormatException e) {
             //txtDistance.setText("IDE CSAK SZÁMOT ÍRHATSZ!!!");  //Ha sikertelen a parseInt
-            showAlert("A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!",true,"err");
+            showAlert("A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
             btnBev.setDisable(false);
             txtDistance.clear();
         }
@@ -703,7 +722,7 @@ public class ViewController implements Initializable {
             tabNyilv.setDisable(true);
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
-            showAlert("Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!",true,"info");
+            showAlert("Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
         }
         checkSpecialClients();
         telephely = db.getClient("telephely");
@@ -879,7 +898,7 @@ public class ViewController implements Initializable {
         lblKezdo.setText("Kezdő: " + settings.getElozo_zaro() + " Km");
         //rebuildSpedometer();
         lblKm.setText("Jelenlegi záró: " + (settings.getElozo_zaro() + db.getSpedometer(workDate)) + " Km");
-        textZaro.setText(lblKm.getText());
+        //  textZaro.setText(db.);
         lblMegtett.setText("Megtett út: " + db.getSpedometer(workDate) + " Km");
     }
 
@@ -1022,33 +1041,68 @@ public class ViewController implements Initializable {
     }
 
 
-    public void showAlert(String alertText, Boolean singleOrDualButton,String alertLevel) {        //Single button => true , dual button => false
-        String color="8bdb70";
+    public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {        //Single button => true , dual button => false; típusok info(vagy bármilyen string),err,warn,succ
+        alertClick = false;
+
+        String color = "83b1f5";//kék
         lblAlert.textFillProperty().setValue(Paint.valueOf("ffffff"));
         lblAlert.setText("Információ");
-        if (alertLevel=="err"){
-            color="ff4d4d";
-        lblAlert.setText("Hiba!");
+        if (alertLevel == "err") {
+            color = "ff4d4d";//piros
+            lblAlert.setText("Hiba!");
         }
-        if (alertLevel=="warn") {
-            color = "f2cc5a";
+        if (alertLevel == "warn") {
+            color = "f2cc5a";//sárga
             lblAlert.textFillProperty().setValue(Paint.valueOf("000000"));
             lblAlert.setText("Figyelmeztetés!");
+        }
+        if (alertLevel == "succ") {
+            color = "8bdb70";//zöld
+            lblAlert.textFillProperty().setValue(Paint.valueOf("ffffff"));
+            lblAlert.setText("Siker!");
         }
         alertPane.setVisible(true);
         alertTextArea.clear();
         alertTextArea.setText(alertText);
+        //alertCircle.fillProperty().setValue(Paint.valueOf(color));
+        alertRectangle.fillProperty().setValue(Paint.valueOf(color));
         if (singleOrDualButton) {
             paneSingleButton.setVisible(true);
             paneDualButton.setVisible(false);
-            alertCircle.fillProperty().setValue(Paint.valueOf(color));
-            alertRectangle.fillProperty().setValue(Paint.valueOf(color));
+
         } else {
             paneDualButton.setVisible(true);
             paneSingleButton.setVisible(false);
         }
     }
 
+    public String workDateDecOrInc(String value) {
+        Integer year = Integer.parseInt(workDate.substring(0, 3));
+        Integer month = Integer.parseInt(workDate.substring(5, 6));
+        if (value == "+") {
+            if (month <= 11)
+                month++;
+            else year++;
+        }
+        if (value == "-") {
+            if (month >= 2)
+                month--;
+            else year--;
+        }
+        return year.toString() + "-" + month.toString();
+    }
+
+    public void setWorkdate()
+    {workDate = txtDate.getText();
+            if (db.getSettings(workDate) == null) {
+        showAlert("Az előző hónapot még nem zártad le!\nBiztosan új hónapot kezdesz?", false, "info");
+    }
+            settings.setAktualis_honap(workDate);
+            db.addSettings(settings);
+            observableList.clear();
+            observableList.addAll(db.getRoutes(workDate));
+
+}           //Éppen aktuális hónap kiválasztása
 
 
 }

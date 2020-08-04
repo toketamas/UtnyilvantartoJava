@@ -110,7 +110,8 @@ public class DbModel {
                         "fogyasztas text," +
                         "elozo_zaro integer," +
                         "aktualis_honap text primary key not null," +
-                        "utolso_ugyfel text);");
+                        "utolso_ugyfel text," +
+                        "lezarva boolean);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -121,7 +122,7 @@ public class DbModel {
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
 
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, settings.getNev());
@@ -134,6 +135,7 @@ public class DbModel {
             preparedStatement.setInt(8, settings.getElozo_zaro());
             preparedStatement.setString(9, settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
+            preparedStatement.setBoolean(11,settings.getLezarva());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -151,8 +153,8 @@ public class DbModel {
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
-
-                "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "'"+
+                "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"+
+                "lezarva ='" + settings.getLezarva() + "'"+
                 " where aktualis_honap = '"+dateValue+"';";
 
         try {
@@ -180,7 +182,8 @@ public class DbModel {
                         rs1.getString("fogyasztas"),
                         rs1.getInt("elozo_zaro"),
                         rs1.getString("aktualis_honap"),
-                        rs1.getString("utolso_ugyfel")
+                        rs1.getString("utolso_ugyfel"),
+                        rs1.getBoolean("lezarva")
                 );
             }
         } catch (SQLException ex) {
@@ -189,6 +192,9 @@ public class DbModel {
         }
         return settings;
     }
+
+
+
     public void addRoute(Route route) {
 
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?)";
@@ -254,10 +260,18 @@ public class DbModel {
         }
     }
 
-    public int getSpedometer(String workDate) {      // a routes listából a havi összes távolságot adja vissza
+    public int getTotalDistanceTravelled(){
+        String sqlQuery = "select sum(distance) from routes;";
+        return querySpedometer(sqlQuery);
+    }
+
+    public int getSpedometer(String workDate) {
+        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%'; ";
+        return querySpedometer(sqlQuery);
+    }
+
+    public int querySpedometer(String sqlQuery) {      // a routes listából a havi összes távolságot adja vissza
         int value = 0;
-        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' ";
-        System.out.println(sqlQuery);
         try {
             rs1 = createStatement.executeQuery(sqlQuery);
             value = rs1.getInt("sum(distance)");
@@ -324,7 +338,7 @@ public class DbModel {
 
     public Distance getDistance(String client1,String client2) {      // a distances listából két ügyfél távolságát adja vissza
         Distance distance=new Distance(client1,client2);
-        String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "'";
+        String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
         try {
             preparedStatement=conn.prepareStatement(sqlQuery);
             rs1=preparedStatement.executeQuery();

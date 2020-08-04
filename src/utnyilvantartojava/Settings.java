@@ -12,6 +12,8 @@ public class Settings {
     private int elozo_zaro;
     private String aktualis_honap;
     private String utolso_ugyfel;
+    private Boolean lezarva;
+
 
     public Settings() {
         this.nev ="";
@@ -24,9 +26,10 @@ public class Settings {
         this.elozo_zaro = 0;
         this.aktualis_honap = "";
         this.utolso_ugyfel = "telephely";
+        this.lezarva=false;
     }
 
-    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap, String utolso_ugyfel) {
+    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap, String utolso_ugyfel, Boolean lezarva) {
         this.nev = nev;
         this.varos = varos;
         this.cim = cim;
@@ -37,6 +40,7 @@ public class Settings {
         this.elozo_zaro = elozo_zaro;
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = utolso_ugyfel;
+        this.lezarva=lezarva;
     }
 
     public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap) {
@@ -50,11 +54,17 @@ public class Settings {
         this.elozo_zaro = elozo_zaro;
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = "telephely";
+        this.lezarva=lezarva;
     }
 
 
+    public Boolean getLezarva() {
+        return lezarva;
+    }
 
-
+    public void setLezarva(Boolean lezarva) {
+        this.lezarva = lezarva;
+    }
 
     public String getNev() {
         return nev;
