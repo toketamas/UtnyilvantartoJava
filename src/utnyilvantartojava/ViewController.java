@@ -16,7 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.SearchableComboBox;
@@ -880,6 +879,7 @@ public class ViewController implements Initializable {
         lblKezdo.setText("Kezdő: " + settings.getElozo_zaro() + " Km");
         //rebuildSpedometer();
         lblKm.setText("Jelenlegi záró: " + (settings.getElozo_zaro() + db.getSpedometer(workDate)) + " Km");
+        textZaro.setText(lblKm.getText());
         lblMegtett.setText("Megtett út: " + db.getSpedometer(workDate) + " Km");
     }
 
