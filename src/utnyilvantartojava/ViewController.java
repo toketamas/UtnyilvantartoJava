@@ -406,12 +406,12 @@ public class ViewController implements Initializable {
         }*/
 
         if (btnPlus.isArmed()) {
-            workDate=workDateDecOrInc("+");
-           setWorkdate();
+            txtDate.setText(workDateDecOrInc("+"));
+            setWorkdate();
 
         }
         if (btnMinus.isArmed()) {
-            workDate=workDateDecOrInc("-");
+            txtDate.setText(workDateDecOrInc("-"));
             setWorkdate();
         }
 
@@ -1077,32 +1077,43 @@ public class ViewController implements Initializable {
     }
 
     public String workDateDecOrInc(String value) {
-        Integer year = Integer.parseInt(workDate.substring(0, 3));
-        Integer month = Integer.parseInt(workDate.substring(5, 6));
+        Integer year = Integer.parseInt(workDate.substring(0, 4));
+        System.out.println(year);
+        Integer month = Integer.parseInt(workDate.substring(5, 7));
+        System.out.println(month);
         if (value == "+") {
-            if (month <= 11)
-                month++;
-            else year++;
+            if (month < 12)
+                month=month+1;
+            else {
+                year = year + 1;
+                month=1;
+            }
         }
         if (value == "-") {
-            if (month >= 2)
+            if (month > 1)
                 month--;
-            else year--;
+            else{
+                year--;
+                month=12;
+            }
         }
-        return year.toString() + "-" + month.toString();
+        String mnt;
+        if (month<10)
+            mnt="0"+month.toString();
+        else
+            mnt=month.toString();
+        return year.toString() + "-" + mnt;
+
     }
 
-    public void setWorkdate()
-    {workDate = txtDate.getText();
-            if (db.getSettings(workDate) == null) {
-        showAlert("Az előző hónapot még nem zártad le!\nBiztosan új hónapot kezdesz?", false, "info");
-    }
-            settings.setAktualis_honap(workDate);
-            db.addSettings(settings);
-            observableList.clear();
-            observableList.addAll(db.getRoutes(workDate));
+    public void setWorkdate() {
+        workDate = txtDate.getText();
+        settings.setAktualis_honap(workDate);
+        db.addSettings(settings);
+        observableList.clear();
+        observableList.addAll(db.getRoutes(workDate));
 
-}           //Éppen aktuális hónap kiválasztása
+    }           //Éppen aktuális hónap kiválasztása
 
 
 }
