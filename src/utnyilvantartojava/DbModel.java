@@ -167,8 +167,17 @@ public class DbModel {
     }
 
     public Settings getSettings(String month) {
-        String sqlQuery="select * from settings where aktualis_honap='"+month+"'";
-        Settings settings = null;
+        String sqlQuery = "select * from settings where aktualis_honap='" + month + "'";
+        return querySettings(sqlQuery);
+    }
+
+    public Settings getMinSpedometer(String rendszam){
+        String sqlQuery = "select min(elozo_zaro),* from settings where rendszam='"+rendszam+"' ;";
+        return querySettings(sqlQuery);
+    }
+
+    public Settings querySettings(String sqlQuery) {
+                Settings settings = null;
         try {
             rs1 = createStatement.executeQuery(sqlQuery);
             while (rs1.next()) {
@@ -260,8 +269,8 @@ public class DbModel {
         }
     }
 
-    public int getTotalDistanceTravelled(){
-        String sqlQuery = "select sum(distance) from routes;";
+    public int getTotalDistanceTravelled(String workDate){
+        String sqlQuery = "select sum(distance) from routes where date < '"+workDate+"-01';";
         return querySpedometer(sqlQuery);
     }
 
