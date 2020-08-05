@@ -1,3 +1,9 @@
+
+
+
+
+//sqLite
+
 package utnyilvantartojava;
 
 import java.sql.*;
@@ -340,7 +346,7 @@ public class DbModel {
             preparedStatement.setInt(3, distance);
             preparedStatement.execute();
         } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("Hiba! Nem sikerült a Distance táblába írni írni");
             System.out.println("" + ex);
         }
     }
@@ -354,8 +360,8 @@ public class DbModel {
 
             distance.setDistance(rs1.getInt("distance"));
 
-            } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            } catch (SQLException ex) {
+            System.out.println("Nem sikerűlt a Distances táblából olvasni!");;
         }
 
         return distance;
@@ -521,7 +527,6 @@ public class DbModel {
             return false;
     }
 }
-
 
 
 

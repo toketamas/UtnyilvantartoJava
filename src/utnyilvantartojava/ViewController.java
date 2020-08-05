@@ -24,6 +24,7 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -179,6 +180,8 @@ public class ViewController implements Initializable {
     SearchableComboBox<String> cbClient;
 
     DbModel db = new DbModel();
+    RemoteDb remoteDb = new RemoteDb();
+
 
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
@@ -473,6 +476,10 @@ public class ViewController implements Initializable {
             Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
             if (start.getDistance() == 0 && target.getDistance() == 0) {
                 db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+
+                remoteDb.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+
+
                 btnBev.setDisable(false);
                 btnDistance.setDisable(true);
             }
