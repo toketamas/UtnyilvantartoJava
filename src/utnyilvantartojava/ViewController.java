@@ -180,7 +180,7 @@ public class ViewController implements Initializable {
     SearchableComboBox<String> cbClient;
 
     DbModel db = new DbModel();
-    RemoteDb remoteDb = new RemoteDb();
+   // RemoteDb remoteDb = new RemoteDb();
 
 
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
@@ -472,17 +472,7 @@ public class ViewController implements Initializable {
                             observableList.size()));
             // rebuildSpedometer();
             //setLabels();
-            Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
-            Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
-            if (start.getDistance() == 0 && target.getDistance() == 0) {
-                db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
-
-                remoteDb.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
-
-
-                btnBev.setDisable(false);
-                btnDistance.setDisable(true);
-            }
+           checkDistInDb();
 
             observableList.add(
                     new Route(
@@ -522,18 +512,7 @@ public class ViewController implements Initializable {
             settings.setUtolso_ugyfel(targetClient.getClientNumber());
             db.updateSettings(settings, workDate);
             txtDepart.setText(getClientFullAddress(targetClient));
-            // rebuildSpedometer();
-            //setLabels();
-            Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
-            Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
-
-            if (start.getDistance() == 0 && target.getDistance() == 0) {
-                db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
-                btnBev.setDisable(false);
-                btnDistance.setDisable(true);
-                // rebuildSpedometer();
-                //setLabels();
-            }
+           checkDistInDb();
             startClient = targetClient;
             targetClient = null;
             // rebuildSpedometer();
@@ -563,6 +542,25 @@ public class ViewController implements Initializable {
         setLabels();
     }
 
+    private void checkDistInDb(){
+        Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
+
+        if (start.getDistance() == 0 && target.getDistance() == 0) {
+            db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            btnBev.setDisable(false);
+            btnDistance.setDisable(true);
+        }
+
+
+        Distance start1 = db.getDistanceFromMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        Distance target1 = db.getDistanceFromMySql(getClientFullAddress(targetClient), getClientFullAddress(startClient));
+        if (start1.getDistance() == 0 && target1.getDistance() == 0) {
+            db.addDistanceToMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            btnBev.setDisable(false);
+            btnDistance.setDisable(true);
+        }
+    }
 
     private void getDist() {
 

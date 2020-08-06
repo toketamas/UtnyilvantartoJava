@@ -16,17 +16,31 @@ public class DbModel {
     final String USERNAME = "";
     final String PASSWORD = "";
 
+    final String JDBC_DRIVER_MYSQL = "com.mysql.jdbc.Driver";
+    final String URLMYSQL2 = "jdbc:mysql://192.168.1.11:3306/routeregister?serverTimezone=Europe/Budapest&useUnicode=true&characterEncoding=UTF-8";
+    final String URLMYSQL = "jdbc:mysql://b4a00aba1329.sn.mynetname.net:3306/routeregister?serverTimezone=Europe/Budapest&useUnicode=true&characterEncoding=UTF-8";
+    final String USERNAME_MYSQL = "diebold";
+    final String PASSWORD_MYSQL = "8V2lrQnq()Tb";
+
 
     Connection conn = null;
     Statement createStatement = null;
     DatabaseMetaData dbmeta = null;
-    ResultSet rs1 = null;
+    ResultSet rs = null;
     PreparedStatement preparedStatement = null;
 
+    Connection conn1 = null;
+    Statement createStatement1 = null;
+    DatabaseMetaData dbmeta1 = null;
+    ResultSet rs1 = null;
+    PreparedStatement preparedStatement1 = null;
+
     public DbModel() {
+
+      /////////////////////////////////////////////////////////////////////////////////////
         try {
             conn = DriverManager.getConnection(URL);
-            System.out.println("A kapcsolat létrejött az adatbázissal,");
+            System.out.println("A kapcsolat létrejött az sqlite adatbázissal,");
         } catch (SQLException ex) {
             System.out.println("Hiba!");
             System.out.println("" + ex);
@@ -47,9 +61,45 @@ public class DbModel {
             System.out.println("" + ex);
         }
 
+     ///////////////////////////////////////////////////////////////////////////////////////
+
         try {
-            rs1 = dbmeta.getTables(null, "APP", "ROUTES", null);
-            if (!rs1.next()) {
+            conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
+            System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
+
+        }catch (Exception e) {
+            System.out.println("Hiba! A távoli mysql server nem érhető el!");
+            System.out.println("" + e);
+            try {
+                conn1 = DriverManager.getConnection(URLMYSQL2, USERNAME_MYSQL, PASSWORD_MYSQL);
+                System.out.println("A kapcsolat létrejött a helyi mysql adatbázissal,");
+
+            }catch (Exception ex) {
+                System.out.println("Hiba! A helyi mysql server nem érhető el!");
+                System.out.println("" + ex);
+            }
+        }
+
+        if (conn1 != null) {
+            try {
+                createStatement1 = conn1.createStatement();
+            } catch (SQLException ex) {
+                System.out.println("Hiba!");
+                System.out.println("" + ex);
+            }
+        }
+        if (conn1 != null) {
+            try {
+                dbmeta1 = conn1.getMetaData();
+            } catch (SQLException ex) {
+                System.out.println("Hiba!");
+                System.out.println("" + ex);
+            }
+        }
+
+        try {
+            rs = dbmeta.getTables(null, "APP", "ROUTES", null);
+            if (!rs.next()) {
                 createStatement.execute("create table routes(" +
                         "routeid integer primary key autoincrement not null," +
                         "date text not null," +
@@ -70,8 +120,8 @@ public class DbModel {
 
 
         try {
-            rs1 = dbmeta.getTables(null, "APP", "CLIENTS", null);
-            if (!rs1.next()) {
+            rs = dbmeta.getTables(null, "APP", "CLIENTS", null);
+            if (!rs.next()) {
                 createStatement.execute("create table clients(" +
                         "client text not null," +
                         "clientnumber text primary key not null ," +
@@ -90,8 +140,8 @@ public class DbModel {
         }
 
         try {
-            rs1 = dbmeta.getTables(null, "APP", "DISTANCES", null);
-            if (!rs1.next()) {
+            rs = dbmeta.getTables(null, "APP", "DISTANCES", null);
+            if (!rs.next()) {
                 createStatement.execute("create table distances(" +
                         "clientid1 text," +
                         "clientid2 text," +
@@ -103,8 +153,8 @@ public class DbModel {
         }
 
         try {
-            rs1 = dbmeta.getTables(null, "APP", "SETTINGS", null);
-            if (!rs1.next()) {
+            rs = dbmeta.getTables(null, "APP", "SETTINGS", null);
+            if (!rs.next()) {
                 createStatement.execute("create table settings(" +
 
                         "nev text," +
@@ -185,20 +235,20 @@ public class DbModel {
     public Settings querySettings(String sqlQuery) {
                 Settings settings = null;
         try {
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
                settings = new Settings(
-                        rs1.getString("nev"),
-                        rs1.getString("varos"),
-                        rs1.getString("cim"),
-                        rs1.getString("auto"),
-                        rs1.getString("rendszam"),
-                        rs1.getString("loketterfogat"),
-                        rs1.getString("fogyasztas"),
-                        rs1.getInt("elozo_zaro"),
-                        rs1.getString("aktualis_honap"),
-                        rs1.getString("utolso_ugyfel"),
-                        rs1.getBoolean("lezarva")
+                        rs.getString("nev"),
+                        rs.getString("varos"),
+                        rs.getString("cim"),
+                        rs.getString("auto"),
+                        rs.getString("rendszam"),
+                        rs.getString("loketterfogat"),
+                        rs.getString("fogyasztas"),
+                        rs.getInt("elozo_zaro"),
+                        rs.getString("aktualis_honap"),
+                        rs.getString("utolso_ugyfel"),
+                        rs.getBoolean("lezarva")
                 );
             }
         } catch (SQLException ex) {
@@ -240,19 +290,19 @@ public class DbModel {
             String sqlQuery = "select * from routes where date like '" + workDate + "-%%' order by date , routeid";
 
             routes = new ArrayList<>();
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                Integer routeId = rs1.getInt("routeid");
-                String date = rs1.getString("date");
-                boolean priv = convertBool(rs1.getInt("private"));
-                String depart = rs1.getString("depart");
-                String arrive = rs1.getString("arrive");
-                String client = rs1.getString("client");
-                int spedometer = rs1.getInt("spedometer");
-                double fueling = rs1.getDouble("fueling");
-                int distance = rs1.getInt("distance");
-                boolean backandforth = convertBool(rs1.getInt("backandforth"));
-                int cellId = rs1.getInt("cellId");
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
+                Integer routeId = rs.getInt("routeid");
+                String date = rs.getString("date");
+                boolean priv = convertBool(rs.getInt("private"));
+                String depart = rs.getString("depart");
+                String arrive = rs.getString("arrive");
+                String client = rs.getString("client");
+                int spedometer = rs.getInt("spedometer");
+                double fueling = rs.getDouble("fueling");
+                int distance = rs.getInt("distance");
+                boolean backandforth = convertBool(rs.getInt("backandforth"));
+                int cellId = rs.getInt("cellId");
 
 
                 routes.add(new Route(routeId, date, priv, depart, arrive, client, fueling, spedometer, distance, backandforth, cellId));
@@ -288,8 +338,8 @@ public class DbModel {
     public int querySpedometer(String sqlQuery) {      // a routes listából a havi összes távolságot adja vissza
         int value = 0;
         try {
-            rs1 = createStatement.executeQuery(sqlQuery);
-            value = rs1.getInt("sum(distance)");
+            rs = createStatement.executeQuery(sqlQuery);
+            value = rs.getInt("sum(distance)");
             System.out.println(value);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -303,8 +353,8 @@ public class DbModel {
                 "where routeid = (select max (routeid) from routes);\n" +
                 "; ";
         try {
-            rs1 = createStatement.executeQuery(sqlQuery);
-            value = rs1.getString("date");
+            rs = createStatement.executeQuery(sqlQuery);
+            value = rs.getString("date");
             System.out.println(value.toString());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -345,6 +395,7 @@ public class DbModel {
             preparedStatement.setString(2, clientId2);
             preparedStatement.setInt(3, distance);
             preparedStatement.execute();
+            System.out.println(sqlQuery);
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a Distance táblába írni írni");
             System.out.println("" + ex);
@@ -356,9 +407,9 @@ public class DbModel {
         String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
         try {
             preparedStatement=conn.prepareStatement(sqlQuery);
-            rs1=preparedStatement.executeQuery();
+            rs =preparedStatement.executeQuery();
 
-            distance.setDistance(rs1.getInt("distance"));
+            distance.setDistance(rs.getInt("distance"));
 
             } catch (SQLException ex) {
             System.out.println("Nem sikerűlt a Distances táblából olvasni!");;
@@ -416,19 +467,19 @@ public class DbModel {
     private Client queryClient(String sqlQuery) {      //visszaad egy ügyfelet
         Client client = null;
         try {
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
                 client = new Client(
-                        rs1.getString("client"),
-                        rs1.getString("clientnumber"),
-                        rs1.getString("type"),
-                        rs1.getString("factorynumber"),
-                        rs1.getInt("zipcode"),
-                        rs1.getString("city"),
-                        rs1.getString("address"),
-                        convertBool(rs1.getInt("exist")),
-                        rs1.getInt("maintenanceperyear"),
-                        rs1.getString("field")
+                        rs.getString("client"),
+                        rs.getString("clientnumber"),
+                        rs.getString("type"),
+                        rs.getString("factorynumber"),
+                        rs.getInt("zipcode"),
+                        rs.getString("city"),
+                        rs.getString("address"),
+                        convertBool(rs.getInt("exist")),
+                        rs.getInt("maintenanceperyear"),
+                        rs.getString("field")
                 );
             }
         } catch (SQLException ex) {
@@ -477,9 +528,9 @@ public class DbModel {
         try {
             String sqlQuery = "select clientnumber from clients";
             clients = new ArrayList<>();
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                clients.add(rs1.getString("clientnumber"));
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
+                clients.add(rs.getString("clientnumber"));
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
@@ -493,9 +544,9 @@ public class DbModel {
         try {
             String sqlQuery = "select distinct city from clients";
             clients = new ArrayList<>();
-            rs1 = createStatement.executeQuery(sqlQuery);
-            while (rs1.next()) {
-                clients.add(rs1.getString("city"));
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
+                clients.add(rs.getString("city"));
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
@@ -503,6 +554,39 @@ public class DbModel {
         }
         return clients;
     }
+
+    public void addDistanceToMySql(String clientId1, String clientId2, int distance) {
+        String sqlQuery = "insert into distances  values (?,?,?)";
+        try {
+            preparedStatement1 = conn1.prepareStatement(sqlQuery);
+            preparedStatement1.setString(1, clientId1);
+            preparedStatement1.setString(2, clientId2);
+            preparedStatement1.setInt(3, distance);
+            preparedStatement1.execute();
+            System.out.println(sqlQuery);
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült a mysql distances táblába írni írni");
+            System.out.println("" + ex);
+        }
+    }
+
+    public Distance getDistanceFromMySql(String client1,String client2) {      // a distances listából két ügyfél távolságát adja vissza
+        Distance distance=new Distance(client1,client2);
+        String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
+        try {
+            preparedStatement1=conn1.prepareStatement(sqlQuery);
+            rs1 =preparedStatement1.executeQuery();
+
+            distance.setDistance(rs1.getInt("distance"));
+
+        } catch (SQLException ex) {
+            System.out.println("Nem sikerűlt a mysql distances táblából olvasni!");;
+        }
+
+        return distance;
+    }
+
+
 
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
     public int convertBool(Boolean value) {
