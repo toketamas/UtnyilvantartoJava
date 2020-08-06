@@ -167,7 +167,7 @@ public class DbModel {
                         "elozo_zaro integer," +
                         "aktualis_honap text primary key not null," +
                         "utolso_ugyfel text," +
-                        "lezarva boolean);");
+                        "lezarva integer);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -191,7 +191,7 @@ public class DbModel {
             preparedStatement.setInt(8, settings.getElozo_zaro());
             preparedStatement.setString(9, settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
-            preparedStatement.setBoolean(11,settings.getLezarva());
+            preparedStatement.setInt(11,settings.getLezarva());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -248,7 +248,7 @@ public class DbModel {
                         rs.getInt("elozo_zaro"),
                         rs.getString("aktualis_honap"),
                         rs.getString("utolso_ugyfel"),
-                        rs.getBoolean("lezarva")
+                        rs.getInt("lezarva")
                 );
             }
         } catch (SQLException ex) {

@@ -327,7 +327,7 @@ public class ViewController implements Initializable {
             txtDistance.clear();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
-            rebuildSpedometer();
+           // rebuildSpedometer();
             setLabels();
         }
 
@@ -336,7 +336,7 @@ public class ViewController implements Initializable {
             System.out.println("route_id = " + selectedRoute.getRouteId());
             db.delRoute(selectedRoute.getRouteId());
 
-            rebuildSpedometer();
+           // rebuildSpedometer();
             setLabels();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
@@ -526,6 +526,7 @@ public class ViewController implements Initializable {
         db.addRoute(observableList.get(observableList.size() - 1));
         observableList.clear();
         observableList.addAll(db.getRoutes(workDate));
+        rebuildSpedometer();
         if (chkBackToSites.isSelected()) {
             chkSites.setSelected(true);
             chkBackToSites.setSelected(false);
@@ -538,7 +539,7 @@ public class ViewController implements Initializable {
         table.scrollTo(table.getItems().size() - 1);
         btnBev.setDisable(true);
         btnDistance.setDisable(false);
-        rebuildSpedometer();
+       // rebuildSpedometer();
         setLabels();
     }
 
@@ -715,7 +716,7 @@ public class ViewController implements Initializable {
         settings.setAktualis_honap(workDate);
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
-        rebuildSpedometer();
+       // rebuildSpedometer();
         setLabels();
         if (db.getSettings(workDate) == null) {
             db.addSettings(settings);
@@ -745,8 +746,10 @@ public class ViewController implements Initializable {
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
         datePicker.setValue(LocalDate.now());
         excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
-        observableList.addAll(db.getRoutes(workDate));         // betölti az adatokat az adatbázisból
+        observableList.addAll(db.getRoutes(workDate));
         rebuildSpedometer();
+        // betölti az adatokat az adatbázisból
+        //rebuildSpedometer();
         setLabels();
         startClient = db.getClient(settings.getUtolso_ugyfel());                  // beállítja startclientnek az utolsó érkezés helyét
         System.out.println(startClient.getClientNumber());
@@ -762,7 +765,7 @@ public class ViewController implements Initializable {
         cbClient.getItems().addAll(db.getAllClient());
         fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába
         table.scrollTo(table.getItems().size() - 1);
-        rebuildSpedometer();
+       // rebuildSpedometer();
         setLabels();
         setText();
     }
@@ -1020,16 +1023,12 @@ public class ViewController implements Initializable {
 
     public void rebuildSpedometer() {
         int currentValue = settings.getElozo_zaro();
-        //System.out.println(currentValue);
+
         for (int i = 0; i < observableList.size(); i++) {
-            //Route route = observableList.get(i);
             currentValue = currentValue + observableList.get(i).getTavolsag();
             observableList.get(i).setSpedometer(currentValue);
-            //db.updateRoute(route, route.getRouteId());
+            db.updateRoute(observableList.get(i),observableList.get(i).getRouteId());
         }
-        //observableList.clear();
-        //observableList.addAll(db.getRoutes("'" + workDate + "-%%'"));
-        //spedometer=currentValue;
         setLabels();
     }
 
@@ -1112,11 +1111,23 @@ public class ViewController implements Initializable {
     }
 
     public void setWorkdate() {
+        int zaroKm = settings.getElozo_zaro()+db.getSpedometer(workDate);
+        Settings checkSetting =db.getSettings(workDate);
+        settings.setLezarva(zaroKm);
+        db.updateSettings(settings,workDate);
         workDate = txtDate.getText();
+        settings.setElozo_zaro(zaroKm);
         settings.setAktualis_honap(workDate);
-        db.addSettings(settings);
+        settings.setLezarva(0);
+        if (db.getSettings(settings.getAktualis_honap())==null)
+              db.addSettings(settings);
+        else
+            db.updateSettings(settings,workDate);
         observableList.clear();
         observableList.addAll(db.getRoutes(workDate));
+        rebuildSpedometer();
+
+        setLabels();
 
     }           //Éppen aktuális hónap kiválasztása
 
