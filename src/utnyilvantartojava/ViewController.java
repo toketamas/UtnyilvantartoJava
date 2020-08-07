@@ -24,7 +24,6 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -297,7 +296,7 @@ public class ViewController implements Initializable {
         }
 
         if (btnReady.isArmed()) {
-            setWorkdate();
+            setWorkdate("#");
         }
 
         if (btnMakeExcel.isArmed()) {               //Excel készítése
@@ -385,7 +384,7 @@ public class ViewController implements Initializable {
             txtArrive.clear();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
-            rebuildSpedometer();
+            rebuildDistanceInDb();
             setLabels();
             chkBack.setSelected(false);
         }
@@ -410,12 +409,12 @@ public class ViewController implements Initializable {
 
         if (btnPlus.isArmed()) {
             txtDate.setText(workDateDecOrInc("+"));
-            setWorkdate();
+            setWorkdate("+");
 
         }
         if (btnMinus.isArmed()) {
             txtDate.setText(workDateDecOrInc("-"));
-            setWorkdate();
+            setWorkdate("-");
         }
 
     }
@@ -526,7 +525,7 @@ public class ViewController implements Initializable {
         db.addRoute(observableList.get(observableList.size() - 1));
         observableList.clear();
         observableList.addAll(db.getRoutes(workDate));
-        rebuildSpedometer();
+        rebuildDistanceInDb();
         if (chkBackToSites.isSelected()) {
             chkSites.setSelected(true);
             chkBackToSites.setSelected(false);
@@ -539,7 +538,7 @@ public class ViewController implements Initializable {
         table.scrollTo(table.getItems().size() - 1);
         btnBev.setDisable(true);
         btnDistance.setDisable(false);
-        // rebuildSpedometer();
+        rebuildDistanceInDb();
         setLabels();
     }
 
@@ -707,12 +706,13 @@ public class ViewController implements Initializable {
     }
 
     public void start() {
-        if (db.getLastRoute() == null)
+        datePicker.setValue(LocalDate.now());
+        if (db.getDateOfLastRoute() == null)
             workDate = LocalDate.now().toString().substring(0, 7);
-        else
-            workDate = db.getLastRoute().toString().substring(0, 7);
-        //System.out.println(workDate);
-        //System.out.println(workDate);
+        else {
+           setDate();
+        }
+
         settings.setAktualis_honap(workDate);
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
@@ -744,10 +744,10 @@ public class ViewController implements Initializable {
         chkSites.setSelected(true);
         cbClient.setValue("Válaszd ki az ügyfelet");
         WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
-        datePicker.setValue(LocalDate.now());
+
         excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
         observableList.addAll(db.getRoutes(workDate));
-        rebuildSpedometer();
+        rebuildDistanceInDb();
         // betölti az adatokat az adatbázisból
         //rebuildSpedometer();
         setLabels();
@@ -1021,7 +1021,7 @@ public class ViewController implements Initializable {
         }
     }
 
-    public void rebuildSpedometer() {
+    public void rebuildDistanceInDb() {
         int currentValue = settings.getElozo_zaro();
 
         for (int i = 0; i < observableList.size(); i++) {
@@ -1043,7 +1043,6 @@ public class ViewController implements Initializable {
         return client.getCity() + " " + client.getAddress();
 
     }
-
 
     public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {        //Single button => true , dual button => false; típusok info(vagy bármilyen string),err,warn,succ
         alertClick = false;
@@ -1093,6 +1092,7 @@ public class ViewController implements Initializable {
                 month = 1;
             }
         }
+
         if (value == "-") {
             if (month > 1)
                 month--;
@@ -1110,62 +1110,73 @@ public class ViewController implements Initializable {
 
     }
 
-    public void setDate() {
+    public void setWorkdate(String plusOrMinus) {           //"+" = plus gomb; "-" = - gomb; "#" = beirt érték után Kész gomb
+    if (plusOrMinus=="-") {
+        workDate = txtDate.getText();
+        Settings s1 = db.getSettings(workDate);
+        if (s1!=null) {
+            settings = s1;
+            observableList.clear();
+            observableList.addAll(db.getRoutes(workDate));
+            setLabels();
+        }else {
+            observableList.clear();
+            showAlert(workDate+"-hónapban nincsenek adatok. ",true,"info");
+        }
+    }
+
+    if (plusOrMinus=="+"){
+        //System.out.println(plusOrMinus);
+        workDate = txtDate.getText();
+        System.out.println("date "+workDate);
+        Settings s1 = db.getSettings(workDate);
+        System.out.println(s1);
+        if (s1!=null) {
+            settings = s1;
+            observableList.clear();
+            observableList.addAll(db.getRoutes(workDate));
+            setLabels();
+            //System.out.println(s1);
+
+        }else{
+            int closingKmValue = settings.getLezarva(); //elmenti a zárót
+
+            settings.setAktualis_honap(workDate);
+
+            settings.setElozo_zaro(closingKmValue);    //beállítja a mentett zárót nyitónak
+            settings.setLezarva(closingKmValue);        //zárónak is
+            db.addSettings(settings);
+            observableList.clear();
+            observableList.addAll(db.getRoutes(workDate));
+            setLabels();
+        }
 
     }
 
-    public void setWorkdate() {
-        String prevWorkDate = workDate;
-        int kezdoKm = settings.getElozo_zaro();
-        int megtettKm = db.getSpedometer(workDate);
-        int zaroKm = kezdoKm + megtettKm;
-        System.out.println("kezdő " + kezdoKm);
-        System.out.println("záró " + zaroKm);
-        settings.setLezarva(zaroKm);
-        db.updateSettings(settings, workDate);
-        /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+     /*   //settings.setLezarva(settings.getElozo_zaro()+db.getSpedometer(workDate));
+        //db.updateSettings(settings, workDate);
         workDate = txtDate.getText();
         settings=db.getSettings(workDate);                     //a kiválasztott hónap beállításai
-        Settings prevSettings= db.getSettings(prevWorkDate);   //az előző beállítások
 
-        if sett
-
-
-
-
-
-
-        /*if (db.getSettings(workDate) == null) {
-            settings.setAktualis_honap(workDate);
-            db.addSettings(settings);
-            settings=db.getSettings(workDate);
-            settings.setElozo_zaro(zaroKm);
-            System.out.println("zaro "+zaroKm);
-            settings.setLezarva(0);
-            db.updateSettings(settings,workDate);
-            db.addSettings(settings);
-            settings=db.getSettings(workDate);
-        } else if (Integer.parseInt(workDate.substring(0, 4)) > Integer.parseInt(prevWorkDate.substring(0, 4)) ||
-                  (Integer.parseInt(workDate.substring(0, 4)) >= Integer.parseInt(prevWorkDate.substring(0, 4)) &&
-                   Integer.parseInt(workDate.substring(5, 7)) > Integer.parseInt(prevWorkDate.substring(5, 7)))) {
-
-        }
-/*
-
-                Integer.parseInt(workDate.substring(0,4))>Integer.parseInt(prevWorkDate.substring(0,4)) ||
-               (Integer.parseInt(workDate.substring(0,4))>=Integer.parseInt(prevWorkDate.substring(0,4)) &&
-                Integer.parseInt(workDate.substring(5,7))>Integer.parseInt(prevWorkDate.substring(5,7)))){
-*/
 
         observableList.clear();
         observableList.addAll(db.getRoutes(workDate));
-        rebuildSpedometer();
+        //rebuildDistanceInDb();
         db.updateSettings(settings, workDate);
 
         setLabels();
-
+        setDate();
+*/
     }           //Éppen aktuális hónap kiválasztása
 
-
+    public void setDate(){
+        String dateValue = db.getDateOfLastRoute();
+        if (dateValue!=null) {
+            workDate = dateValue.substring(0, 7);
+            datePicker.setValue(LocalDate.parse(dateValue));
+        }
+    }
 }
 

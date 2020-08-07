@@ -332,21 +332,16 @@ public class DbModel {
         }
     }
 
-    public int getTotalDistanceTravelled(String workDate){
-        String sqlQuery = "select sum(distance) from routes where date < '"+workDate+"-01';";
-        return querySpedometer(sqlQuery);
-    }
-
     public int getSpedometer(String workDate) {
-        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%'; ";
-        return querySpedometer(sqlQuery);
+        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
+        return queryIntValueFromRoute(sqlQuery,"sum(distance)");
     }
 
-    public int querySpedometer(String sqlQuery) {      // a routes listából a havi összes távolságot adja vissza
+    public int queryIntValueFromRoute(String sqlQuery, String returnColumn) {
         int value = 0;
         try {
             rs = createStatement.executeQuery(sqlQuery);
-            value = rs.getInt("sum(distance)");
+            value = rs.getInt(returnColumn);
             System.out.println(value);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -354,19 +349,24 @@ public class DbModel {
         return value;
     }
 
-    public Object getLastRoute(){
-        Object value=null ;
+    public String getDateOfLastRoute(){
+        String value=null ;
         String sqlQuery = "select * from routes\n" +
                 "where routeid = (select max (routeid) from routes);\n" +
                 "; ";
         try {
             rs = createStatement.executeQuery(sqlQuery);
             value = rs.getString("date");
-            System.out.println(value.toString());
+            //System.out.println(value.toString());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return value;
+    }
+
+    public int getMaxKmFromMonth(String workDate){
+        String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '"+workDate+"-%%';";
+        return queryIntValueFromRoute(sqlQuery,"spedometer");
     }
 
     public void updateRoute(Route route, int routeId) {
@@ -465,7 +465,6 @@ public class DbModel {
     public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
     }
-
 
     public Client getClientFromAddress(String value) {
         return queryClient("select * from clients where city || ' ' || address='" + value + "';");
