@@ -266,7 +266,7 @@ public class DbModel {
     }
 
 
-
+// routes táblához tartozó lekérdezések
     public void addRoute(Route route) {
 
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?)";
@@ -331,6 +331,10 @@ public class DbModel {
             throwables.printStackTrace();
         }
     }
+    public double getFueling(String workDate) {
+        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
+        return queryDoubleValueFromRoute(sqlQuery,"sum(fueling)");
+    }
 
     public int getSpedometer(String workDate) {
         String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
@@ -342,7 +346,17 @@ public class DbModel {
         try {
             rs = createStatement.executeQuery(sqlQuery);
             value = rs.getInt(returnColumn);
-            System.out.println(value);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return value;
+    }
+
+    public double queryDoubleValueFromRoute(String sqlQuery, String returnColumn) {
+        double value = 0;
+        try {
+            rs = createStatement.executeQuery(sqlQuery);
+            value = rs.getDouble(returnColumn);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

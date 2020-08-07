@@ -300,9 +300,7 @@ public class ViewController implements Initializable {
         }
 
         if (btnMakeExcel.isArmed()) {               //Excel készítése
-            // showAlert("Mielőtt elkészíted az excelt le \nkell zárnod a hónapot! Lezárod ?", false, "info");
-
-            if (alertOkOrCancel) {
+                rebuildDistanceInDb();
                 excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
                 System.out.println(excelName);
                 makeExcel(excelName, "nyomtat");
@@ -316,7 +314,7 @@ public class ViewController implements Initializable {
                 }
             }
 
-        }
+
 
         if (btnCancel.isArmed()) {              //Kész gomb az út módosításnál
             startClient = startClientTemp;
@@ -525,7 +523,7 @@ public class ViewController implements Initializable {
         db.addRoute(observableList.get(observableList.size() - 1));
         observableList.clear();
         observableList.addAll(db.getRoutes(workDate));
-        rebuildDistanceInDb();
+        //rebuildDistanceInDb();
         if (chkBackToSites.isSelected()) {
             chkSites.setSelected(true);
             chkBackToSites.setSelected(false);
@@ -540,6 +538,8 @@ public class ViewController implements Initializable {
         btnDistance.setDisable(false);
         rebuildDistanceInDb();
         setLabels();
+        settings.setLezarva(db.getSpedometer(workDate)+settings.getElozo_zaro());
+        db.updateSettings(settings,workDate);
     }
 
     private void checkDistInDb() {
@@ -986,11 +986,17 @@ public class ViewController implements Initializable {
         rowToExcel.setCell(fileName, sheetName, "C3", settings.getAuto());
         rowToExcel.setCell(fileName, sheetName, "C4", settings.getRendszam());
         rowToExcel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
-        rowToExcel.setCell(fileName, sheetName, "C6", spedometer.toString());
+        rowToExcel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getLezarva()));
         rowToExcel.setCell(fileName, sheetName, "D4", settings.getNev());
         rowToExcel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
         rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
         rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
+        String fuelValue = String.valueOf(db.getFueling(workDate));
+        rowToExcel.setCell(fileName, sheetName, "G7", fuelValue.substring(0,7));
+        Double value=100*db.getFueling(workDate)/megtettKM;
+        System.out.println(value);
+        rowToExcel.setCell(fileName, sheetName, "G6", value.toString().substring(0,5));
+
 
         for (int i = 0; i < observableList.size(); i++) {
             String utCelja;
@@ -1111,7 +1117,9 @@ public class ViewController implements Initializable {
     }
 
     public void setWorkdate(String plusOrMinus) {           //"+" = plus gomb; "-" = - gomb; "#" = beirt érték után Kész gomb
-    if (plusOrMinus=="-") {
+
+        Settings prevSettings=settings;
+        if (plusOrMinus=="-"||plusOrMinus=="#") {
         workDate = txtDate.getText();
         Settings s1 = db.getSettings(workDate);
         if (s1!=null) {
@@ -1121,12 +1129,13 @@ public class ViewController implements Initializable {
             setLabels();
         }else {
             observableList.clear();
-            showAlert(workDate+"-hónapban nincsenek adatok. ",true,"info");
+            showAlert(workDate+" hónapban nincsenek adatok. ",true,"info");
         }
     }
 
     if (plusOrMinus=="+"){
         //System.out.println(plusOrMinus);
+
         workDate = txtDate.getText();
         System.out.println("date "+workDate);
         Settings s1 = db.getSettings(workDate);
@@ -1135,23 +1144,34 @@ public class ViewController implements Initializable {
             settings = s1;
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate));
+
+            System.out.println(settings.getElozo_zaro()+" "+prevSettings.getLezarva());
+            if (settings.getElozo_zaro()!=prevSettings.getLezarva()){
+                settings.setElozo_zaro(prevSettings.getLezarva());
+                settings.setLezarva(db.getSpedometer(workDate)+settings.getElozo_zaro());
+                System.out.println(settings.getElozo_zaro()+" "+prevSettings.getLezarva());
+            }
             setLabels();
             //System.out.println(s1);
 
         }else{
             int closingKmValue = settings.getLezarva(); //elmenti a zárót
-
             settings.setAktualis_honap(workDate);
-
             settings.setElozo_zaro(closingKmValue);    //beállítja a mentett zárót nyitónak
             settings.setLezarva(closingKmValue);        //zárónak is
             db.addSettings(settings);
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate));
+            settings.setLezarva(db.getSpedometer(workDate)+settings.getElozo_zaro());
+            db.updateSettings(settings,workDate);
+
             setLabels();
         }
 
     }
+
+
+
 
 
 
