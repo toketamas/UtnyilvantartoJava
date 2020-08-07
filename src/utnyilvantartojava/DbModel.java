@@ -47,7 +47,7 @@ public class DbModel {
             conn = DriverManager.getConnection(URL);
             System.out.println("A kapcsolat létrejött az sqlite adatbázissal,");
         } catch (SQLException ex) {
-            System.out.println("Hiba!");
+            System.out.println("Hiba nem sikerült kapcsolódni az sqlite adatbázishoz!");
             System.out.println("" + ex);
         }
 
@@ -221,7 +221,7 @@ public class DbModel {
                 " where aktualis_honap = '"+dateValue+"';";
 
         try {
-            System.out.println(sqlQuery);
+           // System.out.println(sqlQuery);
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
         } catch (SQLException throwables) {
@@ -292,7 +292,7 @@ public class DbModel {
 
     public ArrayList getRoutes(String workDate) {      //A kiválasztott hónap utjait adja vissza
         ArrayList<Route> routes = null;
-        System.out.println(workDate);
+       // System.out.println(workDate);
         try {
             String sqlQuery = "select * from routes where date like '" + workDate + "-%%' order by date , routeid";
 
@@ -313,7 +313,7 @@ public class DbModel {
 
 
                 routes.add(new Route(routeId, date, priv, depart, arrive, client, fueling, spedometer, distance, backandforth, cellId));
-                System.out.println(date);
+               // System.out.println(date);
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
@@ -338,6 +338,11 @@ public class DbModel {
 
     public int getSpedometer(String workDate) {
         String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
+        return queryIntValueFromRoute(sqlQuery,"sum(distance)");
+    }
+
+    public int getMaganut(String workDate) {
+        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
         return queryIntValueFromRoute(sqlQuery,"sum(distance)");
     }
 
@@ -396,7 +401,7 @@ public class DbModel {
                 "backandforth=" + convertBool(route.isVissza()) +","+
                 "cellid=" + route.getCellId() +" "+
                 "where routeid = " + routeId + ";";
-        System.out.println(sqlQuery);
+        //System.out.println(sqlQuery);
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -416,7 +421,7 @@ public class DbModel {
             preparedStatement.setString(2, clientId2);
             preparedStatement.setInt(3, distance);
             preparedStatement.execute();
-            System.out.println(sqlQuery);
+          //  System.out.println(sqlQuery);
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a Distance táblába írni írni");
             System.out.println("" + ex);
@@ -523,7 +528,7 @@ public class DbModel {
                 "field='" + client.getField() + "' " +
                 "where clientnumber ='"+clientNumber+"';";
 
-        System.out.println(sqlQuery);
+       // System.out.println(sqlQuery);
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
@@ -583,7 +588,7 @@ public class DbModel {
             preparedStatement1.setString(2, clientId2);
             preparedStatement1.setInt(3, distance);
             preparedStatement1.execute();
-            System.out.println(sqlQuery);
+         //   System.out.println(sqlQuery);
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a mysql distances táblába írni írni");
             System.out.println("" + ex);

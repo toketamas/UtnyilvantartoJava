@@ -267,7 +267,7 @@
                      </font>
                   </Label>
                   <Label layoutX="534.0" layoutY="875.0" text="© Minden jog fenntartva" />
-                  <Label id="lblVer" fx:id="lblVer" layoutX="568.0" layoutY="357.0" text="Verzió: 0.1.9">
+                  <Label id="lblVer" fx:id="lblVer" layoutX="568.0" layoutY="357.0" text="Verzió: 0.2.0">
                      <font>
                         <Font size="14.0" />
                      </font>

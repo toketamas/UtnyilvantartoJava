@@ -275,6 +275,7 @@ public class ViewController implements Initializable {
             tabNyilv.setDisable(false);
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(0);
+            showAlert("A beállítás sikerült "+settings.getNev()+"! \nMost már használhatod a programot!",true,"succ");
 
         }
 
@@ -302,7 +303,7 @@ public class ViewController implements Initializable {
         if (btnMakeExcel.isArmed()) {               //Excel készítése
                 rebuildDistanceInDb();
                 excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
-                System.out.println(excelName);
+                //System.out.println(excelName);
                 makeExcel(excelName, "nyomtat");
 
                 try {
@@ -330,7 +331,7 @@ public class ViewController implements Initializable {
 
         if (btnDelete.isArmed()) {               // Törlés gomb az út módosításnál
             observableList.remove(selectedRoute);
-            System.out.println("route_id = " + selectedRoute.getRouteId());
+           // System.out.println("route_id = " + selectedRoute.getRouteId());
             db.delRoute(selectedRoute.getRouteId());
 
             // rebuildSpedometer();
@@ -752,7 +753,7 @@ public class ViewController implements Initializable {
         //rebuildSpedometer();
         setLabels();
         startClient = db.getClient(settings.getUtolso_ugyfel());                  // beállítja startclientnek az utolsó érkezés helyét
-        System.out.println(startClient.getClientNumber());
+       // System.out.println(startClient.getClientNumber());
 
         if (startClient.getClient().toLowerCase().startsWith("telephely")) {
             txtDepart.setText(startClient.getClient());
@@ -879,7 +880,7 @@ public class ViewController implements Initializable {
                 list[i] = sc.nextLine();
             }
             sc.close();
-            System.out.println(list.toString());
+           // System.out.println(list.toString());
         } catch (Exception e) {
             System.out.println("Nem találom a fájlt!");
         }
@@ -987,15 +988,30 @@ public class ViewController implements Initializable {
         rowToExcel.setCell(fileName, sheetName, "C4", settings.getRendszam());
         rowToExcel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
         rowToExcel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getLezarva()));
+        rowToExcel.setCell(fileName, sheetName, "L105", String.valueOf(settings.getLezarva()));
         rowToExcel.setCell(fileName, sheetName, "D4", settings.getNev());
         rowToExcel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
         rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
         rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
+        rowToExcel.setCell(fileName, sheetName, "L103", megtettKM.toString());
         String fuelValue = String.valueOf(db.getFueling(workDate));
-        rowToExcel.setCell(fileName, sheetName, "G7", fuelValue.substring(0,7));
+        if (fuelValue.length()>6)
+            fuelValue=fuelValue.substring(0,7);
+        rowToExcel.setCell(fileName, sheetName, "G7",fuelValue );
         Double value=100*db.getFueling(workDate)/megtettKM;
-        System.out.println(value);
-        rowToExcel.setCell(fileName, sheetName, "G6", value.toString().substring(0,5));
+        String dValue="";
+        if (value.toString().length()>4)
+            dValue = value.toString().substring(0,5);
+        rowToExcel.setCell(fileName, sheetName, "G6",dValue );
+        rowToExcel.setCell(fileName, sheetName, "L104", String.valueOf(db.getMaganut(workDate)));
+        Double doubleValue = (double) db.getMaganut(workDate)/megtettKM*100;
+        if(doubleValue.toString().length()>2 && doubleValue!=100)
+            dValue=doubleValue.toString().substring(0,2);
+        else
+            dValue=doubleValue.toString();
+
+        rowToExcel.setCell(fileName, sheetName, "M104", dValue+"%");
+
 
 
         for (int i = 0; i < observableList.size(); i++) {
@@ -1087,9 +1103,9 @@ public class ViewController implements Initializable {
 
     public String workDateDecOrInc(String value) {
         Integer year = Integer.parseInt(workDate.substring(0, 4));
-        System.out.println(year);
+        //System.out.println(year);
         Integer month = Integer.parseInt(workDate.substring(5, 7));
-        System.out.println(month);
+        //System.out.println(month);
         if (value == "+") {
             if (month < 12)
                 month = month + 1;
@@ -1137,19 +1153,19 @@ public class ViewController implements Initializable {
         //System.out.println(plusOrMinus);
 
         workDate = txtDate.getText();
-        System.out.println("date "+workDate);
+       // System.out.println("date "+workDate);
         Settings s1 = db.getSettings(workDate);
-        System.out.println(s1);
+        //System.out.println(s1);
         if (s1!=null) {
             settings = s1;
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate));
 
-            System.out.println(settings.getElozo_zaro()+" "+prevSettings.getLezarva());
+          //  System.out.println(settings.getElozo_zaro()+" "+prevSettings.getLezarva());
             if (settings.getElozo_zaro()!=prevSettings.getLezarva()){
                 settings.setElozo_zaro(prevSettings.getLezarva());
                 settings.setLezarva(db.getSpedometer(workDate)+settings.getElozo_zaro());
-                System.out.println(settings.getElozo_zaro()+" "+prevSettings.getLezarva());
+               // System.out.println(settings.getElozo_zaro()+" "+prevSettings.getLezarva());
             }
             setLabels();
             //System.out.println(s1);
