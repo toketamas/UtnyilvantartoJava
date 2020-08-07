@@ -22,6 +22,8 @@ public class DbModel {
     final String USERNAME_MYSQL = "diebold";
     final String PASSWORD_MYSQL = "8V2lrQnq()Tb";
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     Connection conn = null;
     Statement createStatement = null;
@@ -35,9 +37,12 @@ public class DbModel {
     ResultSet rs1 = null;
     PreparedStatement preparedStatement1 = null;
 
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+
     public DbModel() {
 
-      /////////////////////////////////////////////////////////////////////////////////////
+
         try {
             conn = DriverManager.getConnection(URL);
             System.out.println("A kapcsolat létrejött az sqlite adatbázissal,");
@@ -61,7 +66,7 @@ public class DbModel {
             System.out.println("" + ex);
         }
 
-     ///////////////////////////////////////////////////////////////////////////////////////
+     //////////////////////////////////////////////////////////////////////////////////////////////
 
         try {
             conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
@@ -79,6 +84,8 @@ public class DbModel {
                 System.out.println("" + ex);
             }
         }
+
+          
 
         if (conn1 != null) {
             try {

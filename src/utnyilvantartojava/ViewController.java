@@ -180,7 +180,7 @@ public class ViewController implements Initializable {
     SearchableComboBox<String> cbClient;
 
     DbModel db = new DbModel();
-   // RemoteDb remoteDb = new RemoteDb();
+    // RemoteDb remoteDb = new RemoteDb();
 
 
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
@@ -327,7 +327,7 @@ public class ViewController implements Initializable {
             txtDistance.clear();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
-           // rebuildSpedometer();
+            // rebuildSpedometer();
             setLabels();
         }
 
@@ -336,7 +336,7 @@ public class ViewController implements Initializable {
             System.out.println("route_id = " + selectedRoute.getRouteId());
             db.delRoute(selectedRoute.getRouteId());
 
-           // rebuildSpedometer();
+            // rebuildSpedometer();
             setLabels();
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
@@ -472,7 +472,7 @@ public class ViewController implements Initializable {
                             observableList.size()));
             // rebuildSpedometer();
             //setLabels();
-           checkDistInDb();
+            checkDistInDb();
 
             observableList.add(
                     new Route(
@@ -512,7 +512,7 @@ public class ViewController implements Initializable {
             settings.setUtolso_ugyfel(targetClient.getClientNumber());
             db.updateSettings(settings, workDate);
             txtDepart.setText(getClientFullAddress(targetClient));
-           checkDistInDb();
+            checkDistInDb();
             startClient = targetClient;
             targetClient = null;
             // rebuildSpedometer();
@@ -539,11 +539,11 @@ public class ViewController implements Initializable {
         table.scrollTo(table.getItems().size() - 1);
         btnBev.setDisable(true);
         btnDistance.setDisable(false);
-       // rebuildSpedometer();
+        // rebuildSpedometer();
         setLabels();
     }
 
-    private void checkDistInDb(){
+    private void checkDistInDb() {
         Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
         Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
 
@@ -716,7 +716,7 @@ public class ViewController implements Initializable {
         settings.setAktualis_honap(workDate);
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
-       // rebuildSpedometer();
+        // rebuildSpedometer();
         setLabels();
         if (db.getSettings(workDate) == null) {
             db.addSettings(settings);
@@ -765,7 +765,7 @@ public class ViewController implements Initializable {
         cbClient.getItems().addAll(db.getAllClient());
         fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába
         table.scrollTo(table.getItems().size() - 1);
-       // rebuildSpedometer();
+        // rebuildSpedometer();
         setLabels();
         setText();
     }
@@ -1027,7 +1027,7 @@ public class ViewController implements Initializable {
         for (int i = 0; i < observableList.size(); i++) {
             currentValue = currentValue + observableList.get(i).getTavolsag();
             observableList.get(i).setSpedometer(currentValue);
-            db.updateRoute(observableList.get(i),observableList.get(i).getRouteId());
+            db.updateRoute(observableList.get(i), observableList.get(i).getRouteId());
         }
         setLabels();
     }
@@ -1087,45 +1087,80 @@ public class ViewController implements Initializable {
         System.out.println(month);
         if (value == "+") {
             if (month < 12)
-                month=month+1;
+                month = month + 1;
             else {
                 year = year + 1;
-                month=1;
+                month = 1;
             }
         }
         if (value == "-") {
             if (month > 1)
                 month--;
-            else{
+            else {
                 year--;
-                month=12;
+                month = 12;
             }
         }
         String mnt;
-        if (month<10)
-            mnt="0"+month.toString();
+        if (month < 10)
+            mnt = "0" + month.toString();
         else
-            mnt=month.toString();
+            mnt = month.toString();
         return year.toString() + "-" + mnt;
 
     }
 
+    public void setDate() {
+
+    }
+
     public void setWorkdate() {
-        int zaroKm = settings.getElozo_zaro()+db.getSpedometer(workDate);
-        Settings checkSetting =db.getSettings(workDate);
+        String prevWorkDate = workDate;
+        int kezdoKm = settings.getElozo_zaro();
+        int megtettKm = db.getSpedometer(workDate);
+        int zaroKm = kezdoKm + megtettKm;
+        System.out.println("kezdő " + kezdoKm);
+        System.out.println("záró " + zaroKm);
         settings.setLezarva(zaroKm);
-        db.updateSettings(settings,workDate);
+        db.updateSettings(settings, workDate);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
         workDate = txtDate.getText();
-        settings.setElozo_zaro(zaroKm);
-        settings.setAktualis_honap(workDate);
-        settings.setLezarva(0);
-        if (db.getSettings(settings.getAktualis_honap())==null)
-              db.addSettings(settings);
-        else
+        settings=db.getSettings(workDate);                     //a kiválasztott hónap beállításai
+        Settings prevSettings= db.getSettings(prevWorkDate);   //az előző beállítások
+
+        if sett
+
+
+
+
+
+
+        /*if (db.getSettings(workDate) == null) {
+            settings.setAktualis_honap(workDate);
+            db.addSettings(settings);
+            settings=db.getSettings(workDate);
+            settings.setElozo_zaro(zaroKm);
+            System.out.println("zaro "+zaroKm);
+            settings.setLezarva(0);
             db.updateSettings(settings,workDate);
+            db.addSettings(settings);
+            settings=db.getSettings(workDate);
+        } else if (Integer.parseInt(workDate.substring(0, 4)) > Integer.parseInt(prevWorkDate.substring(0, 4)) ||
+                  (Integer.parseInt(workDate.substring(0, 4)) >= Integer.parseInt(prevWorkDate.substring(0, 4)) &&
+                   Integer.parseInt(workDate.substring(5, 7)) > Integer.parseInt(prevWorkDate.substring(5, 7)))) {
+
+        }
+/*
+
+                Integer.parseInt(workDate.substring(0,4))>Integer.parseInt(prevWorkDate.substring(0,4)) ||
+               (Integer.parseInt(workDate.substring(0,4))>=Integer.parseInt(prevWorkDate.substring(0,4)) &&
+                Integer.parseInt(workDate.substring(5,7))>Integer.parseInt(prevWorkDate.substring(5,7)))){
+*/
+
         observableList.clear();
         observableList.addAll(db.getRoutes(workDate));
         rebuildSpedometer();
+        db.updateSettings(settings, workDate);
 
         setLabels();
 
