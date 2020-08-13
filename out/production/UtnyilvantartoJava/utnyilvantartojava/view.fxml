@@ -22,7 +22,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <children>
 <TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
     <tabs>
