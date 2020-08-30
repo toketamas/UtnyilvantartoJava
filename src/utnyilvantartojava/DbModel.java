@@ -71,18 +71,22 @@ public class DbModel {
         try {
             conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
             System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
+            ViewController.mySqlActive=true;
 
         }catch (Exception e) {
             System.out.println("Hiba! A távoli mysql server nem érhető el!");
             System.out.println("" + e);
+            ViewController.mySqlActive=false;
             try {
                 conn1 = DriverManager.getConnection(URLMYSQL2, USERNAME_MYSQL, PASSWORD_MYSQL);
                 System.out.println("A kapcsolat létrejött a helyi mysql adatbázissal,");
-
+                ViewController.mySqlActive=true;
             }catch (Exception ex) {
                 System.out.println("Hiba! A helyi mysql server nem érhető el!");
                 System.out.println("" + ex);
+                ViewController.mySqlActive=false;
             }
+            System.out.println(ViewController.mySqlActive);
         }
 
           

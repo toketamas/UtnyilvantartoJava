@@ -192,21 +192,17 @@ public class ViewController implements Initializable {
     String excelSource;
     String workDate;//= LocalDate.now().toString().substring(0,7);            //a hónap amivel dolgozunk
     String excelName;
-
     Client startClient;             // induló kliens
     Client targetClient;            // cél kliens
     Client telephely;                // telephely kliens
     Client startClientTemp;         //itt tárolja  a startklienst amikor egy másikat módosít a felhasználó
     Client targetClientTemp;        //ugyanaz mint feljebb a célklienssel
-
     Route selectedRoute;            // a táblából kiválasztott út
-
     Double fueling = 0.0;
-
     boolean selectedClientOdaVissza;
     boolean alertOkOrCancel;
     boolean alertClick;
-
+    public static boolean mySqlActive;
     Integer distance;
     Integer spedometer;
     int selctedRow;

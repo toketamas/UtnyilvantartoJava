@@ -33,7 +33,6 @@ public class Route {
         this.ugyfel = new SimpleStringProperty(ugyfel);
         this.magan = new SimpleBooleanProperty(magan);
         this.odaVissza = new SimpleBooleanProperty(odaVissza);
-        //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
         this.spedometer = new SimpleIntegerProperty(spedometer);
         this.fueling = new SimpleDoubleProperty(tankolas);
         this.cellId=celId;
@@ -47,7 +46,6 @@ public class Route {
         this.ugyfel = new SimpleStringProperty(ugyfel);
         this.magan = new SimpleBooleanProperty(magan);
         this.odaVissza = new SimpleBooleanProperty(odaVissza);
-       //this.telephelyrol = new SimpleBooleanProperty(telephelyrol);
         this.spedometer = new SimpleIntegerProperty(spedometer);
         this.fueling = new SimpleDoubleProperty(tankolas);
         this.cellId=cellId;
@@ -63,7 +61,6 @@ public class Route {
         this.magan = new SimpleBooleanProperty();
         this.odaVissza = new SimpleBooleanProperty();
 
-        //this.telephelyrol = new SimpleBooleanProperty();
     }
 
     public Integer getRouteId() {
@@ -189,24 +186,6 @@ public class Route {
     public int getCellId() {
         return cellId;
     }
-
-    /*  public boolean isTelephelyrol() {
-        return telephelyrol.get();
-    }
-
-    public BooleanProperty telephelyrolProperty() {
-        return telephelyrol;
-    }
-
-    public void setTelephelyrol(boolean telephelyrol) {
-        this.telephelyrol.set(telephelyrol);
-    }*/
-
-
-
-
-
-
 
     public ArrayList<String> readFile(String path) {
 
