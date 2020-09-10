@@ -189,7 +189,7 @@ public class DbModel {
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
 
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?.?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, settings.getNev());
@@ -203,6 +203,7 @@ public class DbModel {
             preparedStatement.setString(9, settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
             preparedStatement.setInt(11,settings.getLezarva());
+            preparedStatement.setString(12, (settings.getRendszam())+settings.getAktualis_honap());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -210,7 +211,7 @@ public class DbModel {
         }
     }
 
-    public void updateSettings(Settings settings,String dateValue) {
+    public void updateSettings(Settings settings,String idValue) {
         String sqlQuery = "update settings set " +
                 "nev= '" + settings.getNev() +"',"+
                 "varos='" +settings.getVaros()+"',"+
@@ -220,9 +221,10 @@ public class DbModel {
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
+                "aktualis_honap=" +settings.getAktualis_honap()+","+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"+
                 "lezarva ='" + settings.getLezarva() + "'"+
-                " where aktualis_honap = '"+dateValue+"';";
+                " where id = '"+idValue+"';";
 
         try {
            // System.out.println(sqlQuery);
@@ -233,8 +235,8 @@ public class DbModel {
         }
     }
 
-    public Settings getSettings(String month) {
-        String sqlQuery = "select * from settings where aktualis_honap='" + month + "'";
+    public Settings getSettings(String month,String rendszam) {
+        String sqlQuery = "select * from settings where aktualis_honap='" + rendszam + month + "'";
         return querySettings(sqlQuery);
     }
 
@@ -271,9 +273,9 @@ public class DbModel {
 
 
 // routes táblához tartozó lekérdezések
-    public void addRoute(Route route) {
+    public void addRoute(Route route, String rendszam) {
 
-        String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, null);
@@ -287,6 +289,7 @@ public class DbModel {
             preparedStatement.setInt(9, route.getTavolsag());
             preparedStatement.setInt(10, convertBool(route.isVissza()));
             preparedStatement.setInt(11, route.getCellId());
+            preparedStatement.setString(12,rendszam);
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisba írni");
@@ -294,11 +297,11 @@ public class DbModel {
         }
     }
 
-    public ArrayList getRoutes(String workDate) {      //A kiválasztott hónap utjait adja vissza
+    public ArrayList getRoutes(String workDate,String rendszam) {      //A kiválasztott hónap utjait adja vissza
         ArrayList<Route> routes = null;
        // System.out.println(workDate);
         try {
-            String sqlQuery = "select * from routes where date like '" + workDate + "-%%' order by date , routeid";
+            String sqlQuery = "select * from routes where date like '" + workDate + "-%%'  , routeid and rendszam='"+rendszam+"' order by date;";
 
             routes = new ArrayList<>();
             rs = createStatement.executeQuery(sqlQuery);
@@ -335,18 +338,20 @@ public class DbModel {
             throwables.printStackTrace();
         }
     }
-    public double getFueling(String workDate) {
-        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
+    public double getFueling(String workDate,String rendszam) {
+        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  // a routes listából a havi összes távolságot adja vissza
         return queryDoubleValueFromRoute(sqlQuery,"sum(fueling)");
     }
 
-    public int getSpedometer(String workDate) {
-        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
+    public int getSpedometer(String workDate,String rendszam) {
+        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  // a routes listából a havi összes távolságot adja vissza
+        System.out.println(sqlQuery);
         return queryIntValueFromRoute(sqlQuery,"sum(distance)");
     }
 
-    public int getMaganut(String workDate) {
-        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%'; ";  // a routes listából a havi összes távolságot adja vissza
+    public int getMaganut(String workDate, String rendszam) {
+        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  // a routes listából a havi összes távolságot adja vissza
+        System.out.println(sqlQuery);
         return queryIntValueFromRoute(sqlQuery,"sum(distance)");
     }
 

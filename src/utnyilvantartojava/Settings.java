@@ -15,6 +15,8 @@ public class Settings {
     private int lezarva;
 
 
+
+
     public Settings() {
         this.nev ="";
         this.varos ="";
@@ -41,6 +43,7 @@ public class Settings {
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = utolso_ugyfel;
         this.lezarva=lezarva;
+
     }
 
     public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap) {
