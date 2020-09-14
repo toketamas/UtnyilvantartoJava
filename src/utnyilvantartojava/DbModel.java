@@ -203,10 +203,10 @@ public class DbModel {
             preparedStatement.setString(9, settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
             preparedStatement.setInt(11,settings.getLezarva());
-            preparedStatement.setString(12, (settings.getRendszam())+settings.getAktualis_honap());
+            preparedStatement.setString(12, settings.getId());
             preparedStatement.execute();
         } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
             System.out.println("" + ex);
         }
     }
@@ -236,12 +236,12 @@ public class DbModel {
     }
 
     public Settings getSettings(String month,String rendszam) {
-        String sqlQuery = "select * from settings where aktualis_honap='" + rendszam + month + "'";
+        String sqlQuery = "select * from settings where id='" + rendszam + month + "'";
         return querySettings(sqlQuery);
     }
 
-    public Settings getMinSpedometer(String rendszam){
-        String sqlQuery = "select min(elozo_zaro),* from settings where rendszam='"+rendszam+"' ;";
+    public Settings getLastSettings(){
+        String sqlQuery = "select max(aktualis_honap), * from settings ;";
         return querySettings(sqlQuery);
     }
 
@@ -261,7 +261,8 @@ public class DbModel {
                         rs.getInt("elozo_zaro"),
                         rs.getString("aktualis_honap"),
                         rs.getString("utolso_ugyfel"),
-                        rs.getInt("lezarva")
+                        rs.getInt("lezarva"),
+                       rs.getString("id")
                 );
             }
         } catch (SQLException ex) {
@@ -292,7 +293,7 @@ public class DbModel {
             preparedStatement.setString(12,rendszam);
             preparedStatement.execute();
         } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("Hiba! Nem sikerült a routes táblába írni");
             System.out.println("" + ex);
         }
     }
@@ -301,7 +302,7 @@ public class DbModel {
         ArrayList<Route> routes = null;
        // System.out.println(workDate);
         try {
-            String sqlQuery = "select * from routes where date like '" + workDate + "-%%'  , routeid and rendszam='"+rendszam+"' order by date;";
+            String sqlQuery = "select * from routes where date like '" + workDate + "-%%'  and rendszam='"+rendszam+"' order by date;";
 
             routes = new ArrayList<>();
             rs = createStatement.executeQuery(sqlQuery);
@@ -462,7 +463,7 @@ public class DbModel {
             preparedStatement.setInt(3, distance);
             preparedStatement.execute();
         } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("Hiba! Nem sikerűlt a distance táblába írni");
             System.out.println("" + ex);
         }
     }
@@ -485,7 +486,7 @@ public class DbModel {
             preparedStatement.setString(10, field);
             preparedStatement.execute();
         } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült az adatbázisba írni");
+            System.out.println("Hiba! Nem sikerült a clients táblába írni");
             System.out.println("" + ex);
         }
     }

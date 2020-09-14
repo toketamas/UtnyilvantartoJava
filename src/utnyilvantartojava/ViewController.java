@@ -184,7 +184,7 @@ public class ViewController implements Initializable {
 
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
     SingleSelectionModel<Tab> selectionModel;
-    Settings settings = new Settings(); //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
+    Settings settings ; //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
     //Változók
     URL url1;
     String remoteExcel = loadFile("link.txt")[0];
@@ -676,7 +676,12 @@ public class ViewController implements Initializable {
 
     public void start() {
         datePicker.setValue(LocalDate.now());
-        if (db.getDateOfLastRoute() == null)
+        settings=db.getLastSettings();
+        System.out.println(settings.getRendszam());
+        System.out.println(settings.getAktualis_honap());
+        System.out.println(settings.getId());
+        settings.setId(settings.getRendszam()+settings.getAktualis_honap());
+        if (db.getDateOfLastRoute() == null)                                    //megvizsgálja hogy van e adat a routes táblában
             workDate = LocalDate.now().toString().substring(0, 7);
         else {
             setDate();
@@ -686,16 +691,16 @@ public class ViewController implements Initializable {
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
         setLabels();
-        if (db.getSettings(workDate,settings.getRendszam()) == null) {
+
+       /* if (db.getSettings(workDate,settings.getRendszam()) == null) {
             db.addSettings(settings);
         }
         settings = db.getSettings(workDate,settings.getRendszam());
-        System.out.println(settings);
-        System.out.println(settings.getRendszam());
-        System.out.println(settings.getAktualis_honap());
+        System.out.println(settings);*/
+//
         if (settings.getNev().trim().length() == 0 ||
                 settings.getVaros().trim().length() == 0 ||
-                settings.getCim().trim().length() == 0) {
+                settings.getCim().trim().length() == 0||settings.getRendszam()==null) {
             tabNyilv.setDisable(true);
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);

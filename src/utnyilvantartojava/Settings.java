@@ -13,11 +13,14 @@ public class Settings {
     private String aktualis_honap;
     private String utolso_ugyfel;
     private int lezarva;
+    private final String ID;
 
 
 
 
-    public Settings() {
+
+    public Settings(String id) {
+        ID = id;
         this.nev ="";
         this.varos ="";
         this.cim = "";
@@ -29,9 +32,10 @@ public class Settings {
         this.aktualis_honap = "";
         this.utolso_ugyfel = "telephely";
         this.lezarva=0;
+
     }
 
-    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int lezarva) {
+    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int lezarva, String id) {
         this.nev = nev;
         this.varos = varos;
         this.cim = cim;
@@ -43,23 +47,21 @@ public class Settings {
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = utolso_ugyfel;
         this.lezarva=lezarva;
+        this.ID=id;
 
     }
 
-    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap) {
-        this.nev = nev;
-        this.varos = varos;
-        this.cim = cim;
-        this.auto = auto;
-        this.rendszam = rendszam;
-        this.loketterfogat = loketterfogat;
-        this.fogyasztas = fogyasztas;
-        this.elozo_zaro = elozo_zaro;
-        this.aktualis_honap = aktualis_honap;
-        this.utolso_ugyfel = "telephely";
-        this.lezarva=0;
+
+
+    public String getId() {
+        return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
 
     public int getLezarva() {
         return lezarva;
