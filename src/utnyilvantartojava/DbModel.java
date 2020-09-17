@@ -68,7 +68,7 @@ public class DbModel {
 
      //////////////////////////////////////////////////////////////////////////////////////////////
 
-        try {
+       /* try {
             conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
             System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
             ViewController.mySqlActive=true;
@@ -89,7 +89,7 @@ public class DbModel {
             System.out.println(ViewController.mySqlActive);
         }
 
-          
+         */
 
         if (conn1 != null) {
             try {
@@ -122,7 +122,8 @@ public class DbModel {
                         "fueling double not null," +
                         "distance integer not null," +
                         "backandforth integer not null," +
-                        "cellid integer not null);");
+                        "cellid integer not null,"+
+                        "rendszam text not null);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -176,9 +177,10 @@ public class DbModel {
                         "loketterfogat text," +
                         "fogyasztas text," +
                         "elozo_zaro integer," +
-                        "aktualis_honap text primary key not null," +
+                        "aktualis_honap text ," +
                         "utolso_ugyfel text," +
-                        "lezarva integer);");
+                        "lezarva integer)"+
+                        "id text primary key not null;");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -188,8 +190,11 @@ public class DbModel {
 
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
-
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?.?)";
+        System.out.println("add: "+settings.getAktualis_honap());
+        String honap=settings.getAktualis_honap();
+        System.out.println("a honap változó: "+honap);
+        System.out.println("id: "+settings.getId());
+        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, settings.getNev());
@@ -200,7 +205,8 @@ public class DbModel {
             preparedStatement.setString(6, settings.getLoketterfogat());
             preparedStatement.setString(7, settings.getFogyasztas());
             preparedStatement.setInt(8, settings.getElozo_zaro());
-            preparedStatement.setString(9, settings.getAktualis_honap());
+            preparedStatement.setString(9, honap);
+            System.out.println("add közben:"+settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
             preparedStatement.setInt(11,settings.getLezarva());
             preparedStatement.setString(12, settings.getId());
@@ -212,6 +218,7 @@ public class DbModel {
     }
 
     public void updateSettings(Settings settings,String idValue) {
+        System.out.println("update: "+settings.getAktualis_honap());
         String sqlQuery = "update settings set " +
                 "nev= '" + settings.getNev() +"',"+
                 "varos='" +settings.getVaros()+"',"+
@@ -221,7 +228,7 @@ public class DbModel {
                 "loketterfogat='" + settings.getLoketterfogat() +"',"+
                 "fogyasztas='" + settings.getFogyasztas() +"',"+
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
-                "aktualis_honap=" +settings.getAktualis_honap()+","+
+                "aktualis_honap='" +settings.getAktualis_honap()+"',"+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"+
                 "lezarva ='" + settings.getLezarva() + "'"+
                 " where id = '"+idValue+"';";
@@ -525,6 +532,8 @@ public class DbModel {
     }
 
     public void updateClient(Client client, String clientNumber) {
+        System.out.println("client:"+client);
+        System.out.println("cn:"+clientNumber);
         String sqlQuery = "update clients set " +
                 "client='" + client.getClient() +"',"+
                 //"clientnumber='" + client.getClientNumber() +"',"+
@@ -538,7 +547,7 @@ public class DbModel {
                 "field='" + client.getField() + "' " +
                 "where clientnumber ='"+clientNumber+"';";
 
-       // System.out.println(sqlQuery);
+       System.out.println(sqlQuery);
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
