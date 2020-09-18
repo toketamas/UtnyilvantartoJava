@@ -12,15 +12,18 @@ public class Settings {
     private int elozo_zaro;
     private String aktualis_honap;
     private String utolso_ugyfel;
-    private int lezarva;
-    private final String ID;
+    private int zaro_km;
+    private String id;
+    private  int sorszam;
+    private String utolsoSzerkesztes;
+    private Boolean lezartTabla;
 
 
 
 
 
     public Settings(String id) {
-        ID = id;
+        this.id = id;
         this.nev ="";
         this.varos ="";
         this.cim = "";
@@ -31,11 +34,13 @@ public class Settings {
         this.elozo_zaro = 0;
         this.aktualis_honap = "";
         this.utolso_ugyfel = "telephely";
-        this.lezarva=0;
+        this.zaro_km =0;
 
     }
 
-    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas, int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int lezarva, String id) {
+    public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas,
+                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean lezartTabla)
+    {
         this.nev = nev;
         this.varos = varos;
         this.cim = cim;
@@ -46,10 +51,12 @@ public class Settings {
         this.elozo_zaro = elozo_zaro;
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = utolso_ugyfel;
-        this.lezarva=lezarva;
-        this.ID=id;
-
-    }
+        this.zaro_km = zaro_km;
+        this.id =id;
+        this.sorszam=sorszam;
+        this.utolsoSzerkesztes=utolsoSzerkesztes;
+        this.lezartTabla=lezartTabla;
+    };
 
 
 
@@ -61,14 +68,24 @@ public class Settings {
         this.id = id;
     }
 
-    private String id;
-
-    public int getLezarva() {
-        return lezarva;
+    public String getUtolsoSzerkesztes() {
+        return utolsoSzerkesztes;
     }
 
-    public void setLezarva(int lezarva) {
-        this.lezarva = lezarva;
+    public Boolean getLezartTabla() {
+        return lezartTabla;
+    }
+
+    public void setLezartTabla(Boolean lezartTabla) {
+        this.lezartTabla = lezartTabla;
+    }
+
+    public int getZaroKm() {
+        return zaro_km;
+    }
+
+    public void setZaro_km(int zaro_km) {
+        this.zaro_km = zaro_km;
     }
 
     public String getNev() {

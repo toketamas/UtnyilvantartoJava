@@ -7,6 +7,9 @@
 package utnyilvantartojava;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class DbModel {
@@ -179,8 +182,11 @@ public class DbModel {
                         "elozo_zaro integer," +
                         "aktualis_honap text ," +
                         "utolso_ugyfel text," +
-                        "lezarva integer)"+
-                        "id text primary key not null;");
+                        "zaro_km integer)"+
+                        "id text unique"+
+                        "sorszam int primary key autoincrement,"+
+                        "utolso_szerkesztes datetime," +
+                        "lezart_tabla boolean;");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -194,7 +200,7 @@ public class DbModel {
         String honap=settings.getAktualis_honap();
         System.out.println("a honap változó: "+honap);
         System.out.println("id: "+settings.getId());
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, settings.getNev());
@@ -208,8 +214,11 @@ public class DbModel {
             preparedStatement.setString(9, honap);
             System.out.println("add közben:"+settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
-            preparedStatement.setInt(11,settings.getLezarva());
+            preparedStatement.setInt(11,settings.getZaroKm());
             preparedStatement.setString(12, settings.getId());
+            preparedStatement.setString(13,null);
+            preparedStatement.setString(14, LocalDateTime.now().toString());
+            preparedStatement.setBoolean(15,false);
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
@@ -230,9 +239,11 @@ public class DbModel {
                 "elozo_zaro=" + settings.getElozo_zaro() +","+
                 "aktualis_honap='" +settings.getAktualis_honap()+"',"+
                 "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"+
-                "lezarva ='" + settings.getLezarva() + "'"+
+                "zaro_km ='" + settings.getZaroKm() + "',"+
+                "utolso_szerkesztes='"+ LocalDateTime.now().toString() +"',"+
+                "lezart_tabla='"+settings.getLezartTabla()+"'"+
                 " where id = '"+idValue+"';";
-
+        System.out.println(sqlQuery);
         try {
            // System.out.println(sqlQuery);
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -242,13 +253,13 @@ public class DbModel {
         }
     }
 
-    public Settings getSettings(String month,String rendszam) {
-        String sqlQuery = "select * from settings where id='" + rendszam + month + "'";
+    public Settings getSettings(String settingsId) {
+        String sqlQuery = "select * from settings where id='" + settingsId + "'";
         return querySettings(sqlQuery);
     }
 
     public Settings getLastSettings(){
-        String sqlQuery = "select max(aktualis_honap), * from settings ;";
+        String sqlQuery = "SELECT MAX(sorszam), * FROM settings ;";
         return querySettings(sqlQuery);
     }
 
@@ -268,8 +279,11 @@ public class DbModel {
                         rs.getInt("elozo_zaro"),
                         rs.getString("aktualis_honap"),
                         rs.getString("utolso_ugyfel"),
-                        rs.getInt("lezarva"),
-                       rs.getString("id")
+                        rs.getInt("zaro_km"),
+                       rs.getString("id"),
+                       rs.getInt("sorszam"),
+                       rs.getString("utolso_szerkesztes"),
+                       rs.getBoolean("lezart_tabla")
                 );
             }
         } catch (SQLException ex) {

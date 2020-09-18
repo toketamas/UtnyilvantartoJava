@@ -187,6 +187,7 @@ public class ViewController implements Initializable {
     Settings settings; //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
     //Változók
     URL url1;
+    String settingsId;
     String remoteExcel = loadFile("link.txt")[0];
     String localExcel = "ATM_karb_*.xlsx";
     String excelSource;
@@ -265,11 +266,13 @@ public class ViewController implements Initializable {
                 settings.setLoketterfogat(txfLoket.getText());
                 settings.setFogyasztas(txfFogyaszt.getText());
                 settings.setElozo_zaro(Integer.parseInt(txfElozo.getText().trim()));
+                settingsId=txfRendsz.getText()+workDate;
+                settings.setId(settingsId);
 
 
-                if (db.getSettings(workDate,settings.getRendszam())==null) {
+                if (db.getSettings(settingsId)==null) {
                     settings.setAktualis_honap(workDate);
-                    settings.setId(settings.getRendszam()+workDate);
+                    settings.setId(settingsId);
                     settings.setUtolso_ugyfel("telephely");
                     db.addSettings(settings);
                     telephely=db.getClient("telephely");     //hogy első indításnál is legyen telephely client
@@ -277,7 +280,7 @@ public class ViewController implements Initializable {
 
                 }
                 else {
-                    db.updateSettings(settings, (settings.getRendszam() + workDate));
+                    db.updateSettings(settings, settingsId);
                 }
                 settings=db.getLastSettings();
                 telephely.setField(settings.getNev());
@@ -290,7 +293,7 @@ public class ViewController implements Initializable {
                 btnSet.setDisable(false);
                 btnSetOk.setDisable(true);
                 tabNyilv.setDisable(false);
-                settings = db.getSettings(workDate, settings.getRendszam());
+                settings = db.getSettings(settingsId);
                 selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(0);
                 showAlert("A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
@@ -375,7 +378,7 @@ public class ViewController implements Initializable {
                 cbClient.setValue("Válaszd ki az ügyfelet");
                 settings.setUtolso_ugyfel(telephely.getClientNumber());
             }
-            settings.setLezarva(settings.getElozo_zaro() + db.getSpedometer(workDate, settings.getRendszam()));
+            settings.setZaro_km(settings.getElozo_zaro() + db.getSpedometer(workDate, settings.getRendszam()));
             db.updateSettings(settings, (settings.getRendszam() + workDate));
 
         }
@@ -534,7 +537,7 @@ public class ViewController implements Initializable {
         rebuildDistanceInDb();
         setLabels();
         txtArrive.clear();
-        settings.setLezarva(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
+        settings.setZaro_km(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
         db.updateSettings(settings, (settings.getRendszam() + workDate));
     }
 
@@ -703,15 +706,18 @@ public class ViewController implements Initializable {
     public void start() {
         datePicker.setValue(LocalDate.now());
         settings = db.getLastSettings();
+
         //settings.setId(settings.getRendszam() + settings.getAktualis_honap());
         System.out.println("utolsó út:" + db.getDateOfLastRoute());
         if (db.getDateOfLastRoute() == null)                                    //megvizsgálja hogy van e adat a routes táblában
             workDate = LocalDate.now().toString().substring(0, 7);
         else {
             setDate();
+            settings.setAktualis_honap(workDate);
+            settingsId=settings.getRendszam()+settings.getAktualis_honap();
         }
 
-        settings.setAktualis_honap(workDate);
+
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
         setLabels();
@@ -748,6 +754,7 @@ public class ViewController implements Initializable {
             setTableColumns();                        //beállítja a táblát
             //System.out.println(settings);
             workDate = settings.getAktualis_honap();
+            observableList.clear();
 
             spedometer = settings.getElozo_zaro();
             setText();
@@ -995,8 +1002,8 @@ public class ViewController implements Initializable {
         rowToExcel.setCell(fileName, sheetName, "C3", settings.getAuto());
         rowToExcel.setCell(fileName, sheetName, "C4", settings.getRendszam());
         rowToExcel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
-        rowToExcel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getLezarva()));
-        rowToExcel.setCell(fileName, sheetName, "L105", String.valueOf(settings.getLezarva()));
+        rowToExcel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getZaroKm()));
+        rowToExcel.setCell(fileName, sheetName, "L105", String.valueOf(settings.getZaroKm()));
         rowToExcel.setCell(fileName, sheetName, "D4", settings.getNev());
         rowToExcel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
         rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
@@ -1145,8 +1152,9 @@ public class ViewController implements Initializable {
         Settings prevSettings = settings;
         if (plusOrMinus == "-" || plusOrMinus == "#") {
             workDate = txtDate.getText();
+            settingsId=settings.getRendszam()+workDate;
             System.out.println("setworkdate1" + workDate);
-            Settings s1 = db.getSettings(workDate, settings.getRendszam());
+            Settings s1 = db.getSettings(settingsId);
             if (s1 != null) {
                 settings = s1;
                 observableList.clear();
@@ -1161,31 +1169,32 @@ public class ViewController implements Initializable {
         if (plusOrMinus == "+") {
 
             workDate = txtDate.getText();
+            settingsId=settings.getRendszam()+workDate;
             System.out.println("plusorminus: " + workDate);
-            Settings s1 = db.getSettings(workDate, settings.getRendszam());
+            Settings s1 = db.getSettings(settingsId);
             System.out.println();
             if (s1 != null) {
                 settings = s1;
                 observableList.clear();
                 observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
 
-                if (settings.getElozo_zaro() != prevSettings.getLezarva()) {
-                    settings.setElozo_zaro(prevSettings.getLezarva());
-                    settings.setLezarva(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
+                if (settings.getElozo_zaro() != prevSettings.getZaroKm()) {
+                    settings.setElozo_zaro(prevSettings.getZaroKm());
+                    settings.setZaro_km(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
                 }
                 setLabels();
 
             } else {
-                int closingKmValue = settings.getLezarva(); //elmenti a zárót
+                int closingKmValue = settings.getZaroKm(); //elmenti a zárót
                 settings.setAktualis_honap(workDate);
                 System.out.println("plusorminus2: " + workDate);
                 settings.setElozo_zaro(closingKmValue);    //beállítja a mentett zárót nyitónak
-                settings.setLezarva(closingKmValue);        //zárónak is
+                settings.setZaro_km(closingKmValue);        //zárónak is
                 db.addSettings(settings);
                 System.out.println("setworkdate2" + workDate);
                 observableList.clear();
                 observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
-                settings.setLezarva(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
+                settings.setZaro_km(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
                 System.out.println("setworkdate3" + workDate);
                 db.updateSettings(settings, (settings.getRendszam() + workDate));
 
