@@ -68,7 +68,7 @@ public class DbModel {
 
      //////////////////////////////////////////////////////////////////////////////////////////////
 
-       /* try {
+       try {
             conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
             System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
             ViewController.mySqlActive=true;
@@ -89,7 +89,7 @@ public class DbModel {
             System.out.println(ViewController.mySqlActive);
         }
 
-         */
+
 
         if (conn1 != null) {
             try {

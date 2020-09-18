@@ -272,19 +272,18 @@ public class ViewController implements Initializable {
                     settings.setId(settings.getRendszam()+workDate);
                     settings.setUtolso_ugyfel("telephely");
                     db.addSettings(settings);
-                    telephely=db.getClient("telephely");
-                    db.updateClient(telephely, "telephely");  //hogy első indításnál is legyen telephely client
+                    telephely=db.getClient("telephely");     //hogy első indításnál is legyen telephely client
                     spedometer=settings.getElozo_zaro();
-                   /* showAlert("A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
-                    selectionModel = tabPane.getSelectionModel();
-                    selectionModel.select(0);*/
+
                 }
                 else {
                     db.updateSettings(settings, (settings.getRendszam() + workDate));
                 }
+                settings=db.getLastSettings();
                 telephely.setField(settings.getNev());
                 telephely.setCity(settings.getVaros());
                 telephely.setAddress(settings.getCim());
+                db.updateClient(telephely,"telephely");
                 setLabels();
                 setText();
                 setPane.setDisable(true);
@@ -670,6 +669,7 @@ public class ViewController implements Initializable {
                         String gotUrl = getURL(WV.getEngine().getLocation());
                         int index = gotUrl.indexOf(" km");
                         String sub = gotUrl.substring(index - 6, index);
+                        System.out.println(sub);
                         sub = sub.replace(',', '.');
                         distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
                         txtDistance.setText(distance.toString());
@@ -703,10 +703,7 @@ public class ViewController implements Initializable {
     public void start() {
         datePicker.setValue(LocalDate.now());
         settings = db.getLastSettings();
-        System.out.println(settings.getRendszam());
-        System.out.println(settings.getAktualis_honap());
-        System.out.println(settings.getId());
-        settings.setId(settings.getRendszam() + settings.getAktualis_honap());
+        //settings.setId(settings.getRendszam() + settings.getAktualis_honap());
         System.out.println("utolsó út:" + db.getDateOfLastRoute());
         if (db.getDateOfLastRoute() == null)                                    //megvizsgálja hogy van e adat a routes táblában
             workDate = LocalDate.now().toString().substring(0, 7);
