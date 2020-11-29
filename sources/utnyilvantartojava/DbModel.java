@@ -360,23 +360,24 @@ public class DbModel {
             throwables.printStackTrace();
         }
     }
+    // a routes listából a havi összes tankolást adja vissza
     public double getFueling(String workDate,String rendszam) {
-        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  // a routes listából a havi összes távolságot adja vissza
+        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  
         return queryDoubleValueFromRoute(sqlQuery,"sum(fueling)");
     }
-
+ // a routes listából a havi összes távolságot adja vissza
     public int getSpedometer(String workDate,String rendszam) {
-        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  // a routes listából a havi összes távolságot adja vissza
+        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; "; 
         System.out.println(sqlQuery);
         return queryIntValueFromRoute(sqlQuery,"sum(distance)");
     }
-
+ // a routes listából a havi összes távolságot adja vissza
     public int getMaganut(String workDate, String rendszam) {
-        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  // a routes listából a havi összes távolságot adja vissza
+        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; "; 
         System.out.println(sqlQuery);
         return queryIntValueFromRoute(sqlQuery,"sum(distance)");
     }
-
+// egy int értékkel tér vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
     public int queryIntValueFromRoute(String sqlQuery, String returnColumn) {
         int value = 0;
         try {
@@ -387,7 +388,7 @@ public class DbModel {
         }
         return value;
     }
-
+    // egy double értéket ad vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
     public double queryDoubleValueFromRoute(String sqlQuery, String returnColumn) {
         double value = 0;
         try {
@@ -398,7 +399,7 @@ public class DbModel {
         }
         return value;
     }
-
+// a legutolsó dátumot adja vissza
     public String getDateOfLastRoute(){
         String value=null ;
         String sqlQuery = "select * from routes\n" +
@@ -414,10 +415,17 @@ public class DbModel {
         return value;
     }
 
+    //     
     public int getMaxKmFromMonth(String workDate){
         String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '"+workDate+"-%%';";
         return queryIntValueFromRoute(sqlQuery,"spedometer");
     }
+    
+    /* Az összes tankolás az adott hónapban
+     public double getFuelingMonth(String workDate){
+        String sqlQuery = "SELECT sum(fueling) as value FROM routes where date like '"+workDate+"-%%';";
+        return queryDoubleValueFromRoute(sqlQuery,"value");
+    }*/
 
     public void updateRoute(Route route, int routeId) {
         String sqlQuery = "update routes set " +
