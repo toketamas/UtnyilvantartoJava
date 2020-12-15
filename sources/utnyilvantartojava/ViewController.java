@@ -218,19 +218,138 @@ public class ViewController implements Initializable {
     TableColumn ugyfCol;
     TableColumn spedometerCol;
 
-    //Itt Indul
+//Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
         start();
     }
 
+    public void start() {
+//mai dátum a DatePickerbe
+        datePicker.setValue(LocalDate.now());
+//betölti a settings táblából az utolsó sort
+        settings = db.getLastSettings();
+        ///System.out.println("utolsó út:" + db.getDateOfLastRoute());
+
+//megvizsgálja hogy van e adat a routes táblában
+        if (db.getDateOfLastRoute() == null) {
+//ha van kiveszi belőle az év hónapot
+            workDate = LocalDate.now().toString().substring(0, 7);
+        } else {
+//ha nincs akkor a mai dátumból veszi ki és a settingsbe egy új 
+//rendszám+ÉvHónap kulcsot készít(ez az elsődleges kulcs az adatbázisban)
+            setDate();
+            settings.setAktualis_honap(workDate);
+            settingsId = settings.getRendszam() + settings.getAktualis_honap();
+        }
+
+        btnBev.setDisable(true);
+        btnSetOk.setDisable(true);
+        setLabels();
+
+        /* if (db.getSettings(workDate,settings.getRendszam()) == null) {
+            db.addSettings(settings);
+        }
+        settings = db.getSettings(workDate,settings.getRendszam());
+        System.out.println(settings);*/
+
+        ///System.out.println("Név:" + settings.getNev());
+        ///System.out.println("Rendszám:" + settings.getRendszam());
+        ///System.out.println("hónap:" + settings.getAktualis_honap());
+//megnézzük szerepelnek e a nem excelből hozzáadott címek
+        checkSpecialClients();
+        /// telephely = db.getClient("telephely");
+
+//megvizsgáljuk, hogy az aktuális settings objektum tartalmazza-e a szükséges adatokat
+        if (settings.getNev() == null
+                || settings.getRendszam() == null
+                || settings.getNev().trim().length() == 0
+                || settings.getVaros().trim().length() == 0
+                || settings.getCim().trim().length() == 0) //ha nem: üres stringre állítjuk a rendszámot,ha véletlenül null lenne meghívjuk a beállít tabot
+        {
+            tabNyilv.setDisable(true);
+            settings.setRendszam("");
+            selectionModel = tabPane.getSelectionModel();
+            selectionModel.select(1);
+            showAlert("Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
+// ha megvannak akkor folytatódik
+        } else 
+        {
+            runResume();
+        }
+    }
+
+    public void runResume() {
+
+// kivesszük az adatbázisból a telephely címét
+        telephely = db.getClient("telephely");
+//beállítja a tábla oszlopokat
+        setTableColumns();
+         ///System.out.println(settings);
+
+//beállítjuk a hónapot amit szerkestünk
+        workDate = settings.getAktualis_honap();
+//töröljük a listát
+        observableList.clear();
+//beállítjuk a kilométer óra állást
+        spedometer = settings.getElozo_zaro();
+//textboxok beállítása
+        setText();
+//labelek beállítása
+        setLabels();
+//telphelyről chheckbox bepipálása
+        chkSites.setSelected(true);
+//combobox szöveg beállítása
+        cbClient.setValue("Válaszd ki az ügyfelet");
+//betölti a WebView-ba a térképet
+        WV.getEngine().load("https://www.google.hu/maps/");
+//!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
+        excelSource = localExcel;
+//hozzáadja a listához a rendszámhoz és a szerkesztett hónaphoz tartozó adatokat
+        observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+//újraszámolja a megtett távolságot
+        rebuildDistanceInDb();
+//beállítja a labeleket
+        setLabels();
+// beállítja startclientnek az utolsó érkezés helyét
+        startClient = db.getClient(settings.getUtolso_ugyfel());
+        ///System.out.println("utolsó ügyfél:" + settings.getUtolso_ugyfel());
+//ha a startClient a telephely,
+        if (startClient.getClient().toLowerCase().startsWith("telephely")) {
+//beállítjuk az indulás textbox szövegét "telephely"-re
+            txtDepart.setText(startClient.getClient());
+//bepipáljuk az indulás a telephelyről chkboxot
+            chkSites.setSelected(true);
+        } else {
+//ha nem kivesszük a startclientből a címet
+            txtDepart.setText(getClientFullAddress(startClient));
+//kivesszük az indulás a telephelyről chkboxból a pipát
+            chkSites.setSelected(false);
+        }
+//letiltja az indulás textboxot mivel a beállított érték ahonnan indulni kell mert előzőleg itt álltunk az autóval
+        txtDepart.setEditable(false);
+//hozzáadja a combobok listájához az ügyfeleket az adatbázisból
+        cbClient.getItems().addAll(db.getAllClient());
+//betölti az összes lehetséges várost az érkezés textbox listájába 
+        fillField(txtArrive, db.getAllCitys());
+//betölti az összes lehetséges várost az indulás textbox listájába
+        fillField(txtDepart, db.getAllCitys());
+//a tábla végére görget
+        table.scrollTo(table.getItems().size() - 1);
+        setLabels();
+        setText();
+    }
+
     @FXML
     private void btnClick(ActionEvent event) throws Exception {
-        //útnyilvántartó tab gombok
+//útnyilvántartó tab gombok
 
-        //Bevitel gomb
+//Bevitel gomb
         if (btnBev.isArmed()) {
+// bevitel tiltás
             btnBev.setDisable(true);
+//távolság engedélyezés
             btnDistance.setDisable(false);
+//megvizsgálja, hogy az aktuális dátum egyezik-e a hónappal amivel dolgozunk
             if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
                 insertRoute();
             } else {
@@ -238,21 +357,25 @@ public class ViewController implements Initializable {
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
             }
         }
-
+//lekéri a távolságot
         if (btnDistance.isArmed()) {
             getDist();
         }
-
+//lekéri a távolságot a sor javítása közben
         if (btnDistance1.isArmed()) {
             getDist();
         }
 
-        //beállít tab gombok
+//beállítás tab-on lévő gombok
+//beállításoknál az ok gomb
         if (btnSetOk.isArmed()) {
+//ha van írva valami ezekbe a textboxokba akkor úgy vesszük, hogy ki van töltve az
+//összes beállítás
             if (txfNev.getText().trim().length() != 0
                     && txfTelep.getText().trim().length() != 0
                     && txfTelepCim.getText().trim().length() != 0
                     && txfRendsz.getText().trim().length() != 0) {
+//kiolvassa a textboxok tartalmát és beteszi a settings objektumba
                 settings.setNev(txfNev.getText());
                 settings.setVaros(txfTelep.getText());
                 settings.setCim(txfTelepCim.getText());
@@ -263,23 +386,31 @@ public class ViewController implements Initializable {
                 settings.setElozo_zaro(Integer.parseInt(txfElozo.getText().trim()));
                 settingsId = txfRendsz.getText() + workDate;
                 settings.setId(settingsId);
-
+//Ha az aktuális settings objektum üres beállítjuk a szükséges 
+//értékeket, hogy ne akadjon ki a program induláskor és mentjük az adatbázisba
+//ez első induláskor történik utána be kell állítani a használónak az adatait
                 if (db.getSettings(settingsId) == null) {
                     settings.setAktualis_honap(workDate);
                     settings.setId(settingsId);
                     settings.setUtolso_ugyfel("telephely");
                     db.addSettings(settings);
-                    telephely = db.getClient("telephely");     //hogy első indításnál is legyen telephely client
+                    telephely = db.getClient("telephely");
                     spedometer = settings.getElozo_zaro();
 
                 } else {
+// ha már létezett az aktuális setting objektum akkor beállítja a megváltozott
+//adatokat és frissíti az adatbázist ez olyankor ha pl. a rendszám vagy a lakcím változott
                     db.updateSettings(settings, settingsId);
                 }
+// betöltjük az előzőleg módosított aktuális settings objektumot 
                 settings = db.getLastSettings();
+// beállítjuk a telephely client értékeit
                 telephely.setField(settings.getNev());
                 telephely.setCity(settings.getVaros());
                 telephely.setAddress(settings.getCim());
+                //mentjük az adatbázisba
                 db.updateClient(telephely, "telephely");
+//Beállítjuk a mezők szerkeszthetőségét visszaugrunk az utnyilvántartás tab-ra és folytatodik a program
                 setLabels();
                 setText();
                 setPane.setDisable(true);
@@ -331,8 +462,8 @@ public class ViewController implements Initializable {
                 e.printStackTrace();
             }
         }
-
-        if (btnCancel.isArmed()) {              //Kész gomb az út módosításnál
+//Kész gomb az út módosításnál
+        if (btnCancel.isArmed()) {
             startClient = startClientTemp;
             targetClient = targetClientTemp;
             txtDepart.setText(startClient.getCity() + "" + startClient.getAddress());
@@ -342,8 +473,8 @@ public class ViewController implements Initializable {
             paneCorr.setVisible(false);
             setLabels();
         }
-
-        if (btnDelete.isArmed()) {               // Törlés gomb az út módosításnál
+// Törlés gomb az út módosításnál
+        if (btnDelete.isArmed()) {
             observableList.remove(selectedRoute);
             db.delRoute(selectedRoute.getRouteId());
             setLabels();
@@ -375,7 +506,7 @@ public class ViewController implements Initializable {
             db.updateSettings(settings, (settings.getRendszam() + workDate));
 
         }
-
+//mentés gomb az út módősításánál
         if (btnSave.isArmed()) {
             selectedRoute.setDatum(datePicker.getValue().toString());
             selectedRoute.setIndulas(txtDepart.getText());
@@ -389,6 +520,7 @@ public class ViewController implements Initializable {
             selectedRoute.setFueling(Double.parseDouble(fuel));
             observableList.set(selectedRoute.getCellId(), selectedRoute);
             db.updateRoute(selectedRoute, selectedRoute.getRouteId());
+//!!!FELADAT!!! mentse el itt az adatbázisba a distance táblába a módosított távolságot!!!
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
             startClient = startClientTemp;
@@ -408,7 +540,7 @@ public class ViewController implements Initializable {
             alertOkOrCancel = true;
             alertPane.setVisible(false);
         }
-
+//a választott honap melletti plusz és minusz gomb
         if (btnPlus.isArmed()) {
             txtDate.setText(workDateDecOrInc("+"));
             setWorkdate("+");
@@ -422,18 +554,22 @@ public class ViewController implements Initializable {
     }
 
     public void insertRoute() {
-        String date = datePicker.getValue().toString();         //dátum beolvasás
-        try {                                                // a parseInt miatt
+//dátum beolvasás
+        String date = datePicker.getValue().toString();
+//kivételkezelés a parseInt miatt
+        try {
             distance = parseInt(txtDistance.getText());
         } catch (NumberFormatException e) {
             showAlert("A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
             btnBev.setDisable(false);
             txtDistance.clear();
         }
-        if (chkPrivate.isSelected()) {                          //magánút?
-
-            setLabels();                                     // beállítja a címkéket az útnyilvántartó oldalon
-            observableList.add(new Route( //hozzáad a táblához egy új utat a mezőkből kinyert adatokkal
+//magánút?
+        if (chkPrivate.isSelected()) {
+// beállítja a címkéket az útnyilvántartó oldalon
+            setLabels();
+//hozzáad a táblához egy új utat a mezőkből kinyert adatokkal            
+            observableList.add(new Route( 
                     datePicker.getValue().toString(),
                     chkPrivate.isSelected(),
                     "Magánhasználat",
@@ -444,7 +580,8 @@ public class ViewController implements Initializable {
                     distance,
                     false,
                     observableList.size()));
-            settings.setUtolso_ugyfel("telephely");           //beállítja utolsó ügyfélnek a telephelyet ez lesz a következő út kezdőpontja
+//beállítja utolsó ügyfélnek a telephelyet ez lesz a következő út kezdőpontja            
+            settings.setUtolso_ugyfel("telephely");           
             chkPrivate.setSelected(false);
             chkSites.setSelected(true);
             startClient = telephely;
@@ -453,8 +590,8 @@ public class ViewController implements Initializable {
             txtArrive.clear();
             txtFueling.clear();
             cbClient.setValue("Válaszd ki az ügyfelet");
-
-        } else if (chkBack.isSelected()) {                 //oda-vissza
+//oda-vissza
+        } else if (chkBack.isSelected()) {                 
 
             observableList.add(
                     new Route(
@@ -724,89 +861,6 @@ public class ViewController implements Initializable {
         return response.toString();
     }
 
-    public void start() {
-        datePicker.setValue(LocalDate.now());
-        settings = db.getLastSettings();
-
-        //settings.setId(settings.getRendszam() + settings.getAktualis_honap());
-        System.out.println("utolsó út:" + db.getDateOfLastRoute());
-        if (db.getDateOfLastRoute() == null) //megvizsgálja hogy van e adat a routes táblában
-        {
-            workDate = LocalDate.now().toString().substring(0, 7);
-        } else {
-            setDate();
-            settings.setAktualis_honap(workDate);
-            settingsId = settings.getRendszam() + settings.getAktualis_honap();
-        }
-
-        btnBev.setDisable(true);
-        btnSetOk.setDisable(true);
-        setLabels();
-
-        /* if (db.getSettings(workDate,settings.getRendszam()) == null) {
-            db.addSettings(settings);
-        }
-        settings = db.getSettings(workDate,settings.getRendszam());
-        System.out.println(settings);*/
-//
-        System.out.println("Név:" + settings.getNev());
-        System.out.println("Rendszám:" + settings.getRendszam());
-        System.out.println("hónap:" + settings.getAktualis_honap());
-        checkSpecialClients();
-        // telephely = db.getClient("telephely");
-        if (settings.getNev() == null
-                || settings.getRendszam() == null
-                || settings.getNev().trim().length() == 0
-                || settings.getVaros().trim().length() == 0
-                || settings.getCim().trim().length() == 0) {
-            tabNyilv.setDisable(true);
-            settings.setRendszam("");
-            selectionModel = tabPane.getSelectionModel();
-            selectionModel.select(1);
-            showAlert("Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
-        } else {
-            runResume();
-        }
-    }
-
-    public void runResume() {
-
-        telephely = db.getClient("telephely");
-        setTableColumns();                        //beállítja a táblát
-        //System.out.println(settings);
-        workDate = settings.getAktualis_honap();
-        observableList.clear();
-
-        spedometer = settings.getElozo_zaro();
-        setText();
-        setLabels();
-        chkSites.setSelected(true);
-        cbClient.setValue("Válaszd ki az ügyfelet");
-        WV.getEngine().load("https://www.google.hu/maps/");                  //betölti a WebView-ba a térképet
-
-        excelSource = localExcel;          //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
-        observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
-        rebuildDistanceInDb();
-        // betölti az adatokat az adatbázisból
-        //rebuildSpedometer();
-        setLabels();
-        startClient = db.getClient(settings.getUtolso_ugyfel());                  // beállítja startclientnek az utolsó érkezés helyét
-        System.out.println("utolsó ügyfél:" + settings.getUtolso_ugyfel());
-        if (startClient.getClient().toLowerCase().startsWith("telephely")) {
-            txtDepart.setText(startClient.getClient());
-            chkSites.setSelected(true);
-        } else {
-            txtDepart.setText(getClientFullAddress(startClient));
-            chkSites.setSelected(false);
-        }
-        txtDepart.setEditable(false);
-        cbClient.getItems().addAll(db.getAllClient());
-        fillField(txtArrive, db.getAllCitys()); //betölti az összes lehetséges ügyfelet a combo box listájába
-        table.scrollTo(table.getItems().size() - 1);
-        setLabels();
-        setText();
-    }
-
     public void setTableColumns() {
         datCol = new TableColumn("Dátum");
         datCol.setPrefWidth(92);
@@ -942,12 +996,10 @@ public class ViewController implements Initializable {
         lblKezdo.setText("Kezdő: " + settings.getElozo_zaro() + " Km");
         lblKm.setText("Jelenlegi záró: " + (settings.getElozo_zaro() + db.getSpedometer(workDate, settings.getRendszam())) + " Km");
         lblMegtett.setText("Megtett út: " + db.getSpedometer(workDate, settings.getRendszam()) + " Km");
-        Double atlagFogy = 100 * db.getFueling(workDate, settings.getRendszam()) / db.getSpedometer(workDate,settings.getRendszam());
+        Double atlagFogy = 100 * db.getFueling(workDate, settings.getRendszam()) / db.getSpedometer(workDate, settings.getRendszam());
         System.out.println(atlagFogy);
-        lblAtlagFogy.setText("Átlag fogyasztás: "+atlagFogy.toString().substring(0,3));
+        lblAtlagFogy.setText("Átlag fogyasztás: " + atlagFogy.toString().substring(0, 3));
     }
-    
-    
 
     private void fillField(TextField text, ArrayList list) {
         TextFields.bindAutoCompletion(text, list);
