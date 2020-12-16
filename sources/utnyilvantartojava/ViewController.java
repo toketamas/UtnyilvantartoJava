@@ -251,7 +251,6 @@ public class ViewController implements Initializable {
         }
         settings = db.getSettings(workDate,settings.getRendszam());
         System.out.println(settings);*/
-
         ///System.out.println("Név:" + settings.getNev());
         ///System.out.println("Rendszám:" + settings.getRendszam());
         ///System.out.println("hónap:" + settings.getAktualis_honap());
@@ -272,8 +271,7 @@ public class ViewController implements Initializable {
             selectionModel.select(1);
             showAlert("Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
 // ha megvannak akkor folytatódik
-        } else 
-        {
+        } else {
             runResume();
         }
     }
@@ -284,7 +282,7 @@ public class ViewController implements Initializable {
         telephely = db.getClient("telephely");
 //beállítja a tábla oszlopokat
         setTableColumns();
-         ///System.out.println(settings);
+        ///System.out.println(settings);
 
 //beállítjuk a hónapot amit szerkestünk
         workDate = settings.getAktualis_honap();
@@ -521,6 +519,11 @@ public class ViewController implements Initializable {
             observableList.set(selectedRoute.getCellId(), selectedRoute);
             db.updateRoute(selectedRoute, selectedRoute.getRouteId());
 //!!!FELADAT!!! mentse el itt az adatbázisba a distance táblába a módosított távolságot!!!
+            updateDistance(selectedRoute, settings.getUtolso_ugyfel());
+
+            System.out.println(selectedRoute.getUgyfel());
+            System.out.println();
+            System.out.println(Integer.parseInt(txtDistance.getText()));
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
             startClient = startClientTemp;
@@ -552,105 +555,132 @@ public class ViewController implements Initializable {
         }
 
     }
+// kinyeri az adatbázisból a címeket a distances tábla frissítéséhez és frissíti
+    public void updateDistance(Route selectedRoute, String elozoUgyfel) {
+// mivel a Route objektum gépszám+" "+ügyfél formátumban tárolja az ügyfél adatot le kell vágni a gépszámot
+        int index = selectedRoute.getUgyfel().indexOf(' ');
+        String gepszam = selectedRoute.getUgyfel().substring(0, index);
+//kiveszi a settingsből az indulás helyét(ez az utolsó gépszám vagy a telephely) ez alapján lekéri a client-et
+//az adatbázisból és elkészíti a teljes címet
+        String elsoCim = getClientFullAddress(db.getClientFromClientNumber(elozoUgyfel));
+        ///System.out.println(elsoCim);
+//ugyanaz mint feljebb csak a selectedRoute-ból kinyert címmel.
+        String masodikCim = getClientFullAddress(db.getClientFromClientNumber(gepszam));
+        ///System.out.println(masodikCim);
+        ///System.out.println(txtDistance.getText());
+//frissíti az adatbázist.
+        db.updateDistance(elsoCim,masodikCim,Integer.parseInt(txtDistance.getText()));
+    }
+//magánutat ad a listához
+
+    public void privateRoute() {
+        observableList.add(new Route(
+                datePicker.getValue().toString(),
+                chkPrivate.isSelected(),
+                "Magánhasználat",
+                "Magánhasználat",
+                "Magánhasználat",
+                fueling,
+                spedometer,
+                distance,
+                false,
+                observableList.size()));
+//beállítja utolsó ügyfélnek a telephelyet ez lesz a következő út kezdőpontja            
+        settings.setUtolso_ugyfel("telephely");
+        chkPrivate.setSelected(false);
+        chkSites.setSelected(true);
+        startClient = telephely;
+        txtDepart.setText(telephely.getClientNumber());
+        txtDistance.clear();
+        txtArrive.clear();
+        txtFueling.clear();
+        cbClient.setValue("Válaszd ki az ügyfelet");
+    }
+//ez ad hozzá egy utat    
+
+    public void oneRoute() {
+        observableList.add(
+                new Route(
+                        date,
+                        chkPrivate.isSelected(),
+                        getClientFullAddress(startClient), getClientFullAddress(targetClient),
+                        targetClient.getClientNumber() + "/" + targetClient.getClient(),
+                        fueling,
+                        spedometer,
+                        distance,
+                        chkBack.isSelected(),
+                        observableList.size()));
+    }
+// ez egy visszautat ad hozzá, ez előtt van a listában egy odaút
+
+    public void backRoute() {
+        observableList.add(
+                new Route(
+                        date,
+                        chkPrivate.isSelected(),
+                        getClientFullAddress(targetClient), getClientFullAddress(startClient),
+                        startClient.getClientNumber() + "/" + startClient.getClient(),
+                        fueling,
+                        spedometer,
+                        distance,
+                        chkBack.isSelected(),
+                        observableList.size()));
+        settings.setUtolso_ugyfel("telephely");
+        startClient = telephely;
+        chkSites.setSelected(true);
+        txtDepart.setText("Telephely");
+        chkBack.setSelected(false);
+
+    }
+
+    String date;
 
     public void insertRoute() {
 //dátum beolvasás
-        String date = datePicker.getValue().toString();
-//kivételkezelés a parseInt miatt
+        date = datePicker.getValue().toString();
+//kivételkezelés a parseInt miatt itt olvassa be a távolságot a textboxból
         try {
             distance = parseInt(txtDistance.getText());
         } catch (NumberFormatException e) {
             showAlert("A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
             btnBev.setDisable(false);
             txtDistance.clear();
-        }
-//magánút?
+        }// beállítja a címkéket az útnyilvántartó oldalon
+        setLabels();
+//ha a magánút be van pipálva
         if (chkPrivate.isSelected()) {
-// beállítja a címkéket az útnyilvántartó oldalon
-            setLabels();
-//hozzáad a táblához egy új utat a mezőkből kinyert adatokkal            
-            observableList.add(new Route( 
-                    datePicker.getValue().toString(),
-                    chkPrivate.isSelected(),
-                    "Magánhasználat",
-                    "Magánhasználat",
-                    "Magánhasználat",
-                    fueling,
-                    spedometer,
-                    distance,
-                    false,
-                    observableList.size()));
-//beállítja utolsó ügyfélnek a telephelyet ez lesz a következő út kezdőpontja            
-            settings.setUtolso_ugyfel("telephely");           
-            chkPrivate.setSelected(false);
-            chkSites.setSelected(true);
-            startClient = telephely;
-            txtDepart.setText(telephely.getClientNumber());
-            txtDistance.clear();
-            txtArrive.clear();
-            txtFueling.clear();
-            cbClient.setValue("Válaszd ki az ügyfelet");
-//oda-vissza
-        } else if (chkBack.isSelected()) {                 
-
-            observableList.add(
-                    new Route(
-                            date,
-                            chkPrivate.isSelected(),
-                            getClientFullAddress(startClient), getClientFullAddress(targetClient),
-                            targetClient.getClientNumber() + "/" + targetClient.getClient(),
-                            fueling,
-                            spedometer,
-                            distance,
-                            chkBack.isSelected(),
-                            observableList.size()));
+//hozzáad egy magánutat
+            privateRoute();
+//ha be van pipélva az oda-vissza
+        } else if (chkBack.isSelected()) {
+//hozzáadja az utat a listához   
+            oneRoute();
             checkDistInDb();
-
-            observableList.add(
-                    new Route(
-                            date,
-                            chkPrivate.isSelected(),
-                            getClientFullAddress(targetClient), getClientFullAddress(startClient),
-                            startClient.getClientNumber() + "/" + startClient.getClient(),
-                            fueling,
-                            spedometer,
-                            distance,
-                            chkBack.isSelected(),
-                            observableList.size()));
-            settings.setUtolso_ugyfel("telephely");
-            startClient = telephely;
-            chkSites.setSelected(true);
-            txtDepart.setText("Telephely");
-            chkBack.setSelected(false);
-
+//mégegyszer bekerül az út de most s kezdőcím és a cél fel van cserélve
+            backRoute();
         } else {
 
             chkSites.setSelected(false);
-            observableList.add(new Route(
-                    date,
-                    chkPrivate.isSelected(),
-                    getClientFullAddress(startClient),
-                    getClientFullAddress(targetClient),
-                    targetClient.getClientNumber() + "/" + targetClient.getClient(),
-                    fueling,
-                    spedometer,
-                    distance,
-                    chkBack.isSelected(),
-                    observableList.size()));
-
+//hozzáadja az utat a listához            
+            oneRoute();
+//beállítja utolsó ügyfélnek a cél ügyfél client numberét beírja az indulás mezőbe a teljes címet
+//mert a köv. út innen indul majd 
             settings.setUtolso_ugyfel(targetClient.getClientNumber());
             txtDepart.setText(getClientFullAddress(targetClient));
             checkDistInDb();
             startClient = targetClient;
             targetClient = null;
         }
-
+//megnézi a listában hogy be volt e állítva az utolsó előtti elemnél az oda vissza 
+//ha igen akkor azt és az utolsót is küldi az adatbázisba
         if (observableList.get(observableList.size() - 1).isVissza()) {
             db.addRoute(observableList.get(observableList.size() - 2), settings.getRendszam());
 
         }
+//egyébként csak az utolsó listaelem megy az adatbázisba
         db.addRoute(observableList.get(observableList.size() - 1), settings.getRendszam());
         observableList.clear();
+//újra betölti az adatokat a listába az adatbázisba        
         observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
         if (chkBackToSites.isSelected()) {
             chkSites.setSelected(true);
@@ -669,15 +699,22 @@ public class ViewController implements Initializable {
         settings.setZaro_km(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
         db.updateSettings(settings, (settings.getRendszam() + workDate));
     }
+//Ellenőrzi hogy a benne van-e a két hely közti távolság az adatbázisban
 
     private void checkDistInDb() {
+//odaút        
         Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        System.out.println("start " + start.getDistance());
+//visszaút        
         Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
-
+        System.out.println("target " + target.getDistance());
+        // ha a visszakapott érték 0 akkor beírja az adatbázisba új távolságként
         if (start.getDistance() == 0 && target.getDistance() == 0) {
+            //       if (start == null && target == null) {
             db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
             btnBev.setDisable(false);
             btnDistance.setDisable(true);
+            System.out.println("beírtam");
         }
 
         Distance start1 = db.getDistanceFromMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient));
@@ -688,21 +725,26 @@ public class ViewController implements Initializable {
             btnDistance.setDisable(true);
         }
     }
+//Távolság lekérése
 
     private void getDist() {
-
-        Distance actualDist = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));   //szerepel e az adatbázisban
-        Distance revDist = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));      //szerepel e az adatbázisban visszafelé
+//egy odafele út
+        Distance actualDist = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        //egy visszafele út       
+        Distance revDist = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
+        // ha igen akkor beírja a textboxba a távot 
         if (actualDist.getDistance() != 0) {
             txtDistance.setText(String.valueOf(actualDist.getDistance()));
             btnDistance.setDisable(true);
             btnBev.setDisable(false);
+//ha visszafelé szerepel akkor beírja a textboxba a távot 
         } else if (revDist.getDistance() != 0) {
             txtDistance.setText(String.valueOf(revDist.getDistance()));
             btnDistance.setDisable(true);
             btnBev.setDisable(false);
+            // ha nincs az adatbázisban akkor lekérés a gmapstól           
         } else {
-            getDistanceFromGmaps(cleanAddress(getClientFullAddress(startClient)), cleanAddress(getClientFullAddress(targetClient)));  // ha nincs az adatbázisban akkor lekérés a gmapstól
+            getDistanceFromGmaps(cleanString(getClientFullAddress(startClient)), cleanString(getClientFullAddress(targetClient)));
         }
     }
 
@@ -761,6 +803,7 @@ public class ViewController implements Initializable {
             txtArrive.appendText(getClientFullAddress(targetClient));
         }
     }
+//ez lesz  az openstreetmaps lekérdezés ha kész lesz
 
     public void getDistanceFromOsm(String sAddress, String tAddress) {
         if (txtDistance.getText() != "" || txtDistance != null) {
@@ -790,18 +833,20 @@ public class ViewController implements Initializable {
         }
 
     }
+// lekéri a távot a gmapstól a webview segítségével a webview nem látszik a felhasználói felületen
 
     public void getDistanceFromGmaps(String sAddress, String tAddress) {
         if (txtDistance.getText() != "" || txtDistance != null) {
             String gUrl = "https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress;
-            System.out.println(gUrl);
-            WV.getEngine().load(gUrl); // lekérdezi a távolságot a google mapstól
+            ///System.out.println(gUrl);
+            // itt lekérdezi a távolságot a google mapstól           
+            WV.getEngine().load(gUrl);
 
         }
         btnBev.setDisable(true);
         btnDistance.setDisable(true);
-
-        WV.getEngine().getLoadWorker().stateProperty().addListener( //figyeli hogy betöltődött-e az oldal
+//figyeli hogy betöltődött-e az oldal és vár míg meg nem történt
+        WV.getEngine().getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
             @Override
             public void changed(
@@ -809,7 +854,7 @@ public class ViewController implements Initializable {
                     Worker.State oldValue, Worker.State newValue) {
                 switch (newValue) {
                     case SUCCEEDED:
-                        btnDistance.setDisable(true);
+                        btnDistance.setDisable(false);
                         btnBev.setDisable(false);
                         break;
                     case FAILED:
@@ -825,9 +870,11 @@ public class ViewController implements Initializable {
                 if (newValue != Worker.State.SUCCEEDED) {
                     return;
                 }
-                // Your logic here
+//bekerül a html oldal forráskódja (amit a gmapstól kapott) a gotUrl változóba  
                 String gotUrl = getURL(WV.getEngine().getLocation());
+//kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl               
                 int index = gotUrl.indexOf(" km");
+//kiszedi a távolságot megfelelően kerekíti és beírja a textboxba                
                 String sub = gotUrl.substring(index - 6, index);
                 System.out.println(sub);
                 sub = sub.replace(',', '.');
@@ -840,8 +887,9 @@ public class ViewController implements Initializable {
             }
         });
     }
+// URL beolvasása
 
-    public static String getURL(String url) {             // URL beolvasása
+    public static String getURL(String url) {
         StringBuilder response = null;
         try {
             URL website = new URL(url);
@@ -860,6 +908,7 @@ public class ViewController implements Initializable {
         }
         return response.toString();
     }
+// dinamikusan állítja be a tábla oszlopait
 
     public void setTableColumns() {
         datCol = new TableColumn("Dátum");
@@ -917,13 +966,18 @@ public class ViewController implements Initializable {
             tableSelected();
         });
     }
+// Ha a táblában kiválasztunk egy sort
+// ide kerül a kiválasztott sor indexe
+    int selectedItemIndex;
 
     public void tableSelected() {
+        chkSites.setSelected(false);
+        selectedItemIndex = table.getSelectionModel().getSelectedIndex();
         selectedRoute = table.getSelectionModel().getSelectedItem();
         selctedRow = table.getSelectionModel().getSelectedIndex();
         datePicker.setValue(LocalDate.parse(selectedRoute.getDatum()));
         if (!selectedRoute.isMagan()) {
-            cbClient.setValue(cleanAddress(selectedRoute.getUgyfel()));
+            cbClient.setValue(cleanString(selectedRoute.getUgyfel()));
         } else {
             cbClient.setValue(selectedRoute.getUgyfel());
         }
@@ -1037,7 +1091,7 @@ public class ViewController implements Initializable {
             );
         }
 
-        Client dieboldIroda = db.getClient("DNIroda");
+        /*Client dieboldIroda = db.getClient("DNIroda");
         if (dieboldIroda == null) {
             db.addClient(
                     "DieboldNixdorf",
@@ -1051,7 +1105,7 @@ public class ViewController implements Initializable {
                     0,
                     "DieboldNixdorf"
             );
-        }
+        }*/
         Client magan = db.getClient("Magánhasználat");
         if (magan == null) {
             db.addClient(
@@ -1068,6 +1122,7 @@ public class ViewController implements Initializable {
             );
         }
     }
+//Elkészíti az excel táblát
 
     public void makeExcel(String fileName, String sheetName) {
         Integer megtettKM = db.getSpedometer(workDate, settings.getRendszam());
@@ -1133,6 +1188,7 @@ public class ViewController implements Initializable {
             e.printStackTrace();
         }
     }
+//Újraszámolja a kilométeróra állást az adatbázisban
 
     public void rebuildDistanceInDb() {
         int currentValue = settings.getElozo_zaro();
@@ -1144,21 +1200,35 @@ public class ViewController implements Initializable {
         }
         setLabels();
     }
+//Kicseréli a nemkivánatos karaktereket szóközre
 
-    public String cleanAddress(String address) {
-        if (address.contains("/")) {
-            address = address.replaceAll("/", "");
+    public String cleanString(String str) {
+        if (str.contains("/")) {
+            str = str.replaceAll("/", " ");
+        }
+        if (str.contains("'")) {
+            str = str.replaceAll("'", " ");
+        }
+        if (str.contains("\\")) {
+            str = str.replaceAll("\\", " ");
+        }
+        if (str.contains("\"")) {
+            str = str.replaceAll("\"", " ");
         }
 
-        return address;
+        return str;
     }
+// összerakja a várost és a címet egy stringbe
 
     public String getClientFullAddress(Client client) {
         return client.getCity() + " " + client.getAddress();
 
     }
+//Single button => true , dual button => false; típusok info(vagy bármilyen string),err,warn,succ
+// a kétgombos ablak nem működik, meg kellene oldani, hogy a program várjon amíg nem nyomjuk meg 
+// valamelyik gombot.(Pillanatnyilag nem fontos)
 
-    public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {        //Single button => true , dual button => false; típusok info(vagy bármilyen string),err,warn,succ
+    public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {
         alertClick = false;
 
         String color = "83b1f5";//kék
@@ -1192,6 +1262,7 @@ public class ViewController implements Initializable {
             paneSingleButton.setVisible(false);
         }
     }
+// a logika ahhoz, hogy a + - gomb 12 hónapnak megfelelően működjön.
 
     public String workDateDecOrInc(String value) {
         Integer year = Integer.parseInt(workDate.substring(0, 4));
@@ -1225,8 +1296,9 @@ public class ViewController implements Initializable {
         return year.toString() + "-" + mnt;
 
     }
+//"+" = plus gomb; "-" = - gomb; Ha nem volt + vagy - akkor  "#" = beirt érték után Kész gomb
 
-    public void setWorkdate(String plusOrMinus) {           //"+" = plus gomb; "-" = - gomb; "#" = beirt érték után Kész gomb
+    public void setWorkdate(String plusOrMinus) {
 
         Settings prevSettings = settings;
         if (plusOrMinus == "-" || plusOrMinus == "#") {
@@ -1280,8 +1352,9 @@ public class ViewController implements Initializable {
                 setLabels();
             }
         }
-    }           //Éppen aktuális hónap kiválasztása
+    }
 
+//Éppen aktuális hónap kiválasztása(amivel utoljára dolgoztunk)
     public void setDate() {
         String dateValue = db.getDateOfLastRoute();
         if (dateValue != null) {
@@ -1290,6 +1363,7 @@ public class ViewController implements Initializable {
             datePicker.setValue(LocalDate.parse(dateValue));
         }
     }
+// ha vesszőt írnak a törtbe kicseréli pontra
 
     public String checkFueling(String fuel) {
 

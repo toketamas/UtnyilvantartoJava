@@ -1,9 +1,4 @@
-
-
-
-
 //sqLite
-
 package utnyilvantartojava;
 
 import java.sql.*;
@@ -25,9 +20,7 @@ public class DbModel {
     final String USERNAME_MYSQL = "diebold";
     final String PASSWORD_MYSQL = "8V2lrQnq()Tb";
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     Connection conn = null;
     Statement createStatement = null;
     DatabaseMetaData dbmeta = null;
@@ -40,11 +33,8 @@ public class DbModel {
     ResultSet rs1 = null;
     PreparedStatement preparedStatement1 = null;
 
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     public DbModel() {
-
 
         try {
             conn = DriverManager.getConnection(URL);
@@ -69,30 +59,27 @@ public class DbModel {
             System.out.println("" + ex);
         }
 
-     //////////////////////////////////////////////////////////////////////////////////////////////
-
-       try {
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        try {
             conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
             System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
-            ViewController.mySqlActive=true;
+            ViewController.mySqlActive = true;
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Hiba! A távoli mysql server nem érhető el!");
             System.out.println("" + e);
-            ViewController.mySqlActive=false;
+            ViewController.mySqlActive = false;
             try {
                 conn1 = DriverManager.getConnection(URLMYSQL2, USERNAME_MYSQL, PASSWORD_MYSQL);
                 System.out.println("A kapcsolat létrejött a helyi mysql adatbázissal,");
-                ViewController.mySqlActive=true;
-            }catch (Exception ex) {
+                ViewController.mySqlActive = true;
+            } catch (Exception ex) {
                 System.out.println("Hiba! A helyi mysql server nem érhető el!");
                 System.out.println("" + ex);
-                ViewController.mySqlActive=false;
+                ViewController.mySqlActive = false;
             }
             System.out.println(ViewController.mySqlActive);
         }
-
-
 
         if (conn1 != null) {
             try {
@@ -114,40 +101,39 @@ public class DbModel {
         try {
             rs = dbmeta.getTables(null, "APP", "ROUTES", null);
             if (!rs.next()) {
-                createStatement.execute("create table routes(" +
-                        "routeid integer primary key autoincrement not null," +
-                        "date text not null," +
-                        "private integer," +
-                        "depart text not null," +
-                        "arrive text not null," +
-                        "client text not null," +
-                        "spedometer integer not null," +
-                        "fueling double not null," +
-                        "distance integer not null," +
-                        "backandforth integer not null," +
-                        "cellid integer not null,"+
-                        "rendszam text not null);");
+                createStatement.execute("create table routes("
+                        + "routeid integer primary key autoincrement not null,"
+                        + "date text not null,"
+                        + "private integer,"
+                        + "depart text not null,"
+                        + "arrive text not null,"
+                        + "client text not null,"
+                        + "spedometer integer not null,"
+                        + "fueling double not null,"
+                        + "distance integer not null,"
+                        + "backandforth integer not null,"
+                        + "cellid integer not null,"
+                        + "rendszam text not null);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
             System.out.println("" + ex);
         }
 
-
         try {
             rs = dbmeta.getTables(null, "APP", "CLIENTS", null);
             if (!rs.next()) {
-                createStatement.execute("create table clients(" +
-                        "client text not null," +
-                        "clientnumber text primary key not null ," +
-                        "type text," +
-                        "factorynumber text," +
-                        "zipcode integer," +
-                        "city text not null," +
-                        "address text," +
-                        "exist integer," +
-                        "maintenanceperyear integer," +
-                        "field text);");
+                createStatement.execute("create table clients("
+                        + "client text not null,"
+                        + "clientnumber text primary key not null ,"
+                        + "type text,"
+                        + "factorynumber text,"
+                        + "zipcode integer,"
+                        + "city text not null,"
+                        + "address text,"
+                        + "exist integer,"
+                        + "maintenanceperyear integer,"
+                        + "field text);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -157,10 +143,10 @@ public class DbModel {
         try {
             rs = dbmeta.getTables(null, "APP", "DISTANCES", null);
             if (!rs.next()) {
-                createStatement.execute("create table distances(" +
-                        "clientid1 text," +
-                        "clientid2 text," +
-                        "distance integer);");
+                createStatement.execute("create table distances("
+                        + "clientid1 text,"
+                        + "clientid2 text,"
+                        + "distance integer);");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -170,23 +156,22 @@ public class DbModel {
         try {
             rs = dbmeta.getTables(null, "APP", "SETTINGS", null);
             if (!rs.next()) {
-                createStatement.execute("create table settings(" +
-
-                        "nev text," +
-                        "varos text," +
-                        "cim text," +
-                        "auto text," +
-                        "rendszam text," +
-                        "loketterfogat text," +
-                        "fogyasztas text," +
-                        "elozo_zaro integer," +
-                        "aktualis_honap text ," +
-                        "utolso_ugyfel text," +
-                        "zaro_km integer)"+
-                        "id text unique"+
-                        "sorszam int primary key autoincrement,"+
-                        "utolso_szerkesztes datetime," +
-                        "lezart_tabla boolean;");
+                createStatement.execute("create table settings("
+                        + "nev text,"
+                        + "varos text,"
+                        + "cim text,"
+                        + "auto text,"
+                        + "rendszam text,"
+                        + "loketterfogat text,"
+                        + "fogyasztas text,"
+                        + "elozo_zaro integer,"
+                        + "aktualis_honap text ,"
+                        + "utolso_ugyfel text,"
+                        + "zaro_km integer)"
+                        + "id text unique"
+                        + "sorszam int primary key autoincrement,"
+                        + "utolso_szerkesztes datetime,"
+                        + "lezart_tabla boolean;");
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
@@ -196,10 +181,10 @@ public class DbModel {
 
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
-        System.out.println("add: "+settings.getAktualis_honap());
-        String honap=settings.getAktualis_honap();
-        System.out.println("a honap változó: "+honap);
-        System.out.println("id: "+settings.getId());
+        System.out.println("add: " + settings.getAktualis_honap());
+        String honap = settings.getAktualis_honap();
+        System.out.println("a honap változó: " + honap);
+        System.out.println("id: " + settings.getId());
         String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -212,13 +197,13 @@ public class DbModel {
             preparedStatement.setString(7, settings.getFogyasztas());
             preparedStatement.setInt(8, settings.getElozo_zaro());
             preparedStatement.setString(9, honap);
-            System.out.println("add közben:"+settings.getAktualis_honap());
+            System.out.println("add közben:" + settings.getAktualis_honap());
             preparedStatement.setString(10, settings.getUtolso_ugyfel());
-            preparedStatement.setInt(11,settings.getZaroKm());
+            preparedStatement.setInt(11, settings.getZaroKm());
             preparedStatement.setString(12, settings.getId());
-            preparedStatement.setString(13,null);
+            preparedStatement.setString(13, null);
             preparedStatement.setString(14, LocalDateTime.now().toString());
-            preparedStatement.setBoolean(15,false);
+            preparedStatement.setBoolean(15, false);
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
@@ -226,26 +211,26 @@ public class DbModel {
         }
     }
 
-    public void updateSettings(Settings settings,String idValue) {
-        System.out.println("update: "+settings.getAktualis_honap());
-        String sqlQuery = "update settings set " +
-                "nev= '" + settings.getNev() +"',"+
-                "varos='" +settings.getVaros()+"',"+
-                "cim='" +settings.getCim() +"',"+
-                "auto='" +settings.getAuto() +"',"+
-                "rendszam='" + settings.getRendszam() +"',"+
-                "loketterfogat='" + settings.getLoketterfogat() +"',"+
-                "fogyasztas='" + settings.getFogyasztas() +"',"+
-                "elozo_zaro=" + settings.getElozo_zaro() +","+
-                "aktualis_honap='" +settings.getAktualis_honap()+"',"+
-                "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"+
-                "zaro_km ='" + settings.getZaroKm() + "',"+
-                "utolso_szerkesztes='"+ LocalDateTime.now().toString() +"',"+
-                "lezart_tabla='"+settings.getLezartTabla()+"'"+
-                " where id = '"+idValue+"';";
+    public void updateSettings(Settings settings, String idValue) {
+        System.out.println("update: " + settings.getAktualis_honap());
+        String sqlQuery = "update settings set "
+                + "nev= '" + settings.getNev() + "',"
+                + "varos='" + settings.getVaros() + "',"
+                + "cim='" + settings.getCim() + "',"
+                + "auto='" + settings.getAuto() + "',"
+                + "rendszam='" + settings.getRendszam() + "',"
+                + "loketterfogat='" + settings.getLoketterfogat() + "',"
+                + "fogyasztas='" + settings.getFogyasztas() + "',"
+                + "elozo_zaro=" + settings.getElozo_zaro() + ","
+                + "aktualis_honap='" + settings.getAktualis_honap() + "',"
+                + "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"
+                + "zaro_km ='" + settings.getZaroKm() + "',"
+                + "utolso_szerkesztes='" + LocalDateTime.now().toString() + "',"
+                + "lezart_tabla='" + settings.getLezartTabla() + "'"
+                + " where id = '" + idValue + "';";
         System.out.println(sqlQuery);
         try {
-           // System.out.println(sqlQuery);
+            // System.out.println(sqlQuery);
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
         } catch (SQLException throwables) {
@@ -258,17 +243,17 @@ public class DbModel {
         return querySettings(sqlQuery);
     }
 
-    public Settings getLastSettings(){
+    public Settings getLastSettings() {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings ;";
         return querySettings(sqlQuery);
     }
 
     public Settings querySettings(String sqlQuery) {
-                Settings settings = null;
+        Settings settings = null;
         try {
             rs = createStatement.executeQuery(sqlQuery);
             while (rs.next()) {
-               settings = new Settings(
+                settings = new Settings(
                         rs.getString("nev"),
                         rs.getString("varos"),
                         rs.getString("cim"),
@@ -280,10 +265,10 @@ public class DbModel {
                         rs.getString("aktualis_honap"),
                         rs.getString("utolso_ugyfel"),
                         rs.getInt("zaro_km"),
-                       rs.getString("id"),
-                       rs.getInt("sorszam"),
-                       rs.getString("utolso_szerkesztes"),
-                       rs.getBoolean("lezart_tabla")
+                        rs.getString("id"),
+                        rs.getInt("sorszam"),
+                        rs.getString("utolso_szerkesztes"),
+                        rs.getBoolean("lezart_tabla")
                 );
             }
         } catch (SQLException ex) {
@@ -292,7 +277,6 @@ public class DbModel {
         }
         return settings;
     }
-
 
 // routes táblához tartozó lekérdezések
     public void addRoute(Route route, String rendszam) {
@@ -311,7 +295,7 @@ public class DbModel {
             preparedStatement.setInt(9, route.getTavolsag());
             preparedStatement.setInt(10, convertBool(route.isVissza()));
             preparedStatement.setInt(11, route.getCellId());
-            preparedStatement.setString(12,rendszam);
+            preparedStatement.setString(12, rendszam);
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a routes táblába írni");
@@ -319,11 +303,11 @@ public class DbModel {
         }
     }
 
-    public ArrayList getRoutes(String workDate,String rendszam) {      //A kiválasztott hónap utjait adja vissza
+    public ArrayList getRoutes(String workDate, String rendszam) {      //A kiválasztott hónap utjait adja vissza
         ArrayList<Route> routes = null;
-       // System.out.println(workDate);
+        // System.out.println(workDate);
         try {
-            String sqlQuery = "select * from routes where date like '" + workDate + "-%%'  and rendszam='"+rendszam+"' order by date;";
+            String sqlQuery = "select * from routes where date like '" + workDate + "-%%'  and rendszam='" + rendszam + "' order by date;";
 
             routes = new ArrayList<>();
             rs = createStatement.executeQuery(sqlQuery);
@@ -340,9 +324,8 @@ public class DbModel {
                 boolean backandforth = convertBool(rs.getInt("backandforth"));
                 int cellId = rs.getInt("cellId");
 
-
                 routes.add(new Route(routeId, date, priv, depart, arrive, client, fueling, spedometer, distance, backandforth, cellId));
-               // System.out.println(date);
+                // System.out.println(date);
             }
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
@@ -360,24 +343,28 @@ public class DbModel {
             throwables.printStackTrace();
         }
     }
+
     // a routes listából a havi összes tankolást adja vissza
-    public double getFueling(String workDate,String rendszam) {
-        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; ";  
-        return queryDoubleValueFromRoute(sqlQuery,"sum(fueling)");
+    public double getFueling(String workDate, String rendszam) {
+        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
+        return queryDoubleValueFromRoute(sqlQuery, "sum(fueling)");
     }
- // a routes listából a havi összes távolságot adja vissza
-    public int getSpedometer(String workDate,String rendszam) {
-        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; "; 
+    // a routes listából a havi összes távolságot adja vissza
+
+    public int getSpedometer(String workDate, String rendszam) {
+        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
         System.out.println(sqlQuery);
-        return queryIntValueFromRoute(sqlQuery,"sum(distance)");
+        return queryIntValueFromRoute(sqlQuery, "sum(distance)");
     }
- // a routes listából a havi összes távolságot adja vissza
+    // a routes listából a havi összes távolságot adja vissza
+
     public int getMaganut(String workDate, String rendszam) {
-        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='"+rendszam+"'; "; 
+        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
         System.out.println(sqlQuery);
-        return queryIntValueFromRoute(sqlQuery,"sum(distance)");
+        return queryIntValueFromRoute(sqlQuery, "sum(distance)");
     }
 // egy int értékkel tér vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
+
     public int queryIntValueFromRoute(String sqlQuery, String returnColumn) {
         int value = 0;
         try {
@@ -388,6 +375,7 @@ public class DbModel {
         }
         return value;
     }
+
     // egy double értéket ad vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
     public double queryDoubleValueFromRoute(String sqlQuery, String returnColumn) {
         double value = 0;
@@ -400,11 +388,12 @@ public class DbModel {
         return value;
     }
 // a legutolsó dátumot adja vissza
-    public String getDateOfLastRoute(){
-        String value=null ;
-        String sqlQuery = "select * from routes\n" +
-                "where routeid = (select max (routeid) from routes);\n" +
-                "; ";
+
+    public String getDateOfLastRoute() {
+        String value = null;
+        String sqlQuery = "select * from routes\n"
+                + "where routeid = (select max (routeid) from routes);\n"
+                + "; ";
         try {
             rs = createStatement.executeQuery(sqlQuery);
             value = rs.getString("date");
@@ -416,30 +405,29 @@ public class DbModel {
     }
 
     //     
-    public int getMaxKmFromMonth(String workDate){
-        String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '"+workDate+"-%%';";
-        return queryIntValueFromRoute(sqlQuery,"spedometer");
+    public int getMaxKmFromMonth(String workDate) {
+        String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '" + workDate + "-%%';";
+        return queryIntValueFromRoute(sqlQuery, "spedometer");
     }
-    
+
     /* Az összes tankolás az adott hónapban
      public double getFuelingMonth(String workDate){
         String sqlQuery = "SELECT sum(fueling) as value FROM routes where date like '"+workDate+"-%%';";
         return queryDoubleValueFromRoute(sqlQuery,"value");
     }*/
-
     public void updateRoute(Route route, int routeId) {
-        String sqlQuery = "update routes set " +
-                "date='" + route.getDatum() +"',"+
-                "private=" + convertBool(route.isMagan()) +","+
-                "depart='" + route.getIndulas() +"',"+
-                "arrive='" + route.getErkezes() +"',"+
-                "client='" + route.getUgyfel() +"',"+
-                "spedometer=" + route.getSpedometer() +","+
-                "fueling=" + route.getFueling() +","+
-                "distance=" + route.getTavolsag() +","+
-                "backandforth=" + convertBool(route.isVissza()) +","+
-                "cellid=" + route.getCellId() +" "+
-                "where routeid = " + routeId + ";";
+        String sqlQuery = "update routes set "
+                + "date='" + route.getDatum() + "',"
+                + "private=" + convertBool(route.isMagan()) + ","
+                + "depart='" + route.getIndulas() + "',"
+                + "arrive='" + route.getErkezes() + "',"
+                + "client='" + route.getUgyfel() + "',"
+                + "spedometer=" + route.getSpedometer() + ","
+                + "fueling=" + route.getFueling() + ","
+                + "distance=" + route.getTavolsag() + ","
+                + "backandforth=" + convertBool(route.isVissza()) + ","
+                + "cellid=" + route.getCellId() + " "
+                + "where routeid = " + routeId + ";";
         //System.out.println(sqlQuery);
 
         try {
@@ -450,7 +438,6 @@ public class DbModel {
         }
     }
 
-
     //distances táblához tartozó lekérdezések
     public void addDistance(String clientId1, String clientId2, int distance) {
         String sqlQuery = "insert into distances values (?,?,?)";
@@ -460,30 +447,32 @@ public class DbModel {
             preparedStatement.setString(2, clientId2);
             preparedStatement.setInt(3, distance);
             preparedStatement.execute();
-          //  System.out.println(sqlQuery);
+            //  System.out.println(sqlQuery);
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a Distance táblába írni írni");
             System.out.println("" + ex);
         }
     }
 
-    public Distance getDistance(String client1,String client2) {      // a distances listából két ügyfél távolságát adja vissza
-        Distance distance=new Distance(client1,client2);
+    public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
+        Distance distance = new Distance(client1, client2);
         String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
         try {
-            preparedStatement=conn.prepareStatement(sqlQuery);
-            rs =preparedStatement.executeQuery();
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            rs = preparedStatement.executeQuery();
 
             distance.setDistance(rs.getInt("distance"));
 
-            } catch (SQLException ex) {
-            System.out.println("Nem sikerűlt a Distances táblából olvasni!");;
+        } catch (SQLException ex) {
+            System.out.println("Nem sikerűlt a Distances táblából olvasni!");
+
         }
 
         return distance;
     }
+//Beállítja a távolságot a két meglévő helyszín között
 
-    public void setDistance(String clientid1, String clientid2, int distance) { //Beállítja a távolságot a két meglévő helyszín között
+    public void setDistance(String clientid1, String clientid2, int distance) {
         String sqlQuery = "insert into distance values (?,?,?)";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -497,6 +486,20 @@ public class DbModel {
         }
     }
 
+    public void updateDistance(String clientid1, String clientid2, int distance) {
+        String sqlQuery = "update distances set "
+                + "distance=" + distance + " "
+                + "where clientid1 = '" + clientid1 + "' and clientid2='" + clientid2 + "';";
+        //System.out.println(sqlQuery);
+
+        try {
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerűlt a distance táblát frissíteni");
+            System.out.println("" + ex);
+        }
+    }
 
     //  client táblához kapcsolódó lekérdezések
     public void addClient(String client, String clientnumber, String type, String factorynumber, int zipcode, String city, String address, Boolean exist, int maintinanceperyear, String field) {
@@ -528,6 +531,10 @@ public class DbModel {
         return queryClient("select * from clients where city || ' ' || address='" + value + "';");
     }
 
+    public Client getClientFromClientNumber(String value) {
+        return queryClient("select * from clients where clientnumber='" + value + "';");
+    }
+
     private Client queryClient(String sqlQuery) {      //visszaad egy ügyfelet
         Client client = null;
         try {
@@ -554,22 +561,22 @@ public class DbModel {
     }
 
     public void updateClient(Client client, String clientNumber) {
-        System.out.println("client:"+client);
-        System.out.println("cn:"+clientNumber);
-        String sqlQuery = "update clients set " +
-                "client='" + client.getClient() +"',"+
-                //"clientnumber='" + client.getClientNumber() +"',"+
-                "type='" + client.getType() + "',"+
-                "factorynumber='" + client.getFactoryNumber() +"',"+
-                "zipcode=" + client.getZipCode() +","+
-                "city='" + client.getCity() +"',"+
-                "address='" + client.getAddress() +"',"+
-                "exist=" + convertBool(client.getExist()) +","+
-                "maintenanceperyear=" + client.getMaintenancePerYear() +","+
-                "field='" + client.getField() + "' " +
-                "where clientnumber ='"+clientNumber+"';";
+        System.out.println("client:" + client);
+        System.out.println("cn:" + clientNumber);
+        String sqlQuery = "update clients set "
+                + "client='" + client.getClient() + "',"
+                + //"clientnumber='" + client.getClientNumber() +"',"+
+                "type='" + client.getType() + "',"
+                + "factorynumber='" + client.getFactoryNumber() + "',"
+                + "zipcode=" + client.getZipCode() + ","
+                + "city='" + client.getCity() + "',"
+                + "address='" + client.getAddress() + "',"
+                + "exist=" + convertBool(client.getExist()) + ","
+                + "maintenanceperyear=" + client.getMaintenancePerYear() + ","
+                + "field='" + client.getField() + "' "
+                + "where clientnumber ='" + clientNumber + "';";
 
-       System.out.println(sqlQuery);
+        System.out.println(sqlQuery);
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
@@ -577,7 +584,6 @@ public class DbModel {
             throwables.printStackTrace();
         }
     }
-
 
     public void delClient(String value) {
         String sqlQuery = "delete from clients where clientnumber='" + value + "'";
@@ -629,19 +635,19 @@ public class DbModel {
             preparedStatement1.setString(2, clientId2);
             preparedStatement1.setInt(3, distance);
             preparedStatement1.execute();
-         //   System.out.println(sqlQuery);
+            //   System.out.println(sqlQuery);
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a mysql distances táblába írni írni");
             System.out.println("" + ex);
         }
     }
 
-    public Distance getDistanceFromMySql(String client1,String client2) {      // a distances listából két ügyfél távolságát adja vissza
-        Distance distance=new Distance(client1,client2);
+    public Distance getDistanceFromMySql(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
+        Distance distance = new Distance(client1, client2);
         String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
         try {
-            preparedStatement1=conn1.prepareStatement(sqlQuery);
-            rs1 =preparedStatement1.executeQuery();
+            preparedStatement1 = conn1.prepareStatement(sqlQuery);
+            rs1 = preparedStatement1.executeQuery();
 
             distance.setDistance(rs1.getInt("distance"));
 
@@ -652,33 +658,29 @@ public class DbModel {
         return distance;
     }
 
-
-
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
     public int convertBool(Boolean value) {
         int convertedValue;
-        if (value)
+        if (value) {
             return 1;
-        else
+        } else {
             return 0;
+        }
     }
 
     private Boolean convertBool(int value) {
-        if (value == 1)
+        if (value == 1) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     public Boolean convertBool(String value) {
-        if (value.contentEquals("ok"))
+        if (value.contentEquals("ok")) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 }
-
-
-
-
-
