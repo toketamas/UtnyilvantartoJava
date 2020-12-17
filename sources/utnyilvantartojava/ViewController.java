@@ -132,16 +132,20 @@ public class ViewController implements Initializable {
     @FXML
     TextArea alertTextArea;
 
-    //textfildek
-    // Utnyilvántartó tab
+//textfildek
+// Utnyilvántartó tab
     @FXML
     TextField txtDepart;
     @FXML
     TextField txtArrive;
     @FXML
     TextField txtDistance;
-
-    // Beállítás tab
+    @FXML
+    TextField txtDate;
+    @FXML
+    TextField txtFueling;
+    
+// Beállítás tab
     @FXML
     TextField txfNev;
     @FXML
@@ -160,12 +164,34 @@ public class ViewController implements Initializable {
     TextField textZaro;
     @FXML
     TextField txfFogyaszt;
+   
+
+    @FXML
+    TextField txtBeallit;
+//Saját uticélok
+    @FXML
+    AnchorPane sajatUticelokPane;
+    @FXML 
+    TextField txtSajatElnev;
+    @FXML
+    TextField txtSajatEgyebAzon;
+    @FXML
+    TextField txtSajatIranyitoSzam;
+    @FXML
+    TextField txtSajatVaros;
+    @FXML
+    TextField txtSajatCim;
+    @FXML
+    Button btnSajatBev;
+    @FXML
+    Button btnSajatTorles;
+    @FXML
+    ComboBox cbSajat;
+    
+//Filebetöltés    
     @FXML
     TextField txtFile;
-    @FXML
-    TextField txtDate;
-    @FXML
-    TextField txtFueling;
+   
 
     @FXML
     RadioButton radioBtnTh;
@@ -224,6 +250,8 @@ public class ViewController implements Initializable {
     }
 
     public void start() {
+//!!!!!Letiltom a sajatUticelokPane-t addig amíg el nem készül a kód hozzá
+        sajatUticelokPane.setVisible(false);
 //mai dátum a DatePickerbe
         datePicker.setValue(LocalDate.now());
 //betölti a settings táblából az utolsó sort
