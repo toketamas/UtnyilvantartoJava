@@ -145,7 +145,7 @@ public class ViewController implements Initializable {
     @FXML
     TextField txtFueling;
     
-// Beállítás tab
+// Beállítások szakasz
     @FXML
     TextField txfNev;
     @FXML
@@ -168,7 +168,10 @@ public class ViewController implements Initializable {
 
     @FXML
     TextField txtBeallit;
-//Saját uticélok
+
+
+
+//Saját uticélok megadása szakasz
     @FXML
     AnchorPane sajatUticelokPane;
     @FXML 
@@ -392,7 +395,7 @@ public class ViewController implements Initializable {
             getDist();
         }
 
-//beállítás tab-on lévő gombok
+//A beállítás tab-on lévő gombok
 //beállításoknál az ok gomb
         if (btnSetOk.isArmed()) {
 //ha van írva valami ezekbe a textboxokba akkor úgy vesszük, hogy ki van töltve az
@@ -488,7 +491,7 @@ public class ViewController implements Initializable {
                 e.printStackTrace();
             }
         }
-//Kész gomb az út módosításnál
+//Mégse gomb az út módosításnál
         if (btnCancel.isArmed()) {
             startClient = startClientTemp;
             targetClient = targetClientTemp;
@@ -500,7 +503,7 @@ public class ViewController implements Initializable {
             setLabels();
         }
 // Törlés gomb az út módosításnál
-        if (btnDelete.isArmed()) {
+        if (btnDelete.isArmed()) {            
             observableList.remove(selectedRoute);
             db.delRoute(selectedRoute.getRouteId());
             setLabels();
@@ -508,7 +511,7 @@ public class ViewController implements Initializable {
             paneCorr.setVisible(false);
             chkBack.setSelected(false);
             chkPrivate.setSelected(false);
-            startClient = startClientTemp;
+            startClient = targetClientTemp;
             txtDepart.setText(startClient.getCity() + " " + startClient.getAddress());
             targetClient = targetClientTemp;
             if (targetClient != null) {
@@ -519,6 +522,7 @@ public class ViewController implements Initializable {
             paneNormal.setVisible(true);
             paneCorr.setVisible(false);
             selectedRoute = null;
+//Ha minden adatot töröltünk a táblából beállítja indulási helynek a telephelyet
             if (observableList.size() == 0) {
                 startClient = telephely;
                 targetClient = null;
@@ -530,6 +534,7 @@ public class ViewController implements Initializable {
             }
             settings.setZaro_km(settings.getElozo_zaro() + db.getSpedometer(workDate, settings.getRendszam()));
             db.updateSettings(settings, (settings.getRendszam() + workDate));
+            btnSave.setDisable(false);
 
         }
 //mentés gomb az út módősításánál

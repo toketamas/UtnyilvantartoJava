@@ -13,16 +13,19 @@ public class Route {
 
 // private LocalDate datum;
     private Integer routeId;
-    private final StringProperty datum;
-    private final StringProperty indulas;
-    private final StringProperty erkezes;
-    private final IntegerProperty tavolsag;
-    private final StringProperty ugyfel;
-    private final BooleanProperty magan;
-    private final BooleanProperty odaVissza;
-    private final IntegerProperty spedometer;
-    private final DoubleProperty fueling;
+    private StringProperty datum;
+    private StringProperty indulas;
+    private StringProperty erkezes;
+    private IntegerProperty tavolsag;
+    private StringProperty ugyfel;
+    private BooleanProperty magan;
+    private BooleanProperty odaVissza;
+    private IntegerProperty spedometer;
+    private DoubleProperty fueling;
     private int cellId;
+    private String induloUgyfel;
+
+    
 
     public Route(int routeId, String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int celId) {
         this.routeId=routeId;
@@ -36,6 +39,21 @@ public class Route {
         this.spedometer = new SimpleIntegerProperty(spedometer);
         this.fueling = new SimpleDoubleProperty(tankolas);
         this.cellId=celId;
+    }
+    
+    public Route(int routeId, String datum,Boolean magan, String indulas, String induloUgyfel, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int celId) {
+        this.routeId=routeId;
+        this.datum = new SimpleStringProperty(datum);
+        this.indulas = new SimpleStringProperty(indulas);
+        this.erkezes = new SimpleStringProperty(erkezes);
+        this.tavolsag = new SimpleIntegerProperty(tavolsag);
+        this.ugyfel = new SimpleStringProperty(ugyfel);
+        this.magan = new SimpleBooleanProperty(magan);
+        this.odaVissza = new SimpleBooleanProperty(odaVissza);
+        this.spedometer = new SimpleIntegerProperty(spedometer);
+        this.fueling = new SimpleDoubleProperty(tankolas);
+        this.cellId=celId;
+        this.induloUgyfel=induloUgyfel;
     }
 
     public Route(String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int cellId) {
@@ -185,6 +203,14 @@ public class Route {
 
     public int getCellId() {
         return cellId;
+    }
+    
+    public String getInduloUgyfel() {
+        return induloUgyfel;
+    }
+
+    public void setInduloUgyfel(String induloUgyfel) {
+        this.induloUgyfel = induloUgyfel;
     }
 
     public ArrayList<String> readFile(String path) {
