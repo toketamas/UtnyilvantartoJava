@@ -306,7 +306,8 @@ public class ViewController implements Initializable {
     public void runResume() {
         db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
         db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
-        System.out.println(db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()));
+        
+        
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -365,6 +366,10 @@ public class ViewController implements Initializable {
         table.scrollTo(table.getItems().size() - 1);
         setLabels();
         setText();
+        if(db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim())==0){
+            showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?",true,"err");
+            tabNyilv.setDisable(true);
+        }
     }
 
     @FXML

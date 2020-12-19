@@ -70,7 +70,7 @@ public class DbModel {
             System.out.println("Hiba! A távoli mysql server nem érhető el!");
             System.out.println("" + e);
             ViewController.mySqlActive = false;
-           /* try {
+            /* try {
                 conn1 = DriverManager.getConnection(URLMYSQL2, USERNAME_MYSQL, PASSWORD_MYSQL);
                 System.out.println("A kapcsolat létrejött a helyi mysql adatbázissal,");
                 ViewController.mySqlActive = true;
@@ -627,7 +627,8 @@ public class DbModel {
         }
         return clients;
     }
-     public void addDistanceToMySql(String clientId1, String clientId2, int distance) {
+
+    public void addDistanceToMySql(String clientId1, String clientId2, int distance) {
         String sqlQuery = "insert into distances  values (?,?,?)";
         try {
             preparedStatement1 = conn1.prepareStatement(sqlQuery);
@@ -642,60 +643,67 @@ public class DbModel {
         }
     }
 
-    public void addRegToMySql(String nev, String varos,String cim, String rendszam) {
-        String sqlQuery = "insert into felhasznalok  (nev,varos,cim,rendszam,engedelyezve,regisztracio,utolso_hozzaferes) values (?,?,?,?,?,?,?)";
+    public void addRegToMySql(String nev, String varos, String cim, String rendszam) {
+        String sqlQuery = "insert into felhasznalok  (nev,varos,cim,rendszam,regisztracio,utolso_hozzaferes,engedelyezve) values (?,?,?,?,?,?,?)";
         try {
-            preparedStatement1 = conn1.prepareStatement(sqlQuery);
-           // preparedStatement1.setInt(1, 0);
-            preparedStatement1.setString(1, nev);
-            preparedStatement1.setString(2, varos);
-            preparedStatement1.setString(3, cim);
-            preparedStatement1.setString(4, rendszam);
-            preparedStatement1.setInt(5, 1);
-            preparedStatement1.setString(6, LocalDate.now().toString());
-            preparedStatement1.setString(7, LocalDateTime.now().toString());            
-            preparedStatement1.execute();
-            System.out.println(LocalDateTime.now());
+            if (conn1 != null) {
+                preparedStatement1 = conn1.prepareStatement(sqlQuery);
+                preparedStatement1.setString(1, nev);
+                preparedStatement1.setString(2, varos);
+                preparedStatement1.setString(3, cim);
+                preparedStatement1.setString(4, rendszam);
+                preparedStatement1.setString(5, LocalDate.now().toString());
+                preparedStatement1.setString(6, LocalDateTime.now().toString());
+                preparedStatement1.setInt(7, 1);
+                preparedStatement1.execute();
+                System.out.println(LocalDateTime.now());
+            }
             //   System.out.println(sqlQuery);
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a mysql distances táblába írni írni");
             System.out.println("" + ex);
         }
     }
-    
-    public void updateRegMysql(String nev,String varos,String cim,String rendszam) {
+
+    public void updateRegMysql(String nev, String varos, String cim, String rendszam) {
         String sqlQuery = "update felhasznalok set "
-                
-                + "utolso_hozzaferes='" + LocalDateTime.now()+ "', "
-                + "rendszam='"+rendszam+"' "
-                + "where nev ='" + nev + "' and varos='"+varos+"' and cim='"+cim+"';";
+                + "utolso_hozzaferes='" + LocalDateTime.now() + "', "
+                + "rendszam='" + rendszam + "' "
+                + "where nev ='" + nev + "' and varos='" + varos + "' and cim='" + cim + "';";
 
         System.out.println(sqlQuery);
         try {
-            preparedStatement1 = conn1.prepareStatement(sqlQuery);
-            preparedStatement1.execute();
+            if (conn1 != null) {
+                preparedStatement1 = conn1.prepareStatement(sqlQuery);
+                preparedStatement1.execute();
+                System.out.println("A felhasnalok tábla frissítése sikeres.");
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            System.out.println("Nem sikerült a felhasznalok tábla frissítése.");
         }
     }
-    
-     public boolean checkRegMySql(String nev,String varos,String cim) { 
+
+    public int checkRegMySql(String nev, String varos, String cim) {
+        int result = 0;
+        String sqlQuery = "select * from felhasznalok where nev='" + nev + "' and varos='" + varos + "' and cim='" + cim + "';";
+        System.out.println(sqlQuery);
         
-        String sqlQuery = "select engedelyezve from felhasznalok where nev='" + nev.trim() + "' and varos='" + varos + "' and cim='"+cim+"';";
-         System.out.println(sqlQuery);
-        try {
-            preparedStatement1 = conn1.prepareStatement(sqlQuery);
-            rs1 = preparedStatement1.executeQuery();
-
-           return convertBool(rs1.getInt("engedelyezve"));
-
-        } catch (SQLException ex) {
-            System.out.println("Nem sikerűlt a mysql felhasznalok táblából olvasni!");;
-        }
-                
-        return false;
+            try {if (conn1 != null) {
+                preparedStatement1 = conn1.prepareStatement(sqlQuery);
+                rs1 = preparedStatement1.executeQuery();
+                if (rs1.next()) {
+                    result = rs1.getInt("engedelyezve");
+                }
+                System.out.println(result);}
+            } catch (SQLException ex) {
+                System.out.println("Nem sikerült a mysql felhasznalok táblából olvasni!");
+                System.out.println(ex);
+            }
+            return result;
+        
     }
-    
+
     public Distance getDistanceFromMySql(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
         Distance distance = new Distance(client1, client2);
         String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
@@ -711,8 +719,6 @@ public class DbModel {
 
         return distance;
     }
-
-   
 
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
     public int convertBool(Boolean value) {
