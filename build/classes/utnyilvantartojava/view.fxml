@@ -39,7 +39,7 @@
                     </columnResizePolicy>
                 </TableView>
                 <WebView id="WV" fx:id="WV" disable="false" layoutX="5.0" layoutY="612.0" maxHeight="924.0" maxWidth="1180" minHeight="13.0" minWidth="4.0" prefHeight="13.0" prefWidth="4.0" visible="false" />
-                <DatePicker id="datePicker" fx:id="datePicker" layoutX="71.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="136.0" showWeekNumbers="true" />
+                <DatePicker id="datePicker" fx:id="datePicker" layoutX="71.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="136.0" showWeekNumbers="true" />
                 <TextField id="txtDepart" fx:id="txtDepart" layoutX="14.0" layoutY="284.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="208.0" promptText="Indulás">
                     <font>
                         <Font name="System Bold" size="14.0" />
@@ -87,7 +87,7 @@
                 </TextField>
                 <Separator layoutX="18.0" layoutY="81.0" prefWidth="200.0" />
                 <Separator layoutX="13.0" layoutY="478.0" prefWidth="200.0" />
-                <SearchableComboBox id="cbClient" fx:id="cbClient" editable="true" layoutX="14.0" layoutY="181.0" onAction="#cboxTextChange" pickOnBounds="false" prefHeight="34.0" prefWidth="195.0">
+                <SearchableComboBox id="cbClient" fx:id="cbClient" editable="true" layoutX="14.0" layoutY="170.0" onAction="#cboxTextChange" pickOnBounds="false" prefHeight="45.0" prefWidth="195.0">
                     <cursor>
                         <!--Cursor fx:constant="DEFAULT" /-->
                     </cursor>
@@ -115,7 +115,10 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <TextField id="txtDate" fx:id="txtDate" layoutX="45.0" layoutY="47.0" prefHeight="26.0" prefWidth="86.0" promptText="ÉÉÉÉ.HH" text=" " />
+                <TextField id="txtDate" fx:id="txtDate" layoutX="45.0" layoutY="47.0" prefHeight="26.0" prefWidth="86.0" promptText="ÉÉÉÉ.HH" text=" ">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></TextField>
                 <Button id="btnReady" fx:id="btnReady" layoutX="180.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="27.0" prefWidth="52.0" text="Kész" />
                 <CheckBox id="chkBackToSites" fx:id="chkBackToSites" layoutX="16.0" layoutY="357.0" mnemonicParsing="false" onAction="#chkCheck" text="Érkezés a telephelyre" textFill="#1aa10e">
                     <font>
@@ -127,7 +130,7 @@
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <Label layoutX="18.0" layoutY="108.0" text="Dátum" textFill="#ca1b33">
+                <Label layoutX="18.0" layoutY="103.0" text="Dátum" textFill="#ca1b33">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
@@ -171,12 +174,12 @@
                 </Pane>
                 <Button id="btnMinus" fx:id="btnMinus" layoutX="12.0" layoutY="47.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="27.0" prefWidth="28.0" text="-" />
                 <Button id="btnPlus" fx:id="btnPlus" layoutX="136.0" layoutY="46.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="27.0" prefWidth="32.0" text="+" />
-            <Label layoutX="27.0" layoutY="161.0" text="Kezdd el begépelni a gépszámot" textFill="#f55f08">
+            <Label layoutX="27.0" layoutY="152.0" text="Kezdd el begépelni a gépszámot" textFill="#f55f08">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
             </Label>
-            <Separator layoutX="15.0" layoutY="156.0" prefWidth="200.0" />
+            <Separator layoutX="15.0" layoutY="145.0" prefWidth="200.0" />
             <Separator layoutX="17.0" layoutY="548.0" prefWidth="200.0" />
             <Label layoutX="76.0" layoutY="426.0" text="Távolság" textFill="#1017dd">
                <font>
@@ -231,15 +234,15 @@
                     <children>
                         <Button id="btnSetOk" fx:id="btnSetOk" layoutX="168.0" layoutY="447.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="70.0" text="Mentés" />
                         <Button id="btnSet" fx:id="btnSet" layoutX="62.0" layoutY="447.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="78.0" text="Beállítás" />
-                        <Button id="btnReadExcel" fx:id="btnReadExcel" disable="true" layoutX="601.0" layoutY="113.0" mnemonicParsing="false" onAction="#btnClick" text="Excel beolvasása" />
-                        <TextField id="txtFile" fx:id="txtFile" disable="true" layoutX="550.0" layoutY="204.0" prefHeight="26.0" prefWidth="384.0" />
-                        <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="772.0" layoutY="117.0" mnemonicParsing="false" onAction="#chkRadio" selected="true" text="Betöltés: File">
+                        <Button id="btnReadExcel" fx:id="btnReadExcel" layoutX="727.0" layoutY="151.0" mnemonicParsing="false" onAction="#btnClick" text="Excel beolvasása" />
+                        <TextField id="txtFile" fx:id="txtFile" disable="true" layoutX="550.0" layoutY="204.0" prefHeight="26.0" prefWidth="384.0" visible="false" />
+                        <RadioButton id="radioBtnFile" fx:id="radioBtnFile" disable="false" layoutX="772.0" layoutY="117.0" mnemonicParsing="false" onAction="#chkRadio" selected="true" text="Betöltés: File" visible="false">
                             
                             <toggleGroup>
                                 <ToggleGroup fx:id="radio" />
                             </toggleGroup>
                         </RadioButton>
-                        <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="772.0" layoutY="155.0" mnemonicParsing="false" onAction="#chkRadio" text="Betöltés: TeamHub" toggleGroup="$radio" />
+                        <RadioButton id="radioBtnTh" fx:id="radioBtnTh" disable="true" layoutX="772.0" layoutY="155.0" mnemonicParsing="false" onAction="#chkRadio" text="Betöltés: TeamHub" toggleGroup="$radio" visible="false" />
                         <AnchorPane id="setPane" fx:id="setPane" disable="true" layoutX="14.0" layoutY="45.0" prefHeight="366.0" prefWidth="308.0">
                             <children>
                                 <TextField id="txfNev" fx:id="txfNev" layoutX="135.0" layoutY="6.0" prefHeight="25.6" prefWidth="148.8" promptText="Név" text=" " />
@@ -336,42 +339,45 @@
                   </Label>
                   <AnchorPane id="sajatUticelokPane" fx:id="sajatUticelokPane" layoutX="360.0" layoutY="306.0" prefHeight="415.0" prefWidth="414.0">
                      <children>
-                        <TextField id="txtSajatIranyitoSzam" fx:id="txtSajatIranyitoSzam" layoutX="207.0" layoutY="123.0" prefHeight="25.0" prefWidth="175.0" />
-                        <TextField id="txtSajatVaros" fx:id="txtSajatVaros" layoutX="207.0" layoutY="157.0" prefHeight="25.0" prefWidth="175.0" />
+                        <TextField id="txtSajatIranyitoSzam" fx:id="txtSajatIranyitoSzam" layoutX="207.0" layoutY="154.0" prefHeight="25.0" prefWidth="175.0" />
+                        <TextField id="txtSajatVaros" fx:id="txtSajatVaros" layoutX="207.0" layoutY="188.0" prefHeight="25.0" prefWidth="175.0" />
                         <TextField id="txtSajatElnev" fx:id="txtSajatElnev" layoutX="207.0" layoutY="51.0" prefHeight="25.0" prefWidth="175.0" promptText="Így fog szerepelni a táblában " />
-                        <TextField id="txtSajatCim" fx:id="txtSajatCim" layoutX="207.0" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" />
+                        <TextField id="txtSajatCim" fx:id="txtSajatCim" layoutX="208.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" />
                         <Label layoutX="58.0" layoutY="55.0" text="Elnevezés (azonosító)" />
-                        <Label layoutX="59.0" layoutY="127.0" text="Irányítószám" />
-                        <Label layoutX="60.0" layoutY="161.0" text="Város" />
-                        <Label layoutX="60.0" layoutY="195.0" text="Cím" />
-                        <Label layoutX="60.0" layoutY="17.0" text="Itt adhatsz meg vagy törölhetsz saját uticélokat" textFill="#1259e3">
+                        <Label layoutX="58.0" layoutY="158.0" text="Irányítószám" />
+                        <Label layoutX="59.0" layoutY="192.0" text="Város" />
+                        <Label layoutX="59.0" layoutY="226.0" text="Cím" />
+                        <Label layoutX="63.0" layoutY="17.0" text="Itt adhatsz meg vagy törölhetsz saját uticélokat" textFill="#1259e3">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Button id="btnSajatBev" fx:id="btnSajatBev" layoutX="269.0" layoutY="241.0" mnemonicParsing="false" text="Bevitel" />
-                        <Label layoutX="58.0" layoutY="91.0" text="Egyéb azonosító" />
-                        <TextField id="txtSajatEgyebAzon" fx:id="txtSajatEgyebAzon" layoutX="207.0" layoutY="87.0" prefHeight="25.0" prefWidth="175.0" promptText="Táblában megjelenik " />
+                        <Button id="btnSajatBev" fx:id="btnSajatBev" layoutX="268.0" layoutY="272.0" mnemonicParsing="false" text="Bevitel" />
+                        <Label layoutX="58.0" layoutY="91.0" text="Ügyfél neve" />
+                        <TextField id="txtSajatEgyebUgyfel" fx:id="txtSajatEgyebUgyfel" layoutX="207.0" layoutY="87.0" prefHeight="25.0" prefWidth="175.0" promptText="Táblában megjelenik " />
                         <Label layoutX="391.0" layoutY="47.0" text="*">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="391.0" layoutY="154.0" text="*">
+                        <Label layoutX="391.0" layoutY="186.0" text="*">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="391.0" layoutY="187.0" text="*">
+                        <Label layoutX="391.0" layoutY="221.0" text="*">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ComboBox id="cbSajat" fx:id="cbSajat" layoutX="212.0" layoutY="294.0" prefHeight="25.0" prefWidth="165.0" promptText="Válassz" />
-                        <Button id="btnSajatTorles" fx:id="btnSajatTorles" layoutX="271.0" layoutY="340.0" mnemonicParsing="false" text="Törlés" />
-                        <Label layoutX="46.0" layoutY="298.0" text="Válaszd ki a törlendő elemet" />
+                        <ComboBox id="cbSajat" fx:id="cbSajat" layoutX="211.0" layoutY="325.0" prefHeight="25.0" prefWidth="165.0" promptText="Válassz" />
+                        <Button id="btnSajatTorles" fx:id="btnSajatTorles" layoutX="270.0" layoutY="371.0" mnemonicParsing="false" text="Törlés" />
+                        <Label layoutX="45.0" layoutY="329.0" text="Válaszd ki a törlendő elemet" />
+                        <TextField id="txtSajatEgyebAdat" fx:id="txtSajatEgyebAdat" layoutX="207.0" layoutY="121.0" prefHeight="25.0" prefWidth="175.0" />
+                        <Label layoutX="57.0" layoutY="126.0" text="Egyéb adat" />
                      </children>
                   </AnchorPane>
+                  <Label layoutX="517.0" layoutY="64.0" text="A fájl betöltés  az xls-ből 3-4 percig tart kb.:2350 sor.  Betöltés közben nem használható a program. &#10;                                                  Kérlek ne zárd be a megjelenő ablakot.&#10;" />
                     </children>
                 </AnchorPane>
             </content>
@@ -390,13 +396,13 @@
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="687.0" text="Verzió: 0.2.7">
+                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.3.0">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                  <Label layoutX="511.0" layoutY="662.0" text="© 2020 Tőke Tamás" />
-                  <TextArea id="txtHelp" fx:id="txtHelp" editable="false" layoutX="15.0" layoutY="40.0" prefHeight="595.0" prefWidth="1172.0" text="A program a google maps szolgáltatást használja a távolság kiszámításához, a számítás sebessége kízárólag attól függ,  hogy a Gmaps milyen hamar válaszol.&#10;&#10;A használat: &#10;         Első indításkor ki kell tölteni a megjelenő mezőket, ezeket az adatokat használja a program a távolságszámításhoz és az excel táblázat kitöltéséhez.&#10;         Válaszd ki balra a legfelső sorban a hónapot amivel dolgozni akarsz. Add meg az út dátumát, válaszd ki az ügyfelet a legrdülő listából. kattints a távolság gombra, rövid idő múlva megjelenik &#10;         a számított távolság a &quot;Távolság&quot; szövegmezőben.&#10;         Ha bejelölöd az oda vissza opciót akkor a visszautat is beilleszti a program a táblázatba. (Ezt egyenlőre főleg a telephelyről indulva és oda visszaérkezve érdemes használni).&#10;         Kattints a &quot;Bevitel&quot; gombra. &#10;&#10;         Ha magánhasználatot akarsz bevinni, be kell jelölnöd a &quot;Magánhasználat&quot; opciót. Csak a távolságot kell beírnod a &quot;Távolság&quot; szövegmezőbe és utána a &quot;Bevitel&quot; gombra kattintani.&#10;&#10;         Ha javítani akarsz a táblázat egy során: akkor a táblázatban a javítandó sorra kell kattintani, az adatok megjelennek a bal oldalon, a szövegmezőkben, javítsd ki amit szeretnél és kattints a &#10;         mentés  gombra. Törölheted is a sort a törlés gombbal. Ezek a funkciók ovatosan használandók mert hibát okozhat a megtett távolság számításában illetve olyan sorok keletkezhetnek&#10;         ahonnan nem a következö sorban megadott címhez vezet az út. Ha mégsem akarsz semmit javítani akkor kattints a &quot;Kész&quot; gombra.&#10;&#10;         Az &quot;Excel készítése&quot; gombra kattintva elkészíti az excel táblázatot elnevezi év_hónap_neved_rendszám_gkelsz.xlsx formátumban elmenti a program könyvtárába és megnyitja az excelben.&#10;&#10;         Az adatokat egy adatbázisba menti ami a program mappájában található. Az egyszer már kiszámított távolságokat is menti így azokat nem kell újra lekérni a Gmaps-tól. Aprogram mappájában &#10;         található fájlok szükségesek a futtatáshoz illetve mivel a program JAVA_FX-ben írtam szükség van JAVA futtatókörnyezetre. (JRE)&#10;&#10;A programot a saját munkám megkönnyítésére írtam, ha másnak is hasznos örülök. A program nincs kész sok hibát tartalmaz, de a fő funkciók működnek, ha hibát találsz kérlek írd meg nekem, és amint tudom kijavítom.&#10;&#10;Hibák: &#10;           Ha autót váltasz nem jól kezeli a rendszám megváltozását ez javítás alatt van, ebben az esetben pillanatnyilag le kell cserélni az adatbázist. &#10;           Egyenlőre a régebbi hónapok is szerkeszthetőek.&#10;           Néha bepipálva maradnak dolgok amiknek nem kellene, és bennt maradnak címek távolságok a szövegboxokban amikor nem kellene&#10;           Van olyan eset amikor letiltva marad a távolság gomb de nincs meg a távolság, ilyenkor a bevitelre kell kattintani dob egy hibát és lehet folytatni az adatbevitelt és fordítva is előfordul. &#10;&#10; Változások: &#10;            0.2.6: Kiírja az átlagfogyasztást az Útnyilvántartó lapon. &#10;            0.2.7: Ha javításnál módosítjuk a távolságot akkor menti az adatbázisba. Vissza lehet állítani a módosítás előtti értéket, ha ugyanitt a távolság gombra nyomunk és mentjük a kapott adatot.&#10;" wrapText="true">
+                  <Label layoutX="521.0" layoutY="662.0" text="© 2020 Tőke Tamás" />
+                  <TextArea id="txtHelp" fx:id="txtHelp" editable="false" layoutX="15.0" layoutY="40.0" prefHeight="595.0" prefWidth="1172.0" text="A program a google maps szolgáltatást használja a távolság kiszámításához, a számítás sebessége kízárólag attól függ,  hogy a Gmaps milyen hamar válaszol. &#10;&#10;A működéshez internet kapcsolat szükséges!&#10;&#10;A használat:  &#10;         Első indításkor ki kell tölteni a megjelenő mezőket, ezeket az adatokat használja a program a távolságszámításhoz és az excel táblázat kitöltéséhez.&#10;         Válaszd ki balra a legfelső sorban a hónapot amivel dolgozni akarsz. Add meg az út dátumát, válaszd ki az ügyfelet a legrdülő listából.  Ha elkezded beírni a gépszám vagy egyéb&#10;         azonosító részletét (Pl.: Ha a keresett gépszám DBD82220009 elég a 009) akkor megjelennek a legördülő listában a lehetséges találatok.  Kattints a távolság gombra, rövid idő múlva&#10;         megjelenik  a számított távolság a &quot;Távolság&quot; szövegmezőben.&#10;        &#10;         Ha bejelölöd az oda vissza opciót akkor a visszautat is beilleszti a program a táblázatba. (Ezt egyenlőre főleg a telephelyről indulva és oda visszaérkezve érdemes használni).&#10;         Kattints a &quot;Bevitel&quot; gombra. &#10;         &#10;         Ha magánhasználatot akarsz bevinni, be kell jelölnöd a &quot;Magánhasználat&quot; opciót. Csak a távolságot kell beírnod a &quot;Távolság&quot; szövegmezőbe és utána a &quot;Bevitel&quot; gombra kattintani.&#10;&#10;         Ha javítani akarsz a táblázat egy során: akkor a táblázatban a javítandó sorra kell kattintani, az adatok megjelennek a bal oldalon, a szövegmezőkben, javítsd ki amit szeretnél és kattints a &#10;         mentés  gombra. Ha megváltoztatod a Gmaps-tól kapott távolságot akkor a az általad megadott értéket menti az adatbázisba.  &#10;         &#10;        Az utolsó sort törölheted  a törlés gombbal. Ezek a funkciók ovatosan használandók mert hibát okozhat a megtett távolság számításában illetve olyan sorok keletkezhetnek&#10;         ahonnan nem a következö sorban megadott címhez vezet az út. Ha mégsem akarsz semmit javítani akkor kattints a &quot;Mégse&quot; gombra.&#10;&#10;         Az &quot;Excel készítése&quot; gombra kattintva elkészíti az excel táblázatot elnevezi év_hónap_neved_rendszám_gkelsz.xlsx formátumban elmenti a program könyvtárába és megnyitja az excelben.&#10;         &#10;         Beolvashatók az adatok egy excel fájlból (a számomra elérhető legutolsót mellékeltem), javaslom, hogy egyből töltsd is be mert a mellékelt adatbázis egy régebbi verzióból származik.&#10;         A Beállítás fülön az excel beolvasása gombra kattintva, ki kell választani az xls fájlt és követni a megjelenő utasításokat.  &#10;&#10;         Az adatokat egy adatbázisba menti ami a program mappájában található. Az egyszer már kiszámított távolságokat is menti így azokat nem kell újra lekérni a Gmaps-tól. A program &#10;         mappájában található fájlok szükségesek a futtatáshoz illetve mivel a program JAVA_FX-ben írtam szükség van JAVA futtatókörnyezetre. (JRE)&#10;&#10;A program nincs kész sok hibát tartalmaz, de a fő funkciók működnek, ha hibát találsz kérlek írd meg nekem, és amint tudom kijavítom.&#10;&#10;Általam ismert hibák: &#10;           Ha autót váltasz nem jól kezeli a rendszám megváltozását ez javítás alatt van, ebben az esetben vedd fel velem a kapcsolatot!&#10;           Egyenlőre a régebbi hónapok is szerkeszthetőek.&#10;           Néha bepipálva maradnak dolgok amiknek nem kellene, és bennt maradnak címek távolságok a szövegboxokban amikor nem kellene&#10;           Van olyan eset amikor letiltva marad a távolság gomb de nincs meg a távolság, ilyenkor a bevitelre kell kattintani dob egy hibát és lehet folytatni az adatbevitelt és fordítva is előfordul. &#10;&#10; Változások: &#10;            0.2.6: Kiírja az átlagfogyasztást az Útnyilvántartó lapon. &#10;            0.2.7: Ha javításnál módosítjuk a távolságot akkor menti az adatbázisba. Vissza lehet állítani a módosítás előtti értéket, ha ugyanitt a távolság gombra nyomunk és mentjük a kapott adatot.&#10;            0.3.0: Javíthatóak a címek adatbevitelnél, a javított cím kerül az adatbázisba, internet kapcsolat ellenőrzése, több kisebb hiba javítása. Az új adatok beolvashatóak xlsx fájlból. &#10;                      Be lehet írni a tankolást adatbevitel közben is, nem csak javítással.&#10;                  &#10;&#10;" wrapText="true">
                      <font>
                         <Font size="13.0" />
                      </font>
