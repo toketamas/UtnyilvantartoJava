@@ -115,7 +115,7 @@
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
-                <TextField id="txtDate" fx:id="txtDate" layoutX="46.0" layoutY="36.0" prefHeight="34.0" prefWidth="130.0" promptText="ÉÉÉÉ.HH" text=" ">
+                <TextField id="txtDate" fx:id="txtDate" layoutX="46.0" layoutY="36.0" prefHeight="34.0" prefWidth="130.0" promptText="ÉÉÉÉ.HH">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></TextField>
@@ -168,7 +168,7 @@
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
-                        <Button id="btnDistance" fx:id="btnDistance" layoutX="113.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság" textFill="RED">
+                        <Button id="btnDistance" fx:id="btnDistance" layoutX="113.0" layoutY="8.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság" textFill="#6500ff">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -199,7 +199,7 @@
                     <children>
                         <Button id="btnDelete" fx:id="btnDelete" layoutX="139.0" layoutY="5.0" mnemonicParsing="false" onAction="#btnClick" text="Törlés" textFill="#c60b0b">
                             <font>
-                                <Font size="18.0" />
+                                <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
                         <Button id="btnInsert" fx:id="btnInsert" disable="true" layoutX="78.0" layoutY="3.0" mnemonicParsing="false" text="Beszúrás" textFill="#04b224" visible="false">
@@ -209,17 +209,17 @@
                         </Button>
                         <Button id="btnCancel" fx:id="btnCancel" layoutX="136.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnClick" text="Mégse">
                             <font>
-                                <Font size="18.0" />
+                                <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
-                        <Button id="btnSave" fx:id="btnSave" layoutX="20.0" layoutY="5.0" mnemonicParsing="false" onAction="#btnClick" text="Mentés" textFill="#2a03ee">
+                        <Button id="btnSave" fx:id="btnSave" layoutX="20.0" layoutY="5.0" mnemonicParsing="false" onAction="#btnClick" text="Mentés" textFill="#086516">
                             <font>
-                                <Font size="18.0" />
+                                <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
-                        <Button id="btnDistance" fx:id="btnDistance1" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság" textFill="RED">
+                        <Button id="btnDistance" fx:id="btnDistance1" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnClick" text="Távolság" textFill="#6500ff">
                             <font>
-                                <Font size="18.0" />
+                                <Font name="System Bold" size="18.0" />
                             </font>
                         </Button>
                     </children>
