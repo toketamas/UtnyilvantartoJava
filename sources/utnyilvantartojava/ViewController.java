@@ -255,8 +255,9 @@ public class ViewController implements Initializable {
         sajatUticelokPane.setVisible(false);
 //mai dátum a DatePickerbe
         datePicker.setValue(LocalDate.now());
-        datePicker.setStyle(" -fx-font-size: 16; -fx-font-weight: bold; -fx-text-inner-color: DARKORANGE");
-        cbClient.setStyle(" -fx-font-size: 15; -fx-font-weight: bold; ");
+        datePicker.setStyle(" -fx-font-size: 17; -fx-font-weight: bold; -fx-text-inner-color: #B40431");
+        cbClient.setStyle(" -fx-font-size: 18; -fx-font-weight: bold; ");
+        txtDistance.setStyle("-fx-text-inner-color: #DF01D7");
 //betölti a settings táblából az utolsó sort
         settings = db.getLastSettings();
         ///System.out.println("utolsó út:" + db.getDateOfLastRoute());
@@ -329,7 +330,7 @@ public class ViewController implements Initializable {
 //telphelyről chheckbox bepipálása
         chkSites.setSelected(true);
 //combobox szöveg beállítása
-        cbClient.setValue("Válaszd ki az uticélt");
+        cbClient.setValue("Uticél");
 //betölti a WebView-ba a térképet
         WV.getEngine().load("https://www.google.hu/maps/");
 //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
@@ -557,7 +558,7 @@ public class ViewController implements Initializable {
                 targetClient = null;
                 txtArrive.clear();
                 txtDistance.clear();
-                cbClient.setValue("Válaszd ki az uticélt");
+                cbClient.setValue("Uticél");
 
                 /*if (targetClient != null) {
                 txtArrive.setText(targetClient.getCity() + " " + targetClient.getAddress());
@@ -575,7 +576,7 @@ public class ViewController implements Initializable {
                     txtArrive.clear();
                     txtDistance.clear();
                     txtDepart.setText(startClient.getClientNumber());
-                    cbClient.setValue("Válaszd ki az uticélt");
+                    cbClient.setValue("Uticél");
                     settings.setUtolso_ugyfel(telephely.getClientNumber());
                 }
                 settings.setZaro_km(settings.getElozo_zaro() + db.getSpedometer(workDate, settings.getRendszam()));
@@ -683,7 +684,7 @@ public class ViewController implements Initializable {
         txtDistance.clear();
         txtArrive.clear();
         txtFueling.clear();
-        cbClient.setValue("Válaszd ki az uticélt");
+        cbClient.setValue("Uticél");
     }
 //ez ad hozzá egy utat    
 
