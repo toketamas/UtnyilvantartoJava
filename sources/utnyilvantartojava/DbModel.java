@@ -99,7 +99,7 @@ public class DbModel {
             }
         }
 
-        try {
+        /*    try {
             rs = dbmeta.getTables(null, "APP", "ROUTES", null);
             if (!rs.next()) {
                 createStatement.execute("create table routes("
@@ -176,6 +176,30 @@ public class DbModel {
             }
         } catch (SQLException ex) {
             System.out.println("Hiba!");
+            System.out.println("" + ex);
+        }
+    }
+         */
+        //sajat_cimek tábla létrehozása
+        try {
+            rs = dbmeta.getTables(null, "APP", "CLIENTS", null);
+            if (!rs.next()) {
+                createStatement.execute(
+                        "CREATE TABLE sajat_cimek("
+                        + "client text,"
+                        + "clientnumber text primary key,"
+                        + "type text,factorynumber text,"
+                        + "zipcode integer,"
+                        + "city text,"
+                        + "address text,"
+                        + "exist integer,"
+                        + "maintenanceperyear integer,"
+                        + "field text);"
+                );
+                System.out.println("A sajat_cimek tábla létrehozva.");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Nem sikerült létrehozni a sajat_cimek táblát!");
             System.out.println("" + ex);
         }
     }
@@ -688,20 +712,22 @@ public class DbModel {
         int result = 0;
         String sqlQuery = "select * from felhasznalok where nev='" + nev + "' and varos='" + varos + "' and cim='" + cim + "';";
         System.out.println(sqlQuery);
-        
-            try {if (conn1 != null) {
+
+        try {
+            if (conn1 != null) {
                 preparedStatement1 = conn1.prepareStatement(sqlQuery);
                 rs1 = preparedStatement1.executeQuery();
                 if (rs1.next()) {
                     result = rs1.getInt("engedelyezve");
                 }
-                System.out.println(result);}
-            } catch (SQLException ex) {
-                System.out.println("Nem sikerült a mysql felhasznalok táblából olvasni!");
-                System.out.println(ex);
+                System.out.println(result);
             }
-            return result;
-        
+        } catch (SQLException ex) {
+            System.out.println("Nem sikerült a mysql felhasznalok táblából olvasni!");
+            System.out.println(ex);
+        }
+        return result;
+
     }
 
     public Distance getDistanceFromMySql(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
