@@ -172,9 +172,9 @@ public class ViewController implements Initializable {
     @FXML
     AnchorPane sajatUticelokPane;
     @FXML
-    TextField txtSajatElnev;
+    TextField txtSajatClient;
     @FXML
-    TextField txtSajatEgyebAzon;
+    TextField txtSajatUgyfel;
     @FXML
     TextField txtSajatEgyebAdat;
     @FXML
@@ -1232,7 +1232,7 @@ public class ViewController implements Initializable {
             db.addClient(telephely, false);
         }
 
-        Client diebold = db.getClient("DieboldNixdorf");
+        Client diebold = db.getSajatClient("DieboldNixdorf");
         if (diebold == null) {
             diebold = new Client(
                     "DieboldNixdorf",
@@ -1245,12 +1245,13 @@ public class ViewController implements Initializable {
                     true,
                     0,
                     "DieboldNixdorf");
+            db.addClient(diebold, true);
             db.addClient(diebold, false);
         }
 
         Client magan = db.getClient("Magánhasználat");
         if (magan == null) {
-           magan= new Client(
+            magan = new Client(
                     "Magánhasználat",
                     "Magánhasználat",
                     "Magánhasználat",
@@ -1260,9 +1261,9 @@ public class ViewController implements Initializable {
                     "Magánhasználat",
                     true,
                     0,
-                    "Magánhasználat"                    
+                    "Magánhasználat"
             );
-           db.addClient(magan,false);
+            db.addClient(magan, false);
         }
     }
 //Elkészíti az excel táblát
@@ -1518,27 +1519,29 @@ public class ViewController implements Initializable {
     }
 
     public void addSajatCim() {
-        
+
         int zipcode;
         try {
             zipcode = Integer.parseInt(txtSajatIranyitoSzam.getText());
         } catch (NumberFormatException ex) {
             zipcode = 0;
         }
-        
-        Client sajatClient=new Client(
-        txtSajatElnev.getText(),
-        txtSajatEgyebAzon.getText(),
-        txtSajatEgyebAdat.getText(),
-        txtSajatElnev.getText(), 
-        zipcode,
-        txtSajatVaros.getText(),
-        txtSajatCim.getText(),        
-        true,
-        0,
-        settings.getNev());       
-        txtSajatEgyebAzon.clear();
-        txtSajatElnev.clear();
+        String sajatUgyfel=txtSajatUgyfel.getText();
+        if(sajatUgyfel.trim().length()==0)
+            sajatUgyfel=txtSajatClient.getText();
+        Client sajatClient = new Client(
+                txtSajatClient.getText(),
+                sajatUgyfel,
+                txtSajatEgyebAdat.getText(),
+                txtSajatClient.getText(),
+                zipcode,
+                txtSajatVaros.getText(),
+                txtSajatCim.getText(),
+                true,
+                0,
+                settings.getNev());
+        txtSajatUgyfel.clear();
+        txtSajatClient.clear();
         txtSajatEgyebAdat.clear();
         txtSajatVaros.clear();
         txtSajatIranyitoSzam.clear();
@@ -1550,12 +1553,14 @@ public class ViewController implements Initializable {
         cbSajat.getItems().clear();
         cbSajat.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().clear();
+        cbClient.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().addAll(db.getAllClient(false));
     }
 
     public void delSajatCim() {
-        db.delClient(cbSajat.getValue().toString(), true);
-        db.delClient(cbSajat.getValue().toString(), false);
+        String value = cbSajat.getValue().toString();
+        db.delClient(value, true);
+        db.delClient(value, false);
         cbSajat.getItems().clear();
         cbSajat.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().clear();

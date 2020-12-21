@@ -468,6 +468,10 @@ public class DbModel {
     public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
     }
+    
+    public Client getSajatClient(String value) {
+        return queryClient("select * from sajat_cimek where clientnumber='" + value + "';");
+    }
 
     public Client getClientFromAddress(String value) {
         return queryClient("select * from clients where city || ' ' || address='" + value + "';");
