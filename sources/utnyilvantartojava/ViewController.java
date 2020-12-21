@@ -1215,25 +1215,10 @@ public class ViewController implements Initializable {
     }
 
     private void checkSpecialClients() {
-        Client telephely = db.getClient("telephely");
+        Client telephely;
+        telephely = db.getClient("telephely");
         if (telephely == null) {
-            db.addClient(
-                    "telephely",
-                    "telephely",
-                    "telephely",
-                    "telephely",
-                    0,
-                    settings.getVaros(),
-                    settings.getCim(),
-                    true,
-                    0,
-                    settings.getNev(),
-                    false
-            );
-        }
-        Client diebold = db.getClient("DieboldNixdorf");
-        if (diebold == null) {
-            db.addClient(
+            telephely = new Client(
                     "DieboldNixdorf",
                     "DieboldNixdorf",
                     "telephely",
@@ -1243,14 +1228,29 @@ public class ViewController implements Initializable {
                     "Lőrinci út 59-61",
                     true,
                     0,
+                    "DieboldNixdorf");
+            db.addClient(telephely, false);
+        }
+
+        Client diebold = db.getClient("DieboldNixdorf");
+        if (diebold == null) {
+            diebold = new Client(
                     "DieboldNixdorf",
-                     false
-            );
+                    "DieboldNixdorf",
+                    "telephely",
+                    "telephely",
+                    2220,
+                    "Vecsés",
+                    "Lőrinci út 59-61",
+                    true,
+                    0,
+                    "DieboldNixdorf");
+            db.addClient(diebold, false);
         }
 
         Client magan = db.getClient("Magánhasználat");
         if (magan == null) {
-            db.addClient(
+           magan= new Client(
                     "Magánhasználat",
                     "Magánhasználat",
                     "Magánhasználat",
@@ -1260,9 +1260,9 @@ public class ViewController implements Initializable {
                     "Magánhasználat",
                     true,
                     0,
-                    "Magánhasználat",
-                    false
+                    "Magánhasználat"                    
             );
+           db.addClient(magan,false);
         }
     }
 //Elkészíti az excel táblát
@@ -1518,14 +1518,7 @@ public class ViewController implements Initializable {
     }
 
     public void addSajatCim() {
-        String clientNumber = txtSajatElnev.getText();
-        String clientS=""; //txtSajatEgyebAzon.getText();
-        String type = txtSajatEgyebAdat.getText();
-        String city = txtSajatVaros.getText();
-        String address = txtSajatCim.getText();
-        String factoryNumber = clientNumber;
-        boolean exist = true;
-        int maintinancePerYear = 0;
+        
         int zipcode;
         try {
             zipcode = Integer.parseInt(txtSajatIranyitoSzam.getText());
@@ -1533,18 +1526,27 @@ public class ViewController implements Initializable {
             zipcode = 0;
         }
         
-        System.out.println(txtSajatEgyebAzon.getText());
-        System.out.println(clientS);
+        Client sajatClient=new Client(
+        txtSajatElnev.getText(),
+        txtSajatEgyebAzon.getText(),
+        txtSajatEgyebAdat.getText(),
+        txtSajatElnev.getText(), 
+        zipcode,
+        txtSajatVaros.getText(),
+        txtSajatCim.getText(),        
+        true,
+        0,
+        settings.getNev());       
         txtSajatEgyebAzon.clear();
         txtSajatElnev.clear();
         txtSajatEgyebAdat.clear();
-        txtSajatVaros.clear();        
-        txtSajatIranyitoSzam.clear();       
+        txtSajatVaros.clear();
+        txtSajatIranyitoSzam.clear();
         txtSajatCim.clear();
-       
+
         String field = settings.getNev();
-        db.addClient(clientS, clientNumber, type, factoryNumber, zipcode, city, address, exist, maintinancePerYear, field, true);
-        db.addClient(clientS, clientNumber, type, factoryNumber, zipcode, city, address, exist, maintinancePerYear, field, false);
+        db.addClient(sajatClient, true);
+        db.addClient(sajatClient, false);
         cbSajat.getItems().clear();
         cbSajat.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().clear();

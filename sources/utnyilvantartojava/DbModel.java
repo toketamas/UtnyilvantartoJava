@@ -70,15 +70,6 @@ public class DbModel {
             System.out.println("Hiba! A távoli mysql server nem érhető el!");
             System.out.println("" + e);
             ViewController.mySqlActive = false;
-            /* try {
-                conn1 = DriverManager.getConnection(URLMYSQL2, USERNAME_MYSQL, PASSWORD_MYSQL);
-                System.out.println("A kapcsolat létrejött a helyi mysql adatbázissal,");
-                ViewController.mySqlActive = true;
-            } catch (Exception ex) {
-                System.out.println("Hiba! A helyi mysql server nem érhető el!");
-                System.out.println("" + ex);
-                ViewController.mySqlActive = false;
-            }*/
             System.out.println(ViewController.mySqlActive);
         }
 
@@ -447,7 +438,7 @@ public class DbModel {
 
     //  client táblához kapcsolódó lekérdezések
     //ha a sajatKliens=true a sajat_cimek táblába teszi ha fals akkor a clients táblába
-    public void addClient(String client, String clientnumber, String type, String factorynumber, int zipcode, String city, String address, Boolean exist, int maintinanceperyear, String field, boolean sajatKliens) {
+    public void addClient(Client client, boolean sajatKliens) {
         String sqlQuery;
         if (sajatKliens) {
             sqlQuery = "insert into sajat_cimek values (?,?,?,?,?,?,?,?,?,?)";
@@ -457,16 +448,16 @@ public class DbModel {
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             System.out.println(sqlQuery);
-            preparedStatement.setString(1, client);
-            preparedStatement.setString(2, clientnumber);
-            preparedStatement.setString(3, type);
-            preparedStatement.setString(4, factorynumber);
-            preparedStatement.setInt(5, zipcode);
-            preparedStatement.setString(6, city);
-            preparedStatement.setString(7, address);
-            preparedStatement.setInt(8, convertBool(exist));
-            preparedStatement.setInt(9, maintinanceperyear);
-            preparedStatement.setString(10, field);
+            preparedStatement.setString(1, client.getClient());
+            preparedStatement.setString(2, client.getClientNumber());
+            preparedStatement.setString(3, client.getType());
+            preparedStatement.setString(4, client.getFactoryNumber());
+            preparedStatement.setInt(5, client.getZipCode());
+            preparedStatement.setString(6, client.getCity());
+            preparedStatement.setString(7, client.getAddress());
+            preparedStatement.setInt(8, convertBool(client.getExist()));
+            preparedStatement.setInt(9, client.getMaintenancePerYear());
+            preparedStatement.setString(10, client.getField());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a clients táblába írni");
