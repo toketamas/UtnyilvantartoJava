@@ -176,6 +176,8 @@ public class ViewController implements Initializable {
     @FXML
     TextField txtSajatEgyebAzon;
     @FXML
+    TextField txtSajatEgyebAdat;
+    @FXML
     TextField txtSajatIranyitoSzam;
     @FXML
     TextField txtSajatVaros;
@@ -245,12 +247,13 @@ public class ViewController implements Initializable {
 
 //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         start();
     }
 //betüméret betüszín beállítása ezeknél az elemeknél  a scene builderben nem lehetséges    
-    public void setStyle(){
-        
+
+    public void setStyle() {
+
         datePicker.setStyle(" -fx-font-size: 17; -fx-font-weight: bold; -fx-text-inner-color: #B40431");
         cbClient.setStyle(" -fx-font-size: 18; -fx-font-weight: bold; ");
         txtDistance.setStyle("-fx-text-inner-color: #DF01D7");
@@ -258,12 +261,12 @@ public class ViewController implements Initializable {
 
     public void start() {
         db = new DbModel();
-        
+        setStyle();
         //!!!!!Letiltom a sajatUticelokPane-t addig amíg el nem készül a kód hozzá
         //sajatUticelokPane.setVisible(false);
 //mai dátum a DatePickerbe
         datePicker.setValue(LocalDate.now());
-        
+
 //betölti a settings táblából az utolsó sort
         settings = db.getLastSettings();
         ///System.out.println("utolsó út:" + db.getDateOfLastRoute());
@@ -364,8 +367,12 @@ public class ViewController implements Initializable {
         }
 //letiltja az indulás textboxot mivel a beállított érték ahonnan indulni kell mert előzőleg itt álltunk az autóval
         txtDepart.setEditable(false);
-//hozzáadja a combobok listájához az ügyfeleket az adatbázisból
-        cbClient.getItems().addAll(db.getAllClient());
+//hozzáadja a combobox listájához az ügyfeleket és a saját címeket az adatbázisból
+        cbClient.getItems().addAll(db.getAllClient(true));
+        cbClient.getItems().addAll(db.getAllClient(false));
+//hozzáadja a cb sajat comboboxhoz a saját címeket        
+        cbSajat.getItems().addAll(db.getAllClient(true));
+
 //betölti az összes lehetséges várost az érkezés textbox listájába 
         fillField(txtArrive, db.getAllCitys());
 //betölti az összes lehetséges várost az indulás textbox listájába
@@ -392,7 +399,7 @@ public class ViewController implements Initializable {
 //távolság engedélyezés
             btnDistance.setDisable(false);
             //chkBack.setSelected(false);
-            
+
 //megvizsgálja, hogy az aktuális dátum egyezik-e a hónappal amivel dolgozunk
             if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
                 insertRoute();
@@ -400,7 +407,7 @@ public class ViewController implements Initializable {
                 showAlert("A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
             }
-            
+
         }
 //lekéri a távolságot
         if (btnDistance.isArmed()) {
@@ -409,6 +416,14 @@ public class ViewController implements Initializable {
 //lekéri a távolságot a sor javítása közben
         if (btnDistance1.isArmed()) {
             getDist();
+        }
+
+        if (btnSajatBev.isArmed()) {
+            addSajatCim();
+        }
+
+        if (btnSajatTorles.isArmed()) {
+            delSajatCim();
         }
 
 //A beállítás tab-on lévő gombok
@@ -483,7 +498,7 @@ public class ViewController implements Initializable {
 
         if (btnReadExcel.isArmed()) {
             //btnReadExcel.setDisable(true);
-            if(btnReadExcel.getText()=="Kész"){
+            if (btnReadExcel.getText() == "Kész") {
                 //btnReadExcel.setDisable(false);
                 btnReadExcel.setText("Excel beolvasása");
                 tabNyilv.setDisable(false);
@@ -491,21 +506,21 @@ public class ViewController implements Initializable {
                 start();
                 selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(0);
-            }else{
-            
-            db.conn.close();            
-            btnReadExcel.setText("Kész");
-            tabNyilv.setDisable(true);
-            try {
-                Runtime run = Runtime.getRuntime();
-                run.exec("cmd /c start ./adatbeolvaso/Karbantart.exe /K ");
-                //run.wait();
-               
-            } catch (Exception e) {
-                System.out.println("Nem érhető el a fájl ! ");
-                e.printStackTrace();
-            }
-            
+            } else {
+
+                db.conn.close();
+                btnReadExcel.setText("Kész");
+                tabNyilv.setDisable(true);
+                try {
+                    Runtime run = Runtime.getRuntime();
+                    run.exec("cmd /c start ./adatbeolvaso/Karbantart.exe /K ");
+                    //run.wait();
+
+                } catch (Exception e) {
+                    System.out.println("Nem érhető el a fájl ! ");
+                    e.printStackTrace();
+                }
+
             }
         }
 
@@ -645,7 +660,7 @@ public class ViewController implements Initializable {
 
     public void updateDistance(Route selectedRoute, String elozoUgyfel) {
 // mivel a Route objektum gépszám+" "+ügyfél formátumban tárolja az ügyfél adatot le kell vágni a gépszámot
-        String gepszam=selectedRoute.getUgyfel();
+        String gepszam = selectedRoute.getUgyfel();
         if (selectedRoute.getUgyfel().contains(" ")) {
             int index = selectedRoute.getUgyfel().indexOf(' ');
             gepszam = selectedRoute.getUgyfel().substring(0, index);
@@ -710,7 +725,7 @@ public class ViewController implements Initializable {
 // ez egy visszautat ad hozzá, ez előtt van a listában egy odaút
 
     public void backRoute() {
-        fueling=0.0;
+        fueling = 0.0;
         observableList.add(
                 new Route(
                         date,
@@ -736,11 +751,12 @@ public class ViewController implements Initializable {
 //dátum beolvasás
         //fueling=0.0;
 //ha üres a txtFueling  akkor a parseDouble kiakad ezért akkor 0.0 éréküvé tesszük        
-        String fueltext=txtFueling.getText();
-        if(fueltext.isEmpty())
-            fueltext="0.0";
-        fueling=Double.parseDouble(checkFueling(fueltext));
-              
+        String fueltext = txtFueling.getText();
+        if (fueltext.isEmpty()) {
+            fueltext = "0.0";
+        }
+        fueling = Double.parseDouble(checkFueling(fueltext));
+
         date = datePicker.getValue().toString();
 //kivételkezelés a parseInt miatt itt olvassa be a távolságot a textboxból
         try {
@@ -751,7 +767,7 @@ public class ViewController implements Initializable {
 //ha a magánút be van pipálva
             if (chkPrivate.isSelected()) {
 //hozzáad egy magánutat
-                privateRoute();               
+                privateRoute();
 //ha be van pipélva az oda-vissza
             } else if (chkBack.isSelected()) {
 //hozzáadja az utat a listához   
@@ -825,14 +841,14 @@ public class ViewController implements Initializable {
             System.out.println("beírtam");
         }
 
-       /* Distance start1 = db.getDistanceFromMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        /* Distance start1 = db.getDistanceFromMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient));
         Distance target1 = db.getDistanceFromMySql(getClientFullAddress(targetClient), getClientFullAddress(startClient));
         if (start1.getDistance() == 0 && target1.getDistance() == 0) {
             db.addDistanceToMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
             btnBev.setDisable(false);
             btnDistance.setDisable(true);
         }
-        */
+         */
     }
 //Távolság lekérése
 
@@ -904,8 +920,6 @@ public class ViewController implements Initializable {
         }
     }
 
-
-   
     @FXML
     private void chkRadio(ActionEvent event) {
         if (radioBtnTh.isSelected()) {
@@ -1050,12 +1064,11 @@ public class ViewController implements Initializable {
         maganCol.setPrefWidth(60);
         maganCol.styleProperty();
         maganCol.setResizable(false);
-
         maganCol.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("magan"));
-
         odaVisszaCol = new TableColumn("Oda-V.");
         odaVisszaCol.setPrefWidth(55);
         odaVisszaCol.setResizable(false);
+
         odaVisszaCol.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("vissza"));
 
         tankolCol = new TableColumn("KmÓ");
@@ -1069,13 +1082,13 @@ public class ViewController implements Initializable {
         spedometerCol.setCellValueFactory(new PropertyValueFactory<Route, Double>("fueling"));
 
         indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
-        indCol.setPrefWidth(220);        //oszlop min szélesség beállítása 200 pixelre
+        indCol.setPrefWidth(210);        //oszlop min szélesség beállítása 200 pixelre
         indCol.setResizable(false);
         indCol.setEditable(true);
         indCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
 
         erkCol = new TableColumn("Érkezés");
-        erkCol.setPrefWidth(220);
+        erkCol.setPrefWidth(210);
         erkCol.setResizable(false);
         erkCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("erkezes"));
 
@@ -1096,6 +1109,7 @@ public class ViewController implements Initializable {
             tableSelected();
         });
     }
+
 // Ha a táblában kiválasztunk egy sort
 // ide kerül a kiválasztott sor indexe
     int selectedItemIndex;
@@ -1118,7 +1132,7 @@ public class ViewController implements Initializable {
         chkPrivate.setSelected(selectedRoute.isMagan());
         selectedClientSpedometer = selectedRoute.getSpedometer();
         selectedClientOdaVissza = selectedRoute.isVissza();
-
+        chkBack.setSelected(selectedRoute.isVissza());
         txtFueling.setText(String.valueOf(selectedRoute.getFueling()));
         startClientTemp = startClient;
         targetClientTemp = targetClient;
@@ -1213,7 +1227,8 @@ public class ViewController implements Initializable {
                     settings.getCim(),
                     true,
                     0,
-                    settings.getNev()
+                    settings.getNev(),
+                    false
             );
         }
         Client diebold = db.getClient("DieboldNixdorf");
@@ -1228,12 +1243,11 @@ public class ViewController implements Initializable {
                     "Lőrinci út 59-61",
                     true,
                     0,
-                    "DieboldNixdorf"
+                    "DieboldNixdorf",
+                     false
             );
         }
 
-       
- 
         Client magan = db.getClient("Magánhasználat");
         if (magan == null) {
             db.addClient(
@@ -1246,7 +1260,8 @@ public class ViewController implements Initializable {
                     "Magánhasználat",
                     true,
                     0,
-                    "Magánhasználat"
+                    "Magánhasználat",
+                    false
             );
         }
     }
@@ -1501,4 +1516,49 @@ public class ViewController implements Initializable {
         }
         return fuel;
     }
+
+    public void addSajatCim() {
+        String clientNumber = txtSajatElnev.getText();
+        String clientS=""; //txtSajatEgyebAzon.getText();
+        String type = txtSajatEgyebAdat.getText();
+        String city = txtSajatVaros.getText();
+        String address = txtSajatCim.getText();
+        String factoryNumber = clientNumber;
+        boolean exist = true;
+        int maintinancePerYear = 0;
+        int zipcode;
+        try {
+            zipcode = Integer.parseInt(txtSajatIranyitoSzam.getText());
+        } catch (NumberFormatException ex) {
+            zipcode = 0;
+        }
+        
+        System.out.println(txtSajatEgyebAzon.getText());
+        System.out.println(clientS);
+        txtSajatEgyebAzon.clear();
+        txtSajatElnev.clear();
+        txtSajatEgyebAdat.clear();
+        txtSajatVaros.clear();        
+        txtSajatIranyitoSzam.clear();       
+        txtSajatCim.clear();
+       
+        String field = settings.getNev();
+        db.addClient(clientS, clientNumber, type, factoryNumber, zipcode, city, address, exist, maintinancePerYear, field, true);
+        db.addClient(clientS, clientNumber, type, factoryNumber, zipcode, city, address, exist, maintinancePerYear, field, false);
+        cbSajat.getItems().clear();
+        cbSajat.getItems().addAll(db.getAllClient(true));
+        cbClient.getItems().clear();
+        cbClient.getItems().addAll(db.getAllClient(false));
+    }
+
+    public void delSajatCim() {
+        db.delClient(cbSajat.getValue().toString(), true);
+        db.delClient(cbSajat.getValue().toString(), false);
+        cbSajat.getItems().clear();
+        cbSajat.getItems().addAll(db.getAllClient(true));
+        cbClient.getItems().clear();
+        cbClient.getItems().addAll(db.getAllClient(false));
+
+    }
+
 }

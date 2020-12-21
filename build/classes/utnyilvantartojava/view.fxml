@@ -22,7 +22,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <Tab id="tabNyilv" fx:id="tabNyilv" closable="false" text="Útnyilvántartó">
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1200.0">
@@ -39,7 +39,6 @@
                     </columnResizePolicy>
                 </TableView>
                 <WebView id="WV" fx:id="WV" disable="false" layoutX="5.0" layoutY="612.0" maxHeight="924.0" maxWidth="1180" minHeight="13.0" minWidth="4.0" prefHeight="13.0" prefWidth="4.0" visible="false" />
-                <DatePicker id="datePicker" fx:id="datePicker" layoutX="76.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="145.0" showWeekNumbers="true" />
                 <TextField id="txtDepart" fx:id="txtDepart" layoutX="14.0" layoutY="284.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="208.0" promptText="Indulás">
                     <font>
                         <Font name="System Bold" size="14.0" />
@@ -65,11 +64,6 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <CheckBox id="chkSites" fx:id="chkSites" layoutX="16.0" layoutY="253.0" mnemonicParsing="false" onAction="#chkCheck" text="Indulás a telephelyről" textFill="#1aa10e">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </CheckBox>
                 <CheckBox id="chkBack" fx:id="chkBack" layoutX="29.0" layoutY="488.0" mnemonicParsing="false" text="Oda - vissza" textFill="#0e6d72">
                     <font>
                         <Font name="System Bold" size="14.0" />
@@ -87,6 +81,11 @@
                 </TextField>
                 <Separator layoutX="18.0" layoutY="81.0" prefWidth="200.0" />
                 <Separator layoutX="13.0" layoutY="478.0" prefWidth="200.0" />
+                <TextField id="txtDate" fx:id="txtDate" layoutX="46.0" layoutY="36.0" prefHeight="34.0" prefWidth="130.0" promptText="ÉÉÉÉ.HH">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></TextField>
+                <DatePicker id="datePicker" fx:id="datePicker" layoutX="76.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="145.0" showWeekNumbers="true" />
                 <SearchableComboBox id="cbClient" fx:id="cbClient" editable="true" layoutX="7.0" layoutY="170.0" onAction="#cboxTextChange" pickOnBounds="false" prefHeight="45.0" prefWidth="214.0">
                     <cursor>
                         <!--Cursor fx:constant="DEFAULT" /-->
@@ -95,6 +94,11 @@
                         <Insets />
                     </opaqueInsets>
                 </SearchableComboBox>
+                <CheckBox id="chkSites" fx:id="chkSites" layoutX="16.0" layoutY="253.0" mnemonicParsing="false" onAction="#chkCheck" text="Indulás a telephelyről" textFill="#1aa10e">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </CheckBox>
                 <Label layoutX="158.0" layoutY="457.0" text="Km" textFill="#a405a6">
                     <font>
                         <Font name="System Bold" size="14.0" />
@@ -115,10 +119,6 @@
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
-                <TextField id="txtDate" fx:id="txtDate" layoutX="46.0" layoutY="36.0" prefHeight="34.0" prefWidth="130.0" promptText="ÉÉÉÉ.HH">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font></TextField>
                 <Button id="btnReady" fx:id="btnReady" layoutX="226.0" layoutY="41.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="27.0" prefWidth="52.0" text="Kész">
                <font>
                   <Font size="14.0" />
@@ -235,7 +235,7 @@
             <content>
                 <AnchorPane id="btnReadExcel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <Button id="btnSetOk" fx:id="btnSetOk" layoutX="168.0" layoutY="447.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="70.0" text="Mentés" />
+                        <Button id="btnSetOk" fx:id="btnSetOk" layoutX="168.0" layoutY="447.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="70.0" text="Mentés" textFill="#0c9a0c" />
                         <Button id="btnSet" fx:id="btnSet" layoutX="62.0" layoutY="447.0" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="78.0" text="Beállítás" />
                         <Button id="btnReadExcel" fx:id="btnReadExcel" layoutX="727.0" layoutY="151.0" mnemonicParsing="false" onAction="#btnClick" text="Excel beolvasása" />
                         <TextField id="txtFile" fx:id="txtFile" disable="true" layoutX="550.0" layoutY="204.0" prefHeight="26.0" prefWidth="384.0" visible="false" />
@@ -317,14 +317,14 @@
                         </Label>
                             </children>
                         </AnchorPane>
-                        <Label layoutX="520.0" layoutY="19.0" text="Itt olvashatod be az adatbázisba az új fájlt ami az ügyféladatokat tartalmazza.">
+                        <Label layoutX="520.0" layoutY="19.0" text="Itt olvashatod be az adatbázisba az új fájlt ami az ügyféladatokat tartalmazza." textFill="#1259e3">
                             <font>
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
                         <Separator layoutX="358.0" layoutY="299.0" prefHeight="14.0" prefWidth="842.0" />
                         <Separator layoutX="357.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="6.0" />
-                  <Label layoutX="8.0" layoutY="19.0" text="Ezeket az adatokat meg kell adni a helyes működéshez" textFill="#e53cae">
+                  <Label layoutX="8.0" layoutY="19.0" text="Ezeket az adatokat meg kell adni a helyes működéshez" textFill="#1259e3">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -342,11 +342,13 @@
                   </Label>
                   <AnchorPane id="sajatUticelokPane" fx:id="sajatUticelokPane" focusTraversable="true" layoutX="360.0" layoutY="306.0" prefHeight="415.0" prefWidth="414.0">
                      <children>
-                        <TextField id="txtSajatIranyitoSzam" fx:id="txtSajatIranyitoSzam" layoutX="207.0" layoutY="154.0" prefHeight="25.0" prefWidth="175.0" />
-                        <TextField id="txtSajatVaros" fx:id="txtSajatVaros" layoutX="207.0" layoutY="188.0" prefHeight="25.0" prefWidth="175.0" />
                         <TextField id="txtSajatElnev" fx:id="txtSajatElnev" layoutX="207.0" layoutY="51.0" prefHeight="25.0" prefWidth="175.0" promptText="Így fog szerepelni a táblában " />
-                        <TextField id="txtSajatCim" fx:id="txtSajatCim" layoutX="208.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" />
-                        <Label layoutX="58.0" layoutY="55.0" text="Elnevezés (azonosító)" />
+                        <TextField id="txtSajatEgyebUgyfel" fx:id="txtSajatEgyebUgyfel" layoutX="207.0" layoutY="85.0" prefHeight="25.0" prefWidth="175.0" promptText="Ez is látszik majd a táblában" />
+                        <TextField id="txtSajatEgyebAdat" fx:id="txtSajatEgyebAdat" layoutX="207.0" layoutY="121.0" prefHeight="25.0" prefWidth="175.0" />
+                        <TextField id="txtSajatIranyitoSzam" fx:id="txtSajatIranyitoSzam" layoutX="207.0" layoutY="154.0" prefHeight="25.0" prefWidth="175.0" />
+                        <TextField id="txtSajatVaros" fx:id="txtSajatVaros" layoutX="207.0" layoutY="188.0" prefHeight="25.0" prefWidth="175.0" promptText="Meg kell adni" />
+                        <TextField id="txtSajatCim" fx:id="txtSajatCim" layoutX="208.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" promptText="Meg kell adni" />
+                        <Label layoutX="58.0" layoutY="55.0" text="Uticél (azonosító)" />
                         <Label layoutX="58.0" layoutY="158.0" text="Irányítószám" />
                         <Label layoutX="59.0" layoutY="192.0" text="Város" />
                         <Label layoutX="59.0" layoutY="226.0" text="Cím" />
@@ -355,9 +357,8 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Button id="btnSajatBev" fx:id="btnSajatBev" layoutX="268.0" layoutY="272.0" mnemonicParsing="false" text="Bevitel" />
+                        <Button id="btnSajatBev" fx:id="btnSajatBev" layoutX="268.0" layoutY="272.0" mnemonicParsing="false" onAction="#btnClick" text="Bevitel" />
                         <Label layoutX="58.0" layoutY="91.0" text="Ügyfél neve" />
-                        <TextField id="txtSajatEgyebUgyfel" fx:id="txtSajatEgyebUgyfel" layoutX="207.0" layoutY="87.0" prefHeight="25.0" prefWidth="175.0" promptText="Táblában megjelenik " />
                         <Label layoutX="391.0" layoutY="47.0" text="*">
                            <font>
                               <Font size="18.0" />
@@ -374,9 +375,8 @@
                            </font>
                         </Label>
                         <ComboBox id="cbSajat" fx:id="cbSajat" layoutX="211.0" layoutY="325.0" prefHeight="25.0" prefWidth="165.0" promptText="Válassz" />
-                        <Button id="btnSajatTorles" fx:id="btnSajatTorles" layoutX="270.0" layoutY="371.0" mnemonicParsing="false" text="Törlés" />
-                        <Label layoutX="45.0" layoutY="329.0" text="Válaszd ki a törlendő elemet" />
-                        <TextField id="txtSajatEgyebAdat" fx:id="txtSajatEgyebAdat" layoutX="207.0" layoutY="121.0" prefHeight="25.0" prefWidth="175.0" />
+                        <Button id="btnSajatTorles" fx:id="btnSajatTorles" layoutX="270.0" layoutY="371.0" mnemonicParsing="false" onAction="#btnClick" text="Törlés" textFill="#f50303" />
+                        <Label layoutX="45.0" layoutY="329.0" text="Saját cím törlése" />
                         <Label layoutX="57.0" layoutY="126.0" text="Egyéb adat" />
                      </children>
                   </AnchorPane>

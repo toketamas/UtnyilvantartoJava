@@ -99,87 +99,6 @@ public class DbModel {
             }
         }
 
-        /*    try {
-            rs = dbmeta.getTables(null, "APP", "ROUTES", null);
-            if (!rs.next()) {
-                createStatement.execute("create table routes("
-                        + "routeid integer primary key autoincrement not null,"
-                        + "date text not null,"
-                        + "private integer,"
-                        + "depart text not null,"
-                        + "arrive text not null,"
-                        + "client text not null,"
-                        + "spedometer integer not null,"
-                        + "fueling double not null,"
-                        + "distance integer not null,"
-                        + "backandforth integer not null,"
-                        + "cellid integer not null,"
-                        + "rendszam text not null);");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
-
-        try {
-            rs = dbmeta.getTables(null, "APP", "CLIENTS", null);
-            if (!rs.next()) {
-                createStatement.execute("create table clients("
-                        + "client text not null,"
-                        + "clientnumber text primary key not null ,"
-                        + "type text,"
-                        + "factorynumber text,"
-                        + "zipcode integer,"
-                        + "city text not null,"
-                        + "address text,"
-                        + "exist integer,"
-                        + "maintenanceperyear integer,"
-                        + "field text);");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
-
-        try {
-            rs = dbmeta.getTables(null, "APP", "DISTANCES", null);
-            if (!rs.next()) {
-                createStatement.execute("create table distances("
-                        + "clientid1 text,"
-                        + "clientid2 text,"
-                        + "distance integer);");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
-
-        try {
-            rs = dbmeta.getTables(null, "APP", "SETTINGS", null);
-            if (!rs.next()) {
-                createStatement.execute("create table settings("
-                        + "nev text,"
-                        + "varos text,"
-                        + "cim text,"
-                        + "auto text,"
-                        + "rendszam text,"
-                        + "loketterfogat text,"
-                        + "fogyasztas text,"
-                        + "elozo_zaro integer,"
-                        + "aktualis_honap text ,"
-                        + "utolso_ugyfel text,"
-                        + "zaro_km integer)"
-                        + "id text unique"
-                        + "sorszam int primary key autoincrement,"
-                        + "utolso_szerkesztes datetime,"
-                        + "lezart_tabla boolean;");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hiba!");
-            System.out.println("" + ex);
-        }
-    }
-         */
         //sajat_cimek tábla létrehozása
         try {
             rs = dbmeta.getTables(null, "APP", "SAJAT_CIMEK", null);
@@ -527,10 +446,17 @@ public class DbModel {
     }
 
     //  client táblához kapcsolódó lekérdezések
-    public void addClient(String client, String clientnumber, String type, String factorynumber, int zipcode, String city, String address, Boolean exist, int maintinanceperyear, String field) {
-        String sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
+    //ha a sajatKliens=true a sajat_cimek táblába teszi ha fals akkor a clients táblába
+    public void addClient(String client, String clientnumber, String type, String factorynumber, int zipcode, String city, String address, Boolean exist, int maintinanceperyear, String field, boolean sajatKliens) {
+        String sqlQuery;
+        if (sajatKliens) {
+            sqlQuery = "insert into sajat_cimek values (?,?,?,?,?,?,?,?,?,?)";
+        } else {
+            sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
+        }
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
+            System.out.println(sqlQuery);
             preparedStatement.setString(1, client);
             preparedStatement.setString(2, clientnumber);
             preparedStatement.setString(3, type);
@@ -610,8 +536,14 @@ public class DbModel {
         }
     }
 
-    public void delClient(String value) {
-        String sqlQuery = "delete from clients where clientnumber='" + value + "'";
+    public void delClient(String value, boolean sajatKliens) {
+
+        String sqlQuery;
+        if (sajatKliens) {
+            sqlQuery = "delete from sajat_cimek where clientnumber='" + value + "'";
+        } else {
+            sqlQuery = "delete from clients where clientnumber='" + value + "'";
+        }
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.execute();
@@ -620,10 +552,14 @@ public class DbModel {
         }
     }
 
-    public ArrayList getAllClient() {      //visszaadja  az összes gépszámot
+    public ArrayList getAllClient(boolean sajatKliens) {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
-        try {
-            String sqlQuery = "select clientnumber from clients";
+        String sqlQuery;
+        if(sajatKliens)
+            sqlQuery = "select clientnumber from sajat_cimek";
+        else
+            sqlQuery = "select clientnumber from clients";
+        try {            
             clients = new ArrayList<>();
             rs = createStatement.executeQuery(sqlQuery);
             while (rs.next()) {
@@ -756,7 +692,7 @@ public class DbModel {
         }
     }
 
-    private Boolean convertBool(int value) {
+    public Boolean convertBool(int value) {
         if (value == 1) {
             return true;
         } else {
