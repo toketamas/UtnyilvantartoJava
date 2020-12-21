@@ -182,7 +182,7 @@ public class DbModel {
          */
         //sajat_cimek tábla létrehozása
         try {
-            rs = dbmeta.getTables(null, "APP", "CLIENTS", null);
+            rs = dbmeta.getTables(null, "APP", "SAJAT_CIMEK", null);
             if (!rs.next()) {
                 createStatement.execute(
                         "CREATE TABLE sajat_cimek("

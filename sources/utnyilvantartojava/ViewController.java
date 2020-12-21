@@ -248,16 +248,22 @@ public class ViewController implements Initializable {
         
         start();
     }
-
-    public void start() {
-        db = new DbModel();
-//!!!!!Letiltom a sajatUticelokPane-t addig amíg el nem készül a kód hozzá
-        sajatUticelokPane.setVisible(false);
-//mai dátum a DatePickerbe
-        datePicker.setValue(LocalDate.now());
+//betüméret betüszín beállítása ezeknél az elemeknél  a scene builderben nem lehetséges    
+    public void setStyle(){
+        
         datePicker.setStyle(" -fx-font-size: 17; -fx-font-weight: bold; -fx-text-inner-color: #B40431");
         cbClient.setStyle(" -fx-font-size: 18; -fx-font-weight: bold; ");
         txtDistance.setStyle("-fx-text-inner-color: #DF01D7");
+    }
+
+    public void start() {
+        db = new DbModel();
+        
+        //!!!!!Letiltom a sajatUticelokPane-t addig amíg el nem készül a kód hozzá
+        //sajatUticelokPane.setVisible(false);
+//mai dátum a DatePickerbe
+        datePicker.setValue(LocalDate.now());
+        
 //betölti a settings táblából az utolsó sort
         settings = db.getLastSettings();
         ///System.out.println("utolsó út:" + db.getDateOfLastRoute());

@@ -22,7 +22,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <Tab id="tabNyilv" fx:id="tabNyilv" closable="false" text="Útnyilvántartó">
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1200.0">
@@ -340,7 +340,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <AnchorPane id="sajatUticelokPane" fx:id="sajatUticelokPane" layoutX="360.0" layoutY="306.0" prefHeight="415.0" prefWidth="414.0">
+                  <AnchorPane id="sajatUticelokPane" fx:id="sajatUticelokPane" focusTraversable="true" layoutX="360.0" layoutY="306.0" prefHeight="415.0" prefWidth="414.0">
                      <children>
                         <TextField id="txtSajatIranyitoSzam" fx:id="txtSajatIranyitoSzam" layoutX="207.0" layoutY="154.0" prefHeight="25.0" prefWidth="175.0" />
                         <TextField id="txtSajatVaros" fx:id="txtSajatVaros" layoutX="207.0" layoutY="188.0" prefHeight="25.0" prefWidth="175.0" />
