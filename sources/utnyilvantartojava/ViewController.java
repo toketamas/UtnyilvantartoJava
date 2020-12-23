@@ -174,7 +174,7 @@ public class ViewController implements Initializable {
     @FXML
     TextField txtSajatClient;
     @FXML
-    TextField txtSajatUgyfel;
+    TextField txtSajatClientNumber;
     @FXML
     TextField txtSajatEgyebAdat;
     @FXML
@@ -1215,21 +1215,20 @@ public class ViewController implements Initializable {
     }
 
     private void checkSpecialClients() {
-        Client telephely;
-        telephely = db.getClient("telephely");
+         Client telephely = db.getClient("telephely");
+         
         if (telephely == null) {
-            telephely = new Client(
-                    "DieboldNixdorf",
-                    "DieboldNixdorf",
+            telephely=new Client("telephely",
                     "telephely",
                     "telephely",
-                    2220,
-                    "Vecsés",
-                    "Lőrinci út 59-61",
+                    "telephely",
+                    0,
+                    settings.getVaros(),
+                    settings.getCim(),
                     true,
                     0,
-                    "DieboldNixdorf");
-            db.addClient(telephely, false);
+                    settings.getNev());
+            db.addClient(telephely,false);
         }
 
         Client diebold = db.getSajatClient("DieboldNixdorf");
@@ -1526,12 +1525,12 @@ public class ViewController implements Initializable {
         } catch (NumberFormatException ex) {
             zipcode = 0;
         }
-        String sajatUgyfel=txtSajatUgyfel.getText();
-        if(sajatUgyfel.trim().length()==0)
-            sajatUgyfel=txtSajatClient.getText();
+        String sajatClientNumber=txtSajatClientNumber.getText();
+        if(sajatClientNumber.trim().length()==0)
+            sajatClientNumber=txtSajatClient.getText();
         Client sajatClient = new Client(
                 txtSajatClient.getText(),
-                sajatUgyfel,
+                sajatClientNumber,
                 txtSajatEgyebAdat.getText(),
                 txtSajatClient.getText(),
                 zipcode,
@@ -1540,7 +1539,7 @@ public class ViewController implements Initializable {
                 true,
                 0,
                 settings.getNev());
-        txtSajatUgyfel.clear();
+        txtSajatClientNumber.clear();
         txtSajatClient.clear();
         txtSajatEgyebAdat.clear();
         txtSajatVaros.clear();

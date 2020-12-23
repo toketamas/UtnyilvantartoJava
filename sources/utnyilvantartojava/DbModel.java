@@ -464,7 +464,9 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
-
+    public void addAllSajatClientToClients(){
+        String sqlQuery=""
+    }
     public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
     }

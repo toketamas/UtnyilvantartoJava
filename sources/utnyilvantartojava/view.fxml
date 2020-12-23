@@ -342,7 +342,7 @@
                   </Label>
                   <AnchorPane id="sajatUticelokPane" fx:id="sajatUticelokPane" focusTraversable="true" layoutX="360.0" layoutY="306.0" prefHeight="415.0" prefWidth="414.0">
                      <children>
-                        <TextField id="txtSajatUgyfel" fx:id="txtSajatUgyfel" layoutX="206.0" layoutY="51.0" prefHeight="25.0" prefWidth="175.0" promptText="Ez is látszik majd a  listában" />
+                        <TextField id="txtSajatClientNumber" fx:id="txtSajatClientNumber" layoutX="206.0" layoutY="51.0" prefHeight="25.0" prefWidth="175.0" promptText="Ez is látszik majd a  listában" />
                         <TextField id="txtSajatClient" fx:id="txtSajatClient" layoutX="208.0" layoutY="87.0" prefHeight="25.0" prefWidth="175.0" promptText="Így fog szerepelni a táblában " />
                         <TextField id="txtSajatEgyebAdat" fx:id="txtSajatEgyebAdat" layoutX="207.0" layoutY="121.0" prefHeight="25.0" prefWidth="175.0" />
                         <TextField id="txtSajatIranyitoSzam" fx:id="txtSajatIranyitoSzam" layoutX="207.0" layoutY="154.0" prefHeight="25.0" prefWidth="175.0" />
