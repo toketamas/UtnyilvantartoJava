@@ -465,7 +465,7 @@ public class DbModel {
         }
     }
     public void addAllSajatClientToClients(){
-        String sqlQuery=""
+        queryClient("create table clients as (select * from sajat_cimek)");
     }
     public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
