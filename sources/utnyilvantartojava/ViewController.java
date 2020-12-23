@@ -262,6 +262,10 @@ public class ViewController implements Initializable {
     public void start() {
         db = new DbModel();
         setStyle();
+        cbClient.getItems().clear();
+        cbSajat.getItems().clear();
+        observableList.clear();
+        table.getColumns().clear();
         //!!!!!Letiltom a sajatUticelokPane-t addig amíg el nem készül a kód hozzá
         //sajatUticelokPane.setVisible(false);
 //mai dátum a DatePickerbe
@@ -1551,7 +1555,8 @@ public class ViewController implements Initializable {
         db.addClient(sajatClient, false);
         cbSajat.getItems().clear();
         cbSajat.getItems().addAll(db.getAllClient(true));
-        cbClient.getItems().clear();
+        //cbClient.getEditor().clear();
+        cbClient.getItems().remove(0, cbClient.getItems().size());
         cbClient.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().addAll(db.getAllClient(false));
     }
@@ -1562,9 +1567,9 @@ public class ViewController implements Initializable {
         db.delClient(value, false);
         cbSajat.getItems().clear();
         cbSajat.getItems().addAll(db.getAllClient(true));
-        cbClient.getItems().clear();
+        cbClient.getItems().remove(0, cbClient.getItems().size());
+        cbClient.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().addAll(db.getAllClient(false));
-
     }
 
 }
