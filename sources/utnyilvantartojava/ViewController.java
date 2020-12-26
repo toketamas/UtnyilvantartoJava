@@ -256,11 +256,12 @@ public class ViewController implements Initializable {
 
         datePicker.setStyle(" -fx-font-size: 17; -fx-font-weight: bold; -fx-text-inner-color: #B40431");
         cbClient.setStyle(" -fx-font-size: 18; -fx-font-weight: bold; ");
-        txtDistance.setStyle("-fx-text-inner-color: #DF01D7");
+        txtDistance.setStyle(" -fx-text-inner-color: #DF01D7");
     }
 
     public void start() {
         db = new DbModel();
+        db.renColToActive();
         setStyle();
         cbClient.getItems().clear();
         cbSajat.getItems().clear();
@@ -433,8 +434,12 @@ public class ViewController implements Initializable {
 //A beállítás tab-on lévő gombok
 //beállításoknál az ok gomb
         if (btnSetOk.isArmed()) {
+            settings.setActive(false);
+            db.updateSettings(settings, settings.getId());
+            settings.setActive(true);
 //ha van írva valami ezekbe a textboxokba akkor úgy vesszük, hogy ki van töltve az
 //összes beállítás
+
             if (txfNev.getText().trim().length() != 0
                     && txfTelep.getText().trim().length() != 0
                     && txfTelepCim.getText().trim().length() != 0
@@ -1489,6 +1494,7 @@ public class ViewController implements Initializable {
                 System.out.println("plusorminus2: " + workDate);
                 settings.setElozo_zaro(closingKmValue);    //beállítja a mentett zárót nyitónak
                 settings.setZaro_km(closingKmValue);        //zárónak is
+                settings.setActive(true);
                 db.addSettings(settings);
                 System.out.println("setworkdate2" + workDate);
                 observableList.clear();

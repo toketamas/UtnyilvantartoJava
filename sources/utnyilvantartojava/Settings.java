@@ -16,7 +16,7 @@ public class Settings {
     private String id;
     private  int sorszam;
     private String utolsoSzerkesztes;
-    private Boolean lezartTabla;
+    private Boolean active;
 
 
 
@@ -35,11 +35,12 @@ public class Settings {
         this.aktualis_honap = "";
         this.utolso_ugyfel = "telephely";
         this.zaro_km =0;
+        this.active=true;
 
     }
 
     public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas,
-                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean lezartTabla)
+                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean active)
     {
         this.nev = nev;
         this.varos = varos;
@@ -55,7 +56,7 @@ public class Settings {
         this.id =id;
         this.sorszam=sorszam;
         this.utolsoSzerkesztes=utolsoSzerkesztes;
-        this.lezartTabla=lezartTabla;
+        this.active=active;
     };
 
 
@@ -72,12 +73,12 @@ public class Settings {
         return utolsoSzerkesztes;
     }
 
-    public Boolean getLezartTabla() {
-        return lezartTabla;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setLezartTabla(Boolean lezartTabla) {
-        this.lezartTabla = lezartTabla;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public int getZaroKm() {

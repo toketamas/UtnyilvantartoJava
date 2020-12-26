@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DbModel {
 
@@ -114,6 +116,24 @@ public class DbModel {
         }
     }
 
+    public void renColToActive() {
+
+        try {
+            rs = dbmeta.getColumns(null, null, "settings", null);
+            while (rs.next()) {
+                if (rs.getString("COLUMN_NAME").startsWith("lezart_tabla")) {
+                    System.out.println(rs.getString("COLUMN_NAME"));
+                    String sqlQuery = "ALTER TABLE settings RENAME COLUMN 'lezart_tabla' TO 'active';";
+                    preparedStatement = conn.prepareStatement(sqlQuery);
+                    preparedStatement.execute();
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DbModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
         System.out.println("add: " + settings.getAktualis_honap());
@@ -138,7 +158,7 @@ public class DbModel {
             preparedStatement.setString(12, settings.getId());
             preparedStatement.setString(13, null);
             preparedStatement.setString(14, LocalDateTime.now().toString());
-            preparedStatement.setBoolean(15, false);
+            preparedStatement.setBoolean(15, settings.getActive());
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
@@ -161,7 +181,7 @@ public class DbModel {
                 + "utolso_ugyfel ='" + settings.getUtolso_ugyfel() + "',"
                 + "zaro_km ='" + settings.getZaroKm() + "',"
                 + "utolso_szerkesztes='" + LocalDateTime.now().toString() + "',"
-                + "lezart_tabla='" + settings.getLezartTabla() + "'"
+                + "active='" + settings.getActive() + "'"
                 + " where id = '" + idValue + "';";
         System.out.println(sqlQuery);
         try {
@@ -179,7 +199,7 @@ public class DbModel {
     }
 
     public Settings getLastSettings() {
-        String sqlQuery = "SELECT MAX(sorszam), * FROM settings ;";
+        String sqlQuery = "SELECT MAX(sorszam), * FROM settings WHERE active='true' ;";
         return querySettings(sqlQuery);
     }
 
@@ -203,7 +223,7 @@ public class DbModel {
                         rs.getString("id"),
                         rs.getInt("sorszam"),
                         rs.getString("utolso_szerkesztes"),
-                        rs.getBoolean("lezart_tabla")
+                        rs.getBoolean("active")
                 );
             }
         } catch (SQLException ex) {
@@ -464,13 +484,15 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
-    public void addAllSajatClientToClients(){
+
+    public void addAllSajatClientToClients() {
         queryClient("create table clients as select * from sajat_cimek");
     }
+
     public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
     }
-    
+
     public Client getSajatClient(String value) {
         return queryClient("select * from sajat_cimek where clientnumber='" + value + "';");
     }
@@ -552,11 +574,12 @@ public class DbModel {
     public ArrayList getAllClient(boolean sajatKliens) {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
         String sqlQuery;
-        if(sajatKliens)
+        if (sajatKliens) {
             sqlQuery = "select clientnumber from sajat_cimek";
-        else
+        } else {
             sqlQuery = "select clientnumber from clients";
-        try {            
+        }
+        try {
             clients = new ArrayList<>();
             rs = createStatement.executeQuery(sqlQuery);
             while (rs.next()) {
