@@ -261,14 +261,14 @@ public class ViewController implements Initializable {
 
     public void start() {
         db = new DbModel();
+// átnevezi a lezárt tábla oszlopot active-ra        
         db.renColToActive();
         setStyle();
         cbClient.getItems().clear();
         cbSajat.getItems().clear();
         observableList.clear();
         table.getColumns().clear();
-        //!!!!!Letiltom a sajatUticelokPane-t addig amíg el nem készül a kód hozzá
-        //sajatUticelokPane.setVisible(false);
+       
 //mai dátum a DatePickerbe
         datePicker.setValue(LocalDate.now());
 
@@ -291,14 +291,7 @@ public class ViewController implements Initializable {
         btnSetOk.setDisable(true);
         setLabels();
 
-        /* if (db.getSettings(workDate,settings.getRendszam()) == null) {
-            db.addSettings(settings);
-        }
-        settings = db.getSettings(workDate,settings.getRendszam());
-        System.out.println(settings);*/
-        ///System.out.println("Név:" + settings.getNev());
-        ///System.out.println("Rendszám:" + settings.getRendszam());
-        ///System.out.println("hónap:" + settings.getAktualis_honap());
+       
 //megnézzük szerepelnek e a nem excelből hozzáadott címek
         checkSpecialClients();
         /// telephely = db.getClient("telephely");
@@ -322,7 +315,9 @@ public class ViewController implements Initializable {
     }
 
     public void runResume() {
+// regisztrál a mysql-be        
         db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
+// frissíti a hozzáférés idejét        
         db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
 
 // kivesszük az adatbázisból a telephely címét
@@ -373,7 +368,7 @@ public class ViewController implements Initializable {
 //letiltja az indulás textboxot mivel a beállított érték ahonnan indulni kell mert előzőleg itt álltunk az autóval
         txtDepart.setEditable(false);
 //hozzáadja a combobox listájához az ügyfeleket és a saját címeket az adatbázisból
-        cbClient.getItems().addAll(db.getAllClient(true));
+        //cbClient.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().addAll(db.getAllClient(false));
 //hozzáadja a cb sajat comboboxhoz a saját címeket        
         cbSajat.getItems().addAll(db.getAllClient(true));
