@@ -47,6 +47,11 @@ public class ViewController implements Initializable {
     AnchorPane paneDualButton;
     @FXML
     AnchorPane paneSingleButton;
+    @FXML
+    AnchorPane datePane;
+    @FXML
+    AnchorPane startPane;
+    
 
     @FXML
     Rectangle alertRectangle;
@@ -258,6 +263,8 @@ public class ViewController implements Initializable {
         datePicker.setStyle(" -fx-font-size: 17; -fx-font-weight: bold; -fx-text-inner-color: #B40431");
         cbClient.setStyle(" -fx-font-size: 18; -fx-font-weight: bold; ");
         txtDistance.setStyle(" -fx-text-inner-color: #DF01D7");
+        datePane.setStyle(" -fx-background-color:  #ffebcc;");
+        startPane.setStyle(" -fx-background-color:  #ffebcc;");
     }
 
     public void start() {
@@ -273,8 +280,21 @@ public class ViewController implements Initializable {
 //mai dátum a DatePickerbe
         datePicker.setValue(LocalDate.now());
 
-//betölti a settings táblából az utolsó sort
+        
+        
+//betölti a settings táblából az utolsó sort ahol az active érték true
         settings = db.getLastSettings();
+//ha nem sikerül megpróbálja betölteni az utolsó sort és az active értékét true-ra állítani       
+        if(settings.getId()==null){
+            settings=db.getLastSettingsIfActiveNullAll();
+            if(settings!=null){
+                settings.setActive(true);
+                db.updateSettings(settings, settings.getId());
+                settings=db.getLastSettings();
+            }
+                
+        }
+        
         ///System.out.println("utolsó út:" + db.getDateOfLastRoute());
 //megvizsgálja hogy van e adat a routes táblában
         if (db.getDateOfLastRoute() == null) {
@@ -328,6 +348,7 @@ public class ViewController implements Initializable {
 
 //beállítjuk a hónapot amit szerkestünk
         workDate = settings.getAktualis_honap();
+        checkDateForPlusButton();
 //töröljük a listát
         observableList.clear();
 //beállítjuk a kilométer óra állást
@@ -647,23 +668,28 @@ public class ViewController implements Initializable {
         }
 //a választott honap melletti plusz és minusz gomb
         if (btnPlus.isArmed()) {
+             
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
             txtDate.setText(workDateDecOrInc("+"));
             setWorkdate("+");
-
+checkDateForPlusButton();
         }
         if (btnMinus.isArmed()) {
+            
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
             txtDate.setText(workDateDecOrInc("-"));
             setWorkdate("-");
+             checkDateForPlusButton();
         }
 
         if (btnReady.isArmed()) {
+             
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
             setWorkdate("#");
+            checkDateForPlusButton();
         }
 
     }
@@ -1421,7 +1447,7 @@ public class ViewController implements Initializable {
 // a logika ahhoz, hogy a + - gomb 12 hónapnak megfelelően működjön.
 
     public String workDateDecOrInc(String value) {
-
+       
         Integer year = Integer.parseInt(workDate.substring(0, 4));
         Integer month = Integer.parseInt(workDate.substring(5, 7));
         if (value == "+") {
@@ -1447,7 +1473,7 @@ public class ViewController implements Initializable {
         } else {
             mnt = month.toString();
         }
-        tempSettings=settings;
+        //tempSettings=settings;
         settings.setAktualis_honap(year.toString() + "-" + mnt);
         settings.setId(settings.getRendszam() + year.toString() + "-" + mnt);
 
@@ -1457,10 +1483,10 @@ public class ViewController implements Initializable {
 //"+" = plus gomb; "-" = - gomb; Ha nem volt + vagy - akkor  "#" = beirt érték után Kész gomb
 
     public void setWorkdate(String plusOrMinus) {
-
+        // checkDateForPlusButton();
         Settings prevSettings = settings;
         workDate = txtDate.getText();
-        int yearNow = Integer.parseInt(LocalDate.now().toString().substring(0, 4));
+      /*int yearNow = Integer.parseInt(LocalDate.now().toString().substring(0, 4));
         int monthNow = Integer.parseInt(LocalDate.now().toString().substring(5, 7));
         int workYear = Integer.parseInt(workDate.substring(0, 4));
         int workMonth = Integer.parseInt(workDate.substring(5, 7));
@@ -1474,7 +1500,7 @@ public class ViewController implements Initializable {
             db.updateSettings(settings, settings.getId());
             showAlert("A kiválasztott hónappal még nem \ndolgozhatsz,("+workDate+") mert az még a jövő!!!", true, "warn");
         } else {
-
+*/
             if (plusOrMinus == "-" || plusOrMinus == "#") {
                 settingsId = settings.getRendszam() + workDate;
                 System.out.println("setworkdate1" + workDate);
@@ -1532,7 +1558,7 @@ public class ViewController implements Initializable {
                 }
             }
         }
-    }
+    //}
 //Éppen aktuális hónap kiválasztása(amivel utoljára dolgoztunk)
 
     public void setDate() {
@@ -1605,6 +1631,19 @@ public class ViewController implements Initializable {
         cbClient.getItems().remove(0, cbClient.getItems().size());
         cbClient.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().addAll(db.getAllClient(false));
+    }
+    
+    public void checkDateForPlusButton(){
+        int yearNow = Integer.parseInt(LocalDate.now().toString().substring(0, 4));
+        int monthNow = Integer.parseInt(LocalDate.now().toString().substring(5, 7));
+        int workYear = Integer.parseInt(workDate.substring(0, 4));
+        int workMonth = Integer.parseInt(workDate.substring(5, 7));
+        
+        if (workYear==yearNow && workMonth == monthNow) {
+            btnPlus.setDisable(true);
+        }else{
+             btnPlus.setDisable(false);
+        }
     }
 
 }

@@ -202,6 +202,11 @@ public class DbModel {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings WHERE active='true' ;";
         return querySettings(sqlQuery);
     }
+    
+    public Settings getLastSettingsIfActiveNullAll() {
+        String sqlQuery = "SELECT MAX(sorszam), * FROM settings  ;";
+        return querySettings(sqlQuery);
+    }
 
     public Settings querySettings(String sqlQuery) {
         Settings settings = null;
