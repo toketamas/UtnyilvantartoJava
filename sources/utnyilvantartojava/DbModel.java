@@ -445,12 +445,20 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
-
+    public void updateDistanceRev(String clientid1, String clientid2, int distance) {
+        String sqlQuery = "update distances set "
+                + "distance=" + distance + " "
+                + "where clientid1 = '" + clientid2 + "' and clientid2='" + clientid1 + "';";
+        updateDist(sqlQuery);
+    }
     public void updateDistance(String clientid1, String clientid2, int distance) {
         String sqlQuery = "update distances set "
                 + "distance=" + distance + " "
-                + "where clientid1 = '" + clientid1 + "' and clientid2='" + clientid2 + "';";
-        //System.out.println(sqlQuery);
+                + "where clientid1 = '" + clientid1 + "' and clientid2='" + clientid2 + "';";    
+        updateDist(sqlQuery);
+    }
+    private void updateDist(String sqlQuery) {
+        
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);

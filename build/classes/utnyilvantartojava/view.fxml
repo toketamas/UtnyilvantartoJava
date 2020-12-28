@@ -420,7 +420,7 @@
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.3.7">
+                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.3.9">
                             <font>
                                 <Font size="14.0" />
                             </font>
