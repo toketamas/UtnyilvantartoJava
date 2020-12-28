@@ -1,5 +1,6 @@
 package utnyilvantartojava;
 
+import com.sun.glass.ui.Cursor;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -30,6 +31,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
+import javafx.scene.input.MouseEvent;
 
 public class ViewController implements Initializable {
 
@@ -51,6 +53,8 @@ public class ViewController implements Initializable {
     AnchorPane datePane;
     @FXML
     AnchorPane startPane;
+    @FXML
+    AnchorPane clientPane;
     
 
     @FXML
@@ -128,11 +132,15 @@ public class ViewController implements Initializable {
     @FXML
     Label lblKezdo;
     @FXML
-    static Label lblVer;
+    Label lblVer;
+    @FXML
+    Label lblVerzio;
     @FXML
     Label lblAlert;
     @FXML
     Label lblAtlagFogy;
+    @FXML
+    Label lblRendszam;
 
     @FXML
     TextArea alertTextArea;
@@ -256,22 +264,11 @@ public class ViewController implements Initializable {
 
         start();
     }
-//betüméret betüszín beállítása ezeknél az elemeknél  a scene builderben nem lehetséges    
-
-    public void setStyle() {
-
-        datePicker.setStyle(" -fx-font-size: 17; -fx-font-weight: bold; -fx-text-inner-color: #B40431");
-        cbClient.setStyle(" -fx-font-size: 18; -fx-font-weight: bold; ");
-        txtDistance.setStyle(" -fx-text-inner-color: #DF01D7");
-        datePane.setStyle(" -fx-background-color:  #ffebcc;");
-        startPane.setStyle(" -fx-background-color:  #ffebcc;");
-    }
 
     public void start() {
         db = new DbModel();
 // átnevezi a lezárt tábla oszlopot active-ra        
-        db.renColToActive();
-        setStyle();
+        db.renColToActive();        
         cbClient.getItems().clear();
         cbSajat.getItems().clear();
         observableList.clear();
@@ -582,6 +579,8 @@ public class ViewController implements Initializable {
                 String elozoKliens = "telephely";
                 if (observableList.size() > 1) {
                     elozoCim = observableList.get(observableList.size() - 2).getErkezes();
+                    if(elozoCim.startsWith("Magánhasználat")&&observableList.size() > 2)
+                        
                     elozoKliens = getClientNumberFromRoute(observableList.get(observableList.size() - 2).getUgyfel());
                     txtDepart.setText(elozoCim);
                     startClient = db.getClientFromClientNumber(elozoKliens);
@@ -933,10 +932,10 @@ checkDateForPlusButton();
         } else {
             txtDepart.setEditable(true);
         }
-
-        if (chkPrivate.isSelected()) {
+         if (chkPrivate.isSelected()) {
             txtDistance.setEditable(true);
-            txtDistance.setStyle("-fx-background-color: #ff8888;");
+            txtDistance.setStyle("-fx-background-color:  #eeffcc;");
+            txtDistance.requestFocus();
             cbClient.setValue("Magánhasználat");
             txtDepart.setText("Magánhasználat");
             txtArrive.setText("Magánhasználat");
@@ -1246,6 +1245,9 @@ checkDateForPlusButton();
         System.out.println(atlagFogy);
         lblAtlagFogy.setText("Átlag fogyasztás: " + atlagFogy.toString().substring(0, 3));
         txtFueling.clear();
+        lblVerzio.setText(lblVer.getText());
+        lblRendszam.setText("Rendszám: "+settings.getRendszam());
+        
     }
 
     private void fillField(TextField text, ArrayList list) {
