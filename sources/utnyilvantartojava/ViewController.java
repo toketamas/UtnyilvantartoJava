@@ -503,6 +503,8 @@ public class ViewController implements Initializable {
                 settings = db.getSettings(settingsId);
                 selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(0);
+//Beállítja a telephelyhez a címet és a várost                
+                checkSpecialClients();
                 showAlert("A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
                 runResume();
 
@@ -511,11 +513,11 @@ public class ViewController implements Initializable {
             }
 
         }
-
         if (btnSet.isArmed()) {
             setPane.setDisable(false);
             btnSet.setDisable(true);
             btnSetOk.setDisable(false);
+
             setLabels();
         }
 
@@ -579,6 +581,14 @@ public class ViewController implements Initializable {
             if (selectedRoute == observableList.get(observableList.size() - 1)) {
                 String elozoCim = getClientFullAddress(telephely);
                 String elozoKliens = "telephely";
+                //chkSites.setSelected(true);
+                observableList.remove(selectedRoute);
+                paneNormal.setVisible(true);
+                paneCorr.setVisible(false);
+                chkBack.setSelected(false);
+                chkPrivate.setSelected(false);
+                startClient = db.getClientFromAddress(elozoCim);
+                db.delRoute(selectedRoute.getRouteId());
                 if (observableList.size() > 1) {
                     elozoCim = observableList.get(observableList.size() - 2).getErkezes();
                     elozoKliens = observableList.get(observableList.size() - 2).getUgyfel();
@@ -588,37 +598,37 @@ public class ViewController implements Initializable {
                     }
                     txtDepart.setText(elozoCim);
                     startClient = db.getClientFromClientNumber(elozoKliens);
-                    if(elozoKliens.contains("/"))
-                        elozoKliens=elozoKliens.substring(0, elozoKliens.indexOf("/"));
+                    if (elozoKliens.contains("/")) {
+                        elozoKliens = elozoKliens.substring(0, elozoKliens.indexOf("/"));
+                    }
                     System.out.println(elozoKliens);
                     settings.setUtolso_ugyfel(elozoKliens);
-                
 
-                observableList.remove(selectedRoute);
-                db.delRoute(selectedRoute.getRouteId());
-                setLabels();
-                paneNormal.setVisible(true);
-                paneCorr.setVisible(false);
-                chkBack.setSelected(false);
-                chkPrivate.setSelected(false);
-                startClient = db.getClientFromAddress(elozoCim);
+                    observableList.remove(selectedRoute);
+                    db.delRoute(selectedRoute.getRouteId());
+                    setLabels();
+                    paneNormal.setVisible(true);
+                    paneCorr.setVisible(false);
+                    chkBack.setSelected(false);
+                    chkPrivate.setSelected(false);
+                    startClient = db.getClientFromAddress(elozoCim);
 
-                //txtDepart.setText(targetClientTemp.getCity() + " " + targetClientTemp.getAddress());
-                targetClient = null;
-                txtArrive.clear();
-                txtDistance.clear();
-                cbClient.setValue("Uticél");
+                    //txtDepart.setText(targetClientTemp.getCity() + " " + targetClientTemp.getAddress());
+                    targetClient = null;
+                    txtArrive.clear();
+                    txtDistance.clear();
+                    cbClient.setValue("Uticél");
 
-                /*if (targetClient != null) {
+                    /*if (targetClient != null) {
                 txtArrive.setText(targetClient.getCity() + " " + targetClient.getAddress());
             } else {
                 txtArrive.clear();
             }
-                 */
-                txtDistance.setEditable(false);
-                paneNormal.setVisible(true);
-                paneCorr.setVisible(false);
-                selectedRoute = null;
+                     */
+                    txtDistance.setEditable(false);
+                    paneNormal.setVisible(true);
+                    paneCorr.setVisible(false);
+                    selectedRoute = null;
                 }
 //Ha minden adatot töröltünk a táblából beállítja indulási helynek a telephelyet
                 if (observableList.size() == 0) {
@@ -655,7 +665,7 @@ public class ViewController implements Initializable {
             observableList.set(selectedRoute.getCellId(), selectedRoute);
             db.updateRoute(selectedRoute, selectedRoute.getRouteId());
 //Elmenti az adatbázisba a distance táblába a módosított távolságot
-            updateDistance(selectedRoute, settings.getUtolso_ugyfel(),txtDistance.getText());
+            updateDistance(selectedRoute, settings.getUtolso_ugyfel(), txtDistance.getText());
             observableList.clear();
             observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
             startClient = startClientTemp;
@@ -704,12 +714,13 @@ public class ViewController implements Initializable {
             db.updateSettings(settings, settings.getId());
             setWorkdate("#");
             checkDateForPlusButton();
+
         }
 
     }
 // kinyeri az adatbázisból a címeket a distances tábla frissítéséhez és frissíti
 
-    public void updateDistance(Route selectedRoute, String elozoUgyfel,String distance) {
+    public void updateDistance(Route selectedRoute, String elozoUgyfel, String distance) {
 // mivel a Route objektum gépszám+" "+ügyfél formátumban tárolja az ügyfél adatot le kell vágni a gépszámot
         String gepszam = selectedRoute.getUgyfel();
         if (selectedRoute.getUgyfel().contains(" ")) {
@@ -920,12 +931,12 @@ public class ViewController implements Initializable {
         //egy visszafele út       
         Distance revDist = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
         // ha igen akkor beírja a textboxba a távot 
-        if (actualDist.getDistance() != 0&& noGmaps) {
+        if (actualDist.getDistance() != 0 && noGmaps) {
             txtDistance.setText(String.valueOf(actualDist.getDistance()));
             btnDistance.setDisable(true);
             btnBev.setDisable(false);
 //ha visszafelé szerepel akkor beírja a textboxba a távot 
-        } else if (revDist.getDistance() != 0&&noGmaps) {
+        } else if (revDist.getDistance() != 0 && noGmaps) {
             txtDistance.setText(String.valueOf(revDist.getDistance()));
             btnDistance.setDisable(true);
             btnBev.setDisable(false);
@@ -994,7 +1005,7 @@ public class ViewController implements Initializable {
             txtArrive.clear();
             txtArrive.appendText(getClientFullAddress(targetClient));
             txtArrive.setEditable(true);
-           
+
         }
     }
 //ez lesz  az openstreetmaps lekérdezés ha kész lesz
@@ -1287,6 +1298,11 @@ public class ViewController implements Initializable {
                     0,
                     settings.getNev());
             db.addClient(telephely, false);
+
+        } else {
+            telephely.setCity(settings.getVaros());
+            telephely.setAddress(settings.getCim());
+            db.updateClient(telephely, telephely.getClientNumber());
         }
 
         Client diebold = db.getSajatClient("DieboldNixdorf");
@@ -1612,16 +1628,18 @@ public class ViewController implements Initializable {
         String sajatClientNumber = txtSajatClientNumber.getText();
         if (sajatClientNumber.trim().length() == 0) {
             sajatClientNumber = txtSajatClient.getText();
-            if(sajatClientNumber.contains(" "))
-                sajatClientNumber= sajatClientNumber.replaceAll(" ","_");
+            if (sajatClientNumber.contains(" ")) {
+                sajatClientNumber = sajatClientNumber.replaceAll(" ", "_");
+            }
 
         }
-        String sajatCli= txtSajatClient.getText();
-        if(sajatCli.contains(" "))
-                sajatCli= sajatCli.replaceAll(" ","_");
-        
+        String sajatCli = txtSajatClient.getText();
+        if (sajatCli.contains(" ")) {
+            sajatCli = sajatCli.replaceAll(" ", "_");
+        }
+
         Client sajatClient = new Client(
-               sajatCli,
+                sajatCli,
                 sajatClientNumber,
                 txtSajatEgyebAdat.getText(),
                 txtSajatClient.getText(),
