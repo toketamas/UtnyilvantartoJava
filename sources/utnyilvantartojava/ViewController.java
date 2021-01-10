@@ -338,6 +338,7 @@ public class ViewController implements Initializable {
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
 //beállítja a tábla oszlopokat
+        table.getColumns().clear();
         setTableColumns();
         ///System.out.println(settings);
 
@@ -385,6 +386,7 @@ public class ViewController implements Initializable {
         txtDepart.setEditable(false);
 //hozzáadja a combobox listájához az ügyfeleket és a saját címeket az adatbázisból
         //cbClient.getItems().addAll(db.getAllClient(true));
+        cbClient.getItems().clear();
         cbClient.getItems().addAll(db.getAllClient(false));
 //hozzáadja a cb sajat comboboxhoz a saját címeket        
         cbSajat.getItems().addAll(db.getAllClient(true));
@@ -415,11 +417,12 @@ public class ViewController implements Initializable {
             txtDistance.setEditable(false);
 //távolság engedélyezés
             btnDistance.setDisable(false);
-            //chkBack.setSelected(false);
-
+            //chkBack.setSelected(false);            
 //megvizsgálja, hogy az aktuális dátum egyezik-e a hónappal amivel dolgozunk
             if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
+                              
                 insertRoute();
+                
             } else {
                 showAlert("A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
@@ -449,10 +452,9 @@ public class ViewController implements Initializable {
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
             settings.setActive(true);
-            
+
 //ha van írva valami ezekbe a textboxokba akkor úgy vesszük, hogy ki van töltve az
 //összes beállítás
-
             if (txfNev.getText().trim().length() != 0
                     && txfTelep.getText().trim().length() != 0
                     && txfTelepCim.getText().trim().length() != 0
@@ -583,18 +585,22 @@ public class ViewController implements Initializable {
                 String elozoKliens = "telephely";
                 //chkSites.setSelected(true);
                 observableList.remove(selectedRoute);
+                
                 paneNormal.setVisible(true);
                 paneCorr.setVisible(false);
                 chkBack.setSelected(false);
                 chkPrivate.setSelected(false);
+               
                 startClient = db.getClientFromAddress(elozoCim);
+                
                 db.delRoute(selectedRoute.getRouteId());
+                setLabels();
                 if (observableList.size() > 1) {
-                    elozoCim = observableList.get(observableList.size() - 2).getErkezes();
-                    elozoKliens = observableList.get(observableList.size() - 2).getUgyfel();
+                    elozoCim = observableList.get(observableList.size() - 1).getErkezes();
+                    elozoKliens = observableList.get(observableList.size() - 1).getUgyfel();
                     if (elozoCim.startsWith("Magánhasználat") && observableList.size() > 2) {
-                        elozoCim = observableList.get(observableList.size() - 3).getErkezes();
-                        elozoKliens = getClientNumberFromRoute(observableList.get(observableList.size() - 3).getUgyfel());
+                        elozoCim = observableList.get(observableList.size() - 2).getErkezes();
+                        elozoKliens = getClientNumberFromRoute(observableList.get(observableList.size() - 2).getUgyfel());
                     }
                     txtDepart.setText(elozoCim);
                     startClient = db.getClientFromClientNumber(elozoKliens);
@@ -634,6 +640,7 @@ public class ViewController implements Initializable {
                 if (observableList.size() == 0) {
                     startClient = telephely;
                     targetClient = null;
+                    chkSites.setSelected(true);
                     txtArrive.clear();
                     txtDistance.clear();
                     txtDepart.setText(startClient.getClientNumber());
@@ -880,6 +887,7 @@ public class ViewController implements Initializable {
             settings.setZaro_km(db.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
             settings.setActive(true);
             db.updateSettings(settings, (settings.getRendszam() + workDate));
+            cbClient.setValue("Uticél");
 
         } catch (NumberFormatException e) {
             showAlert("A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
@@ -1066,17 +1074,16 @@ public class ViewController implements Initializable {
                         btnBev.setDisable(false);
                         btnAlertSingleOK.setDisable(false);
                         alertPane.setVisible(false);
-                        break;
-                    case FAILED:
-                        System.out.println("Az oldal betöltése sikertelen");
-                        break;
-                    case CANCELLED:
-                        WV
+                         WV
                                 .getEngine()
                                 .getLoadWorker()
                                 .stateProperty()
                                 .removeListener(this);
-                }
+                        break;
+                    case FAILED:
+                        System.out.println("Az oldal betöltése sikertelen");
+                        break;
+                   }
                 if (newValue != Worker.State.SUCCEEDED) {
                     return;
                 }
@@ -1097,8 +1104,10 @@ public class ViewController implements Initializable {
             }
         });
     }
-// URL beolvasása
 
+   
+      
+// URL beolvasása
     public static String getURL(String url) {
         StringBuilder response = null;
         try {
@@ -1350,12 +1359,12 @@ public class ViewController implements Initializable {
         rowToExcel.setCell(fileName, sheetName, "C4", settings.getRendszam());
         rowToExcel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
         rowToExcel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getZaroKm()));
-        rowToExcel.setCell(fileName, sheetName, "L105", String.valueOf(settings.getZaroKm()));
+        rowToExcel.setCell(fileName, sheetName, "L174", String.valueOf(settings.getZaroKm()));
         rowToExcel.setCell(fileName, sheetName, "D4", settings.getNev());
         rowToExcel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
         rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
         rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
-        rowToExcel.setCell(fileName, sheetName, "L103", megtettKM.toString());
+        rowToExcel.setCell(fileName, sheetName, "L172", megtettKM.toString());
         String fuelValue = String.valueOf(db.getFueling(workDate, settings.getRendszam()));
         if (fuelValue.length() > 6) {
             fuelValue = fuelValue.substring(0, 7);
@@ -1367,7 +1376,7 @@ public class ViewController implements Initializable {
             dValue = value.toString().substring(0, 5);
         }
         rowToExcel.setCell(fileName, sheetName, "G6", dValue);
-        rowToExcel.setCell(fileName, sheetName, "L104", String.valueOf(db.getMaganut(workDate, settings.getRendszam())));
+        rowToExcel.setCell(fileName, sheetName, "L173", String.valueOf(db.getMaganut(workDate, settings.getRendszam())));
         Double doubleValue = (double) db.getMaganut(workDate, settings.getRendszam()) / megtettKM * 100;
         if (doubleValue.toString().length() > 2 && doubleValue != 100) {
             dValue = doubleValue.toString().substring(0, 2);
@@ -1375,7 +1384,7 @@ public class ViewController implements Initializable {
             dValue = doubleValue.toString();
         }
 
-        rowToExcel.setCell(fileName, sheetName, "M104", dValue + "%");
+        rowToExcel.setCell(fileName, sheetName, "M173", dValue + "%");
 
         for (int i = 0; i < observableList.size(); i++) {
             String utCelja;
