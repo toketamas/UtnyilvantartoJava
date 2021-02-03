@@ -21,7 +21,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <Tab id="tabNyilv" fx:id="tabNyilv" closable="false" text="Útnyilvántartó">
             <AnchorPane id="lblRendsz" fx:id="lblRendsz" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1200.0" styleClass="secondPane" stylesheets="@style.css">
@@ -240,7 +240,7 @@
                       </Label>
                </children>
             </AnchorPane>
-            <Label id="lblRendszam" fx:id="lblRendszam" layoutX="916.0" layoutY="15.0" text="Rendszám" textFill="#6a6b7c">
+            <Label id="lblRendszam" fx:id="lblRendszam" layoutX="919.0" layoutY="47.0" text="Rendszám" textFill="#6a6b7c">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -248,6 +248,11 @@
             <Label id="lblVerzio" fx:id="lblVerzio" layoutX="1115.0" layoutY="67.0" text="verzió" textFill="#6a6b7c">
                <font>
                   <Font size="10.0" />
+               </font>
+            </Label>
+            <Label id="lblMaganKm" fx:id="lblMaganKm" layoutX="918.0" layoutY="16.0" text="MaganKm" textFill="#6a6b7c">
+               <font>
+                  <Font name="System Bold" size="12.0" />
                </font>
             </Label>
             </AnchorPane>
