@@ -425,7 +425,7 @@
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.4.0">
+                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.4.1">
                             <font>
                                 <Font size="14.0" />
                             </font>
