@@ -32,6 +32,7 @@ import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class ViewController implements Initializable {
 
@@ -140,6 +141,8 @@ public class ViewController implements Initializable {
     Label lblAtlagFogy;
     @FXML
     Label lblRendszam;
+    @FXML
+    Label lblMaganKm;
 
     @FXML
     TextArea alertTextArea;
@@ -422,6 +425,7 @@ public class ViewController implements Initializable {
             if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
                               
                 insertRoute();
+                
                 
             } else {
                 showAlert("A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
@@ -1285,6 +1289,7 @@ public class ViewController implements Initializable {
         txtFueling.clear();
         lblVerzio.setText(lblVer.getText());
         lblRendszam.setText("Rendszám: " + settings.getRendszam());
+        setLabelMaganKm();
 
     }
 
@@ -1532,21 +1537,7 @@ public class ViewController implements Initializable {
         // checkDateForPlusButton();
         Settings prevSettings = settings;
         workDate = txtDate.getText();
-        /*int yearNow = Integer.parseInt(LocalDate.now().toString().substring(0, 4));
-        int monthNow = Integer.parseInt(LocalDate.now().toString().substring(5, 7));
-        int workYear = Integer.parseInt(workDate.substring(0, 4));
-        int workMonth = Integer.parseInt(workDate.substring(5, 7));
-        System.out.println("work: "+workYear+"; now: "+yearNow);
-        if (workYear > yearNow || (workYear == yearNow && workMonth > monthNow)) {
-            settings=tempSettings;
-            //workDateDecOrInc("-");
-            txtDate.setText(settings.getAktualis_honap());
-            workDate=settings.getAktualis_honap();
-            settings.setActive(true);
-            db.updateSettings(settings, settings.getId());
-            showAlert("A kiválasztott hónappal még nem \ndolgozhatsz,("+workDate+") mert az még a jövő!!!", true, "warn");
-        } else {
-         */
+       
         if (plusOrMinus == "-" || plusOrMinus == "#") {
             settingsId = settings.getRendszam() + workDate;
             System.out.println("setworkdate1" + workDate);
@@ -1699,6 +1690,35 @@ public class ViewController implements Initializable {
         } else {
             btnPlus.setDisable(false);
         }
+    }
+    
+    public void setLabelMaganKm(){
+        double km=0;
+        double osszKm=0;
+        double eredmeny=0;
+        for(int i=0;i<observableList.size();i++){
+            osszKm=osszKm+observableList.get(i).getTavolsag();
+            System.out.println(observableList.get(i).isMagan());
+            if(observableList.get(i).isMagan()){
+                km=km+observableList.get(i).getTavolsag();
+            }
+        }
+        System.out.println("km="+km);
+        System.out.println("összKm="+osszKm);
+//         eredmeny=(km/osszKm)*100;
+       try{
+            eredmeny=(km/osszKm)*100;
+       }
+       catch (Exception e){
+           eredmeny=0;
+       }    
+       
+       lblMaganKm.setText("Magánút: "+(int)km+" km"+", "+(int)eredmeny+"%");
+       if(eredmeny>=10||km>=500)
+            lblMaganKm.setStyle(" -fx-text-fill: red");
+       else
+           lblMaganKm.setStyle(" -fx-text-fill: green");
+       
     }
 
 }
