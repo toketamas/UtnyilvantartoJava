@@ -21,7 +21,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <Tab id="tabNyilv" fx:id="tabNyilv" closable="false" text="Útnyilvántartó">
             <AnchorPane id="lblRendsz" fx:id="lblRendsz" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1200.0" styleClass="secondPane" stylesheets="@style.css">
@@ -87,20 +87,25 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </CheckBox>
-                <Separator layoutX="18.0" layoutY="81.0" prefWidth="200.0" />
+                <Separator layoutX="18.0" layoutY="77.0" prefWidth="200.0" />
                 <Separator layoutX="13.0" layoutY="481.0" prefWidth="200.0" />
                 <TextField id="txtDate" fx:id="txtDate" layoutX="46.0" layoutY="36.0" prefHeight="34.0" prefWidth="130.0" promptText="ÉÉÉÉ.HH">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></TextField>
-            <AnchorPane id="datePane" fx:id="datePane" layoutX="4.0" layoutY="85.0" prefHeight="60.0" prefWidth="220.0" styleClass="firstPane" stylesheets="@style.css">
+            <AnchorPane id="datePane" fx:id="datePane" layoutX="4.0" layoutY="83.0" prefHeight="66.0" prefWidth="220.0" styleClass="firstPane" stylesheets="@style.css">
                <children>
-                      <DatePicker id="datePicker" fx:id="datePicker" layoutX="70.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="145.0" promptText="Válaszd ki" showWeekNumbers="true" styleClass="datePicker" stylesheets="@style.css" />
-                      <Label layoutX="5.0" layoutY="11.0" text="Dátum" textFill="#1017dd">
-                          <font>
-                              <Font name="System Bold" size="18.0" />
-                          </font>
-                      </Label>
+                      <DatePicker id="datePicker" fx:id="datePicker" layoutX="34.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="152.0" promptText="Válaszd ki" showWeekNumbers="true" styleClass="datePicker" stylesheets="@style.css" />
+                  <Button id="btnDateMinus" fx:id="btnDateMinus" layoutY="19.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="31.0" text="-" onAction="#btnClick">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button id="btnDatePlus" fx:id="btnDatePlus" layoutX="188.0" layoutY="20.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="31.0" text="+" onAction="#btnClick">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
             <Label layoutX="21.0" layoutY="151.0" text="Kezdd el begépelni a gépszámot" textFill="#ab0505">
@@ -255,6 +260,11 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+                <Label layoutX="84.0" layoutY="79.0" text="Dátum" textFill="#1017dd">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
             </AnchorPane>
         </Tab>
         <Tab id="tabBeallit" fx:id="tabBeallit" text="Beállítás">

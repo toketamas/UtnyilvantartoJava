@@ -109,6 +109,10 @@ public class ViewController implements Initializable {
     Button btnPlus;
     @FXML
     Button btnMinus;
+    @FXML
+    Button btnDateMinus;
+    @FXML
+    Button btnDatePlus;
 
     // Checkboxok
     @FXML
@@ -726,6 +730,17 @@ public class ViewController implements Initializable {
             setWorkdate("#");
             checkDateForPlusButton();
 
+        }
+        
+        if(btnDatePlus.isArmed()){
+            
+            LocalDate d = datePicker.getValue().plusDays(1);
+            datePicker.setValue(d);
+        }
+        
+        if(btnDateMinus.isArmed()){
+             LocalDate d = datePicker.getValue().minusDays(1);
+            datePicker.setValue(d);
         }
 
     }
