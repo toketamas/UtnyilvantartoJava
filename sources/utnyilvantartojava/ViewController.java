@@ -312,7 +312,7 @@ public class ViewController implements Initializable {
 
         btnBev.setDisable(true);
         btnSetOk.setDisable(true);
-        setLabels();
+        //setLabels();
 
 //megnézzük szerepelnek e a nem excelből hozzáadott címek
         checkSpecialClients();
@@ -348,7 +348,7 @@ public class ViewController implements Initializable {
         table.getColumns().clear();
         setTableColumns();
         ///System.out.println(settings);
-
+setLabels();
 //beállítjuk a hónapot amit szerkestünk
         workDate = settings.getAktualis_honap();
         checkDateForPlusButton();
@@ -1305,6 +1305,7 @@ public class ViewController implements Initializable {
         lblVerzio.setText(lblVer.getText());
         lblRendszam.setText("Rendszám: " + settings.getRendszam());
         setLabelMaganKm();
+        setTelephely();
 
     }
 
@@ -1734,6 +1735,24 @@ public class ViewController implements Initializable {
        else
            lblMaganKm.setStyle(" -fx-text-fill: green");
        
+    }
+    
+    public void setTelephely(){
+        String indValue=txtDepart.getText();
+        System.out.println("indV= "+indValue);
+        String erkValue=txtArrive.getText();
+        System.out.println("erkV= "+erkValue);
+        System.out.println(telephely.getAddress());
+        String telephValue=getClientFullAddress(telephely);
+        System.out.println("th= "+telephValue);
+        if(indValue.startsWith(telephValue)){
+            chkSites.setSelected(true);
+            txtDepart.setText(telephely.getClient());
+        }
+            
+        
+        //if(erkValue.startsWith(telephValue))
+           // chkBackToSites.setSelected(true);
     }
 
 }
