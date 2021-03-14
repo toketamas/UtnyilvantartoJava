@@ -5,87 +5,314 @@
       <artifact name="UtnyilvantartoJava:jar" />
     </artifacts-to-build>
   </component>
-  <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="33dd7f2d-9d2c-4007-84c6-5efbe589edf3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/../../anc/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/androidTest/java/com/example/anc/ExampleInstrumentedTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/java/com/example/anc/FirstFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/java/com/example/anc/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/java/com/example/anc/SecondFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/layout/content_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/layout/fragment_first.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/layout/fragment_second.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/menu/menu_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/navigation/nav_graph.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/values/dimens.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/app/src/test/java/com/example/anc/ExampleUnitTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../anc/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../AdatBeolvaso" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <ui_properties converted="true" />
+    <breakpoint_rules converted="true" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="JavaFxApplication" />
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
       <list>
-        <option value="Class" />
+        <option value="$PROJECT_DIR$/src/sample/Main.java" />
+        <option value="$PROJECT_DIR$/src/sample/sample.fxml" />
+        <option value="$PROJECT_DIR$/src/sample/Controller.java" />
       </list>
     </option>
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1612" />
+    <option name="height" value="876" />
   </component>
-  <component name="ProjectId" id="1g3SWBXGmaj0GBWSeqK6tsl6s3x" />
+  <component name="ProjectId" id="1plhTL0U1HGH9P41lKY1jKAzq4P" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JavaFxApplication" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JavaFxApplication" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JavaFxApplication" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../UtnyilvantartoJavaIJ" />
-    <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.15234375" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="OverrideImplement.combined" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="last_opened_file_path" value="C:/lib" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="recentsLimit" value="5" />
   </component>
   <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="utnyilvantartojava.Main" />
       <module name="UtnyilvantartoJava" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="utnyilvantartojava.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file enabled="true" id="idea.log" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="33dd7f2d-9d2c-4007-84c6-5efbe589edf3" name="Default Changelist" comment="" />
-      <created>1597341813109</created>
+      <changelist id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="" />
+      <created>1359379246138</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1597341813109</updated>
+      <updated>1359379246138</updated>
+      <workItem from="1359379250712" duration="1302000" />
     </task>
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1302000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1612" height="876" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24967742" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962447" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -99,73 +326,35 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="765" y="204" key="#com.intellij.ide.util.MemberChooser" timestamp="1600424640895">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="765" y="204" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600424640895" />
-    <state x="911" y="279" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1600341911878">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="911" y="279" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600341911878" />
-    <state x="265" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1600424322324">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="265" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600424322324" />
-    <state x="606" y="321" key="DetectedRootsChooserDialog" timestamp="1608189296687">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="606" y="321" key="DetectedRootsChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1608189296687" />
-    <state x="757" y="405" key="DetectedRootsChooserDialog/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1599638358700" />
-    <state x="533" y="207" key="FileChooserDialogImpl" timestamp="1608189420607">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="533" y="207" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1608189420607" />
-    <state x="666" y="261" key="FileChooserDialogImpl/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1599638356342" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1608189422340">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1608189422340" />
-    <state width="1877" height="153" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600456902644" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1608189422340">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1608189422340" />
-    <state width="1877" height="153" key="GridCell.Tab.0.center/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600456902644" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1608189422340">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1608189422340" />
-    <state width="1877" height="153" key="GridCell.Tab.0.left/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600456902643" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1608189422340">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1608189422340" />
-    <state width="1877" height="153" key="GridCell.Tab.0.right/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600456902644" />
-    <state width="1860" height="344" key="GridCell.Tab.1.bottom" timestamp="1600370891770">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="344" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600370891770" />
-    <state width="1860" height="344" key="GridCell.Tab.1.center" timestamp="1600370891770">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="344" key="GridCell.Tab.1.center/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600370891770" />
-    <state width="1860" height="344" key="GridCell.Tab.1.left" timestamp="1600370891770">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="344" key="GridCell.Tab.1.left/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600370891770" />
-    <state width="1860" height="344" key="GridCell.Tab.1.right" timestamp="1600370891770">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1860" height="344" key="GridCell.Tab.1.right/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600370891770" />
-    <state x="194" y="27" width="1038" height="765" key="SettingsEditor" timestamp="1608189389892">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="194" y="27" width="1038" height="765" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1608189389892" />
-    <state x="661" y="63" key="SettingsEditor/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1600341919384" />
-    <state x="342" y="140" key="new project wizard" timestamp="1599735578138">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="342" y="140" key="new project wizard/0.0.1920.1040/-1280.4.1280.984@0.0.1920.1040" timestamp="1599735578138" />
+  <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
+    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/sample.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="45" selection-start="467" selection-end="467" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="27" selection-start="136" selection-end="136" vertical-scroll-proportion="0.17171717">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>

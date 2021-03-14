@@ -23,10 +23,8 @@
       <element id="extracted-dir" path="C:/lib/commons-math3-3.6.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/lib/poi-scratchpad-4.1.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/lib/commons-compress-1.19.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/lib/javax.ws.rs-api-javadoc.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/lib/poi-ooxml-schemas-4.1.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/lib/commons-collections4-4.4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/lib/javax.ws.rs-api-2.0.rev.A.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/lib/controlsfx-8.40.16-javadoc.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/lib/mysql-connector-java-8.0.21.jar" path-in-jar="/" />
     </root>
