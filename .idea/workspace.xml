@@ -52,6 +52,8 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +110,7 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
