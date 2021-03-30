@@ -1,5 +1,6 @@
 package utnyilvantartojava;
 
+import com.mysql.cj.xdevapi.JsonString;
 import com.sun.glass.ui.Cursor;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
@@ -31,8 +32,10 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import org.json.JSONObject;
 
 public class ViewController implements Initializable {
 
@@ -151,7 +154,7 @@ public class ViewController implements Initializable {
     @FXML
     TextArea alertTextArea;
 
-//textfildek
+    //textfildek
 // Utnyilvántartó tab
     @FXML
     TextField txtDepart;
@@ -164,7 +167,7 @@ public class ViewController implements Initializable {
     @FXML
     TextField txtFueling;
 
-// Beállítások szakasz
+    // Beállítások szakasz
     @FXML
     TextField txfNev;
     @FXML
@@ -187,7 +190,7 @@ public class ViewController implements Initializable {
     @FXML
     TextField txtBeallit;
 
-//Saját uticélok megadása szakasz
+    //Saját uticélok megadása szakasz
     @FXML
     AnchorPane sajatUticelokPane;
     @FXML
@@ -209,7 +212,7 @@ public class ViewController implements Initializable {
     @FXML
     ComboBox cbSajat;
 
-//Filebetöltés    
+    //Filebetöltés
     @FXML
     TextField txtFile;
 
@@ -232,6 +235,11 @@ public class ViewController implements Initializable {
     Settings settings; //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
     //Változók
     URL url1;
+    //String utnyilvUrl = "https://mju7nhz6bgt5vfr4cde3xsw2yaq1.tfsoft.hu/";
+    String utnyilvUrl ="http://localhost/utnyilvDB/";
+    String jsonResult;
+    JSONObject json;
+
     String settingsId;
     String remoteExcel = loadFile("link.txt")[0];
     String localExcel = "ATM_karb_*.xlsx";
@@ -265,7 +273,7 @@ public class ViewController implements Initializable {
     TableColumn ugyfCol;
     TableColumn spedometerCol;
 
-//Itt Indul
+    //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
 
         start();
@@ -337,10 +345,23 @@ public class ViewController implements Initializable {
     }
 
     public void runResume() {
-// regisztrál a mysql-be        
-        db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
+// regisztrál a mysql-be
+        Remote remote=new Remote();
+        jsonResult=null;
+        jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+        System.out.println(remote.post(utnyilvUrl,jsonResult));
+
+        //db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
 // frissíti a hozzáférés idejét        
-        db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
+        //db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
+        //String utnyilvUrl = "https://mju7nhz6bgt5vfr4cde3xsw2yaq1.tfsoft.hu/";
+        //String utnyilvUrl ="http://localhost/utnyilvDB/";
+
+        //System.out.println(remote.run(utnyilvUrl));
+        jsonResult=null;
+        jsonResult = remote.createJson("mod",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+        System.out.println(jsonResult);
+        System.out.println(remote.post(utnyilvUrl,jsonResult));
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -348,7 +369,7 @@ public class ViewController implements Initializable {
         table.getColumns().clear();
         setTableColumns();
         ///System.out.println(settings);
-setLabels();
+        setLabels();
 //beállítjuk a hónapot amit szerkestünk
         workDate = settings.getAktualis_honap();
         checkDateForPlusButton();
@@ -406,10 +427,28 @@ setLabels();
         table.scrollTo(table.getItems().size() - 1);
         setLabels();
         setText();
-        if (db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()) == 0) {
-            showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
-            tabNyilv.setDisable(true);
-        }
+//Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
+
+    //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        //Remote remote=new Remote();
+        //System.out.println(remote.run(utnyilvUrl));
+        jsonResult=null;
+        jsonResult = remote.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim());
+        System.out.println(jsonResult);
+        json = new JSONObject(remote.post(utnyilvUrl,jsonResult));
+       if((json.getInt("engedelyezve")==1))
+           System.out.println("Engedélyezve");
+       else {
+           showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+           tabNyilv.setDisable(true);
+       }
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+       // if (db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()) == 0) {
+            //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+            //tabNyilv.setDisable(true);
+       // }
     }
 
     @FXML
@@ -427,10 +466,10 @@ setLabels();
             //chkBack.setSelected(false);            
 //megvizsgálja, hogy az aktuális dátum egyezik-e a hónappal amivel dolgozunk
             if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
-                              
+
                 insertRoute();
-                
-                
+
+
             } else {
                 showAlert("A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
@@ -593,14 +632,14 @@ setLabels();
                 String elozoKliens = "telephely";
                 //chkSites.setSelected(true);
                 observableList.remove(selectedRoute);
-                
+
                 paneNormal.setVisible(true);
                 paneCorr.setVisible(false);
                 chkBack.setSelected(false);
                 chkPrivate.setSelected(false);
-               
+
                 startClient = db.getClientFromAddress(elozoCim);
-                
+
                 db.delRoute(selectedRoute.getRouteId());
                 setLabels();
                 if (observableList.size() > 1) {
@@ -731,15 +770,15 @@ setLabels();
             checkDateForPlusButton();
 
         }
-        
-        if(btnDatePlus.isArmed()){
-            
+
+        if (btnDatePlus.isArmed()) {
+
             LocalDate d = datePicker.getValue().plusDays(1);
             datePicker.setValue(d);
         }
-        
-        if(btnDateMinus.isArmed()){
-             LocalDate d = datePicker.getValue().minusDays(1);
+
+        if (btnDateMinus.isArmed()) {
+            LocalDate d = datePicker.getValue().minusDays(1);
             datePicker.setValue(d);
         }
 
@@ -1083,50 +1122,49 @@ setLabels();
 //figyeli hogy betöltődött-e az oldal és vár míg meg nem történt
         WV.getEngine().getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
-            @Override
-            public void changed(
-                    ObservableValue<? extends Worker.State> observable,
-                    Worker.State oldValue, Worker.State newValue) {
-                switch (newValue) {
-                    case SUCCEEDED:
-                        btnDistance.setDisable(false);
-                        btnBev.setDisable(false);
-                        btnAlertSingleOK.setDisable(false);
-                        alertPane.setVisible(false);
-                         WV
-                                .getEngine()
-                                .getLoadWorker()
-                                .stateProperty()
-                                .removeListener(this);
-                        break;
-                    case FAILED:
-                        System.out.println("Az oldal betöltése sikertelen");
-                        break;
-                   }
-                if (newValue != Worker.State.SUCCEEDED) {
-                    return;
-                }
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends Worker.State> observable,
+                            Worker.State oldValue, Worker.State newValue) {
+                        switch (newValue) {
+                            case SUCCEEDED:
+                                btnDistance.setDisable(false);
+                                btnBev.setDisable(false);
+                                btnAlertSingleOK.setDisable(false);
+                                alertPane.setVisible(false);
+                                WV
+                                        .getEngine()
+                                        .getLoadWorker()
+                                        .stateProperty()
+                                        .removeListener(this);
+                                break;
+                            case FAILED:
+                                System.out.println("Az oldal betöltése sikertelen");
+                                break;
+                        }
+                        if (newValue != Worker.State.SUCCEEDED) {
+                            return;
+                        }
 //bekerül a html oldal forráskódja (amit a gmapstól kapott) a gotUrl változóba  
-                String gotUrl = getURL(WV.getEngine().getLocation());
+                        String gotUrl = getURL(WV.getEngine().getLocation());
 //kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl               
-                int index = gotUrl.indexOf(" km");
+                        int index = gotUrl.indexOf(" km");
 //kiszedi a távolságot megfelelően kerekíti és beírja a textboxba                
-                String sub = gotUrl.substring(index - 6, index);
-                System.out.println(sub);
-                sub = sub.replace(',', '.');
-                distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
-                txtDistance.setText(distance.toString());
-                btnBev.setDisable(false);
-                cbClient.setDisable(false);
-                txtDistance.setEditable(false);
+                        String sub = gotUrl.substring(index - 6, index);
+                        System.out.println(sub);
+                        sub = sub.replace(',', '.');
+                        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+                        txtDistance.setText(distance.toString());
+                        btnBev.setDisable(false);
+                        cbClient.setDisable(false);
+                        txtDistance.setEditable(false);
 
-            }
-        });
+                    }
+                });
     }
 
-   
-      
-// URL beolvasása
+
+    // URL beolvasása
     public static String getURL(String url) {
         StringBuilder response = null;
         try {
@@ -1204,7 +1242,7 @@ setLabels();
         });
     }
 
-// Ha a táblában kiválasztunk egy sort
+    // Ha a táblában kiválasztunk egy sort
     // ide kerül a kiválasztott sor indexe
     int selectedItemIndex;
 
@@ -1553,7 +1591,7 @@ setLabels();
         // checkDateForPlusButton();
         Settings prevSettings = settings;
         workDate = txtDate.getText();
-       
+
         if (plusOrMinus == "-" || plusOrMinus == "#") {
             settingsId = settings.getRendszam() + workDate;
             System.out.println("setworkdate1" + workDate);
@@ -1707,52 +1745,51 @@ setLabels();
             btnPlus.setDisable(false);
         }
     }
-    
-    public void setLabelMaganKm(){
-        double km=0;
-        double osszKm=0;
-        double eredmeny=0;
-        for(int i=0;i<observableList.size();i++){
-            osszKm=osszKm+observableList.get(i).getTavolsag();
+
+    public void setLabelMaganKm() {
+        double km = 0;
+        double osszKm = 0;
+        double eredmeny = 0;
+        for (int i = 0; i < observableList.size(); i++) {
+            osszKm = osszKm + observableList.get(i).getTavolsag();
             System.out.println(observableList.get(i).isMagan());
-            if(observableList.get(i).isMagan()){
-                km=km+observableList.get(i).getTavolsag();
+            if (observableList.get(i).isMagan()) {
+                km = km + observableList.get(i).getTavolsag();
             }
         }
-        System.out.println("km="+km);
-        System.out.println("összKm="+osszKm);
+        System.out.println("km=" + km);
+        System.out.println("összKm=" + osszKm);
 //         eredmeny=(km/osszKm)*100;
-       try{
-            eredmeny=(km/osszKm)*100;
-       }
-       catch (Exception e){
-           eredmeny=0;
-       }    
-       
-       lblMaganKm.setText("Magánút: "+(int)km+" km"+", "+(int)eredmeny+"%");
-       if(eredmeny>=10||km>=500)
+        try {
+            eredmeny = (km / osszKm) * 100;
+        } catch (Exception e) {
+            eredmeny = 0;
+        }
+
+        lblMaganKm.setText("Magánút: " + (int) km + " km" + ", " + (int) eredmeny + "%");
+        if (eredmeny >= 10 || km >= 500)
             lblMaganKm.setStyle(" -fx-text-fill: red");
-       else
-           lblMaganKm.setStyle(" -fx-text-fill: green");
-       
+        else
+            lblMaganKm.setStyle(" -fx-text-fill: green");
+
     }
-    
-    public void setTelephely(){
-        String indValue=txtDepart.getText();
-        System.out.println("indV= "+indValue);
-        String erkValue=txtArrive.getText();
-        System.out.println("erkV= "+erkValue);
+
+    public void setTelephely() {
+        String indValue = txtDepart.getText();
+        System.out.println("indV= " + indValue);
+        String erkValue = txtArrive.getText();
+        System.out.println("erkV= " + erkValue);
         System.out.println(telephely.getAddress());
-        String telephValue=getClientFullAddress(telephely);
-        System.out.println("th= "+telephValue);
-        if(indValue.startsWith(telephValue)){
+        String telephValue = getClientFullAddress(telephely);
+        System.out.println("th= " + telephValue);
+        if (indValue.startsWith(telephValue)) {
             chkSites.setSelected(true);
             txtDepart.setText(telephely.getClient());
         }
-            
-        
+
+
         //if(erkValue.startsWith(telephValue))
-           // chkBackToSites.setSelected(true);
+        // chkBackToSites.setSelected(true);
     }
 
 }
