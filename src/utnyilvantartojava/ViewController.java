@@ -346,10 +346,10 @@ public class ViewController implements Initializable {
 
     public void runResume() {
 // regisztrál a mysql-be
-        Remote remote=new Remote();
-        jsonResult=null;
-        jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        System.out.println(remote.post(utnyilvUrl,jsonResult));
+       // Remote remote=new Remote();
+        //jsonResult=null;
+        //jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+       // System.out.println(remote.post(utnyilvUrl,jsonResult));
 
         //db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
 // frissíti a hozzáférés idejét        
@@ -358,10 +358,10 @@ public class ViewController implements Initializable {
         //String utnyilvUrl ="http://localhost/utnyilvDB/";
 
         //System.out.println(remote.run(utnyilvUrl));
-        jsonResult=null;
-        jsonResult = remote.createJson("mod",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        System.out.println(jsonResult);
-        System.out.println(remote.post(utnyilvUrl,jsonResult));
+        //jsonResult=null;
+        //jsonResult = remote.createJson("mod",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+        //System.out.println(jsonResult);
+        //System.out.println(remote.post(utnyilvUrl,jsonResult));
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -430,19 +430,25 @@ public class ViewController implements Initializable {
 //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
 
     //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        //Remote remote=new Remote();
+/*
+         //remote=new Remote();
         //System.out.println(remote.run(utnyilvUrl));
-        jsonResult=null;
-        jsonResult = remote.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim());
+        //jsonResult=null;
+        jsonResult = remote.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
         System.out.println(jsonResult);
-        json = new JSONObject(remote.post(utnyilvUrl,jsonResult));
+        System.out.println(utnyilvUrl);
+        String req =remote.post(utnyilvUrl,jsonResult);
+
+        json = new JSONObject(req);
+        System.out.println(json.getInt("engedelyezve"));
        if((json.getInt("engedelyezve")==1))
            System.out.println("Engedélyezve");
        else {
            showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
            tabNyilv.setDisable(true);
        }
+
+ */
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
        // if (db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()) == 0) {

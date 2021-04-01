@@ -110,18 +110,13 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/com_squareup_okhttp3_okhttp_4_9_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_json_json_20210307.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UtnyilvantartoJava.iml" beforeDir="false" afterPath="$PROJECT_DIR$/UtnyilvantartoJava.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/MakeXml.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/MakeXml.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

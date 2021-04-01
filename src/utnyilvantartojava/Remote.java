@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class Remote {
 
-    public Remote(){}
+    Remote(){}
     public static final MediaType JSON= MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
 
-    public String run(String url) {
+    private String httpGet(String url) {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -33,8 +33,10 @@ public class Remote {
     }
 
 
-    public String post(String url, String json) {
+    private String httpPost(String url, String json) {
         RequestBody body = RequestBody.create(json,JSON);
+        System.err.println(url);
+        System.err.println(json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -42,6 +44,7 @@ public class Remote {
 
         try (Response response = client.newCall(request).execute()) {
 
+            System.err.println(response.body().string());
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +53,7 @@ public class Remote {
 
     }
 
-    public String createJson(String queryType,String nev,String varos,String cim){
+    private String createJson(String queryType,String nev,String varos,String cim){
         String json = new JSONObject()
                 .put("lekerdezes",queryType)
                 .put("nev",nev)
@@ -60,7 +63,7 @@ public class Remote {
         return json;
     }
 
-    public String createJson(String queryType,String nev,String varos,String cim,String rendszam){
+    private String createJson(String queryType,String nev,String varos,String cim,String rendszam){
         String json = new JSONObject()
                 .put("lekerdezes",queryType)
                 .put("nev",nev)
@@ -72,6 +75,53 @@ public class Remote {
     }
 
 
+    public  boolean checkUser(Settings settings){
+
+        String jsonresult=this.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+        return true;
+    }
+
+    //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
+
+    //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*
+         //remote=new Remote();
+        //System.out.println(remote.run(utnyilvUrl));
+        //jsonResult=null;
+        jsonResult = remote.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+        System.out.println(jsonResult);
+        System.out.println(utnyilvUrl);
+        String req =remote.post(utnyilvUrl,jsonResult);
+
+        json = new JSONObject(req);
+        System.out.println(json.getInt("engedelyezve"));
+       if((json.getInt("engedelyezve")==1))
+           System.out.println("Engedélyezve");
+       else {
+           showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+           tabNyilv.setDisable(true);
+       }
+
+ */
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// regisztrál a mysql-be
+    // Remote remote=new Remote();
+    //jsonResult=null;
+    //jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+    // System.out.println(remote.post(utnyilvUrl,jsonResult));
+
+    //db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
+// frissíti a hozzáférés idejét
+    //db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
+    //String utnyilvUrl = "https://mju7nhz6bgt5vfr4cde3xsw2yaq1.tfsoft.hu/";
+    //String utnyilvUrl ="http://localhost/utnyilvDB/";
+
+    //System.out.println(remote.run(utnyilvUrl));
+    //jsonResult=null;
+    //jsonResult = remote.createJson("mod",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+    //System.out.println(jsonResult);
+    //System.out.println(remote.post(utnyilvUrl,jsonResult));
 
 
 }
