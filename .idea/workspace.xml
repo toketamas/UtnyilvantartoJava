@@ -110,10 +110,12 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Alert.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Functions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/TableFunctions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" afterDir="false" />
@@ -171,6 +173,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="JavaFXApplication" />
         <option value="Class" />
       </list>
     </option>

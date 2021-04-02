@@ -2,6 +2,7 @@ package utnyilvantartojava;
 
 import com.mysql.cj.xdevapi.JsonParser;
 import com.mysql.cj.xdevapi.JsonString;
+import javafx.scene.control.Tab;
 import okhttp3.*;
 import org.json.JSONObject;
 
@@ -10,11 +11,15 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-public class Remote {
+abstract class Remote extends ViewController{
 
-    Remote(){}
+
+    JSONObject json;
+
+    private static String jsonresult;
+
     public static final MediaType JSON= MediaType.get("application/json; charset=utf-8");
-    OkHttpClient client = new OkHttpClient();
+    static OkHttpClient client = new OkHttpClient();
 
     private String httpGet(String url) {
         Request request = new Request.Builder()
@@ -33,7 +38,7 @@ public class Remote {
     }
 
 
-    private String httpPost(String url, String json) {
+    private static String httpPost(String url, String json) {
         RequestBody body = RequestBody.create(json,JSON);
         System.err.println(url);
         System.err.println(json);
@@ -53,7 +58,7 @@ public class Remote {
 
     }
 
-    private String createJson(String queryType,String nev,String varos,String cim){
+    private  String createJson(String queryType,String nev,String varos,String cim){
         String json = new JSONObject()
                 .put("lekerdezes",queryType)
                 .put("nev",nev)
@@ -63,7 +68,7 @@ public class Remote {
         return json;
     }
 
-    private String createJson(String queryType,String nev,String varos,String cim,String rendszam){
+    private static String createJson(String queryType, String nev, String varos, String cim, String rendszam){
         String json = new JSONObject()
                 .put("lekerdezes",queryType)
                 .put("nev",nev)
@@ -74,10 +79,20 @@ public class Remote {
         return json;
     }
 
+    static String jsonResult;
+    public static boolean checkUser(Settings settings, Tab tab){
 
-    public  boolean checkUser(Settings settings){
+        jsonResult=createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+        String request= httpPost(Constants.WebapiUrl.TEST_LINK_FOR_DATABASE_WEBAPI,jsonResult);
+        JSONObject json = new JSONObject(request);
+        if((json.getInt("engedelyezve")==1))
+            System.out.println("Engedélyezve");
+        else {
+            //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+            tab.setDisable(true);
+        }
 
-        String jsonresult=this.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
+
         return true;
     }
 

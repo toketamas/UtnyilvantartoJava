@@ -32,6 +32,9 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
+import static utnyilvantartojava.Alert.showAlert;
+import static utnyilvantartojava.Functions.functions;
+import static utnyilvantartojava.TableFunctions.tableFunctions;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -235,10 +238,7 @@ public class ViewController implements Initializable {
     Settings settings; //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
     //Változók
     URL url1;
-    //String utnyilvUrl = "https://mju7nhz6bgt5vfr4cde3xsw2yaq1.tfsoft.hu/";
-    String utnyilvUrl ="http://localhost/utnyilvDB/";
-    String jsonResult;
-    JSONObject json;
+
 
     String settingsId;
     String remoteExcel = loadFile("link.txt")[0];
@@ -313,7 +313,7 @@ public class ViewController implements Initializable {
         } else {
 //ha nincs akkor a mai dátumból veszi ki és a settingsbe egy új 
 //rendszám+ÉvHónap kulcsot készít(ez az elsődleges kulcs az adatbázisban)
-            setDate();
+            functions(this).setDate();
             settings.setAktualis_honap(workDate);
             settingsId = settings.getRendszam() + settings.getAktualis_honap();
         }
@@ -337,7 +337,7 @@ public class ViewController implements Initializable {
             settings.setRendszam("");
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
-            showAlert("Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
+            showAlert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
 // ha megvannak akkor folytatódik
         } else {
             runResume();
@@ -346,10 +346,10 @@ public class ViewController implements Initializable {
 
     public void runResume() {
 // regisztrál a mysql-be
-       // Remote remote=new Remote();
+        // Remote remote=new Remote();
         //jsonResult=null;
         //jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-       // System.out.println(remote.post(utnyilvUrl,jsonResult));
+        // System.out.println(remote.post(utnyilvUrl,jsonResult));
 
         //db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
 // frissíti a hozzáférés idejét        
@@ -367,12 +367,12 @@ public class ViewController implements Initializable {
         telephely = db.getClient("telephely");
 //beállítja a tábla oszlopokat
         table.getColumns().clear();
-        setTableColumns();
+        tableFunctions(this).setTableColumns();
         ///System.out.println(settings);
         setLabels();
 //beállítjuk a hónapot amit szerkestünk
         workDate = settings.getAktualis_honap();
-        checkDateForPlusButton();
+        functions(this).checkDateForPlusButton();
 //töröljük a listát
         observableList.clear();
 //beállítjuk a kilométer óra állást
@@ -429,7 +429,7 @@ public class ViewController implements Initializable {
         setText();
 //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
 
-    //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*
          //remote=new Remote();
         //System.out.println(remote.run(utnyilvUrl));
@@ -449,12 +449,12 @@ public class ViewController implements Initializable {
        }
 
  */
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-       // if (db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()) == 0) {
-            //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
-            //tabNyilv.setDisable(true);
-       // }
+        // if (db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()) == 0) {
+        //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+        //tabNyilv.setDisable(true);
+        // }
     }
 
     @FXML
@@ -477,7 +477,7 @@ public class ViewController implements Initializable {
 
 
             } else {
-                showAlert("A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
+                showAlert(this, "A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
             }
 
@@ -492,11 +492,11 @@ public class ViewController implements Initializable {
         }
 
         if (btnSajatBev.isArmed()) {
-            addSajatCim();
+            functions(this).addSajatCim();
         }
 
         if (btnSajatTorles.isArmed()) {
-            delSajatCim();
+            functions(this).delSajatCim();
         }
 
 //A beállítás tab-on lévő gombok
@@ -560,11 +560,11 @@ public class ViewController implements Initializable {
                 selectionModel.select(0);
 //Beállítja a telephelyhez a címet és a várost                
                 checkSpecialClients();
-                showAlert("A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
+                showAlert(this, "A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
                 runResume();
 
             } else {
-                showAlert("Nem adtál meg minden szükséges\nadatot!", true, "err");
+                showAlert(this, "Nem adtál meg minden szükséges\nadatot!", true, "err");
             }
 
         }
@@ -706,7 +706,7 @@ public class ViewController implements Initializable {
                 chkBack.setSelected(false);
 
             } else {
-                showAlert("Csak az utolsó sort törölheted! ", true, "warn");
+                showAlert(this, "Csak az utolsó sort törölheted! ", true, "warn");
                 txtDistance.setEditable(false);
             }
         }
@@ -720,7 +720,7 @@ public class ViewController implements Initializable {
             selectedRoute.setVissza(chkBack.isSelected());
             selectedRoute.setMagan(chkPrivate.isSelected());
             String fuel = txtFueling.getText();
-            fuel = checkFueling(fuel);
+            fuel = functions(this).checkFueling(fuel);
             selectedRoute.setFueling(Double.parseDouble(fuel));
             observableList.set(selectedRoute.getCellId(), selectedRoute);
             db.updateRoute(selectedRoute, selectedRoute.getRouteId());
@@ -757,7 +757,7 @@ public class ViewController implements Initializable {
             db.updateSettings(settings, settings.getId());
             txtDate.setText(workDateDecOrInc("+"));
             setWorkdate("+");
-            checkDateForPlusButton();
+            functions(this).checkDateForPlusButton();
         }
         if (btnMinus.isArmed()) {
 
@@ -765,7 +765,7 @@ public class ViewController implements Initializable {
             db.updateSettings(settings, settings.getId());
             txtDate.setText(workDateDecOrInc("-"));
             setWorkdate("-");
-            checkDateForPlusButton();
+            functions(this).checkDateForPlusButton();
         }
 
         if (btnReady.isArmed()) {
@@ -773,7 +773,7 @@ public class ViewController implements Initializable {
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
             setWorkdate("#");
-            checkDateForPlusButton();
+            functions(this).checkDateForPlusButton();
 
         }
 
@@ -889,7 +889,7 @@ public class ViewController implements Initializable {
         if (fueltext.isEmpty()) {
             fueltext = "0.0";
         }
-        fueling = Double.parseDouble(checkFueling(fueltext));
+        fueling = Double.parseDouble(functions(this).checkFueling(fueltext));
 
         date = datePicker.getValue().toString();
 //kivételkezelés a parseInt miatt itt olvassa be a távolságot a textboxból
@@ -954,7 +954,7 @@ public class ViewController implements Initializable {
             cbClient.setValue("Uticél");
 
         } catch (NumberFormatException e) {
-            showAlert("A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
+            showAlert(this, "A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
             btnBev.setDisable(false);
             txtDistance.clear();
         }
@@ -1122,7 +1122,7 @@ public class ViewController implements Initializable {
         }
         btnBev.setDisable(true);
         btnDistance.setDisable(true);
-        showAlert("Távolság lekérése a Google Maps-tól", true, "info");
+        showAlert(this, "Távolság lekérése a Google Maps-tól", true, "info");
         btnAlertSingleOK.setDisable(true);
 
 //figyeli hogy betöltődött-e az oldal és vár míg meg nem történt
@@ -1192,93 +1192,7 @@ public class ViewController implements Initializable {
     }
 // dinamikusan állítja be a tábla oszlopait
 
-    public void setTableColumns() {
-        datCol = new TableColumn("Dátum");
-        datCol.setPrefWidth(92);
-        datCol.setResizable(false);
-        datCol.setCellValueFactory(new PropertyValueFactory<Route, LocalDate>("datum"));
 
-        maganCol = new TableColumn("Magán");
-        maganCol.setPrefWidth(60);
-        maganCol.styleProperty();
-        maganCol.setResizable(false);
-        maganCol.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("magan"));
-        odaVisszaCol = new TableColumn("Oda-V.");
-        odaVisszaCol.setPrefWidth(55);
-        odaVisszaCol.setResizable(false);
-
-        odaVisszaCol.setCellValueFactory(new PropertyValueFactory<Route, Boolean>("vissza"));
-
-        tankolCol = new TableColumn("KmÓ");
-        tankolCol.setPrefWidth(57);
-        tankolCol.setResizable(false);
-        tankolCol.setCellValueFactory(new PropertyValueFactory<Route, Double>("spedometer"));
-
-        spedometerCol = new TableColumn("Tankol");
-        spedometerCol.setPrefWidth(57);
-        spedometerCol.setResizable(false);
-        spedometerCol.setCellValueFactory(new PropertyValueFactory<Route, Double>("fueling"));
-
-        indCol = new TableColumn("Indulás");        //indulás oszlop elkészítése
-        indCol.setPrefWidth(210);        //oszlop min szélesség beállítása 200 pixelre
-        indCol.setResizable(false);
-        indCol.setEditable(true);
-        indCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("indulas"));  //beállítja az oszlop adatértékét az Item objektum indulas String változójára
-
-        erkCol = new TableColumn("Érkezés");
-        erkCol.setPrefWidth(210);
-        erkCol.setResizable(false);
-        erkCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("erkezes"));
-
-        tavCol = new TableColumn("Táv.");
-        tavCol.setPrefWidth(48);
-        tavCol.setResizable(false);
-        tavCol.setCellValueFactory(new PropertyValueFactory<Route, IntegerProperty>("tavolsag"));
-
-        ugyfCol = new TableColumn("Ügyfél");
-        ugyfCol.setPrefWidth(170);
-        tavCol.setResizable(false);
-        ugyfCol.setCellValueFactory(new PropertyValueFactory<Route, StringProperty>("ugyfel"));
-
-        table.getColumns().addAll(datCol, maganCol, indCol, erkCol, ugyfCol, spedometerCol, tankolCol, tavCol, odaVisszaCol);
-        table.setItems(observableList);
-
-        table.setOnMouseClicked(event -> {
-            tableSelected();
-        });
-    }
-
-    // Ha a táblában kiválasztunk egy sort
-    // ide kerül a kiválasztott sor indexe
-    int selectedItemIndex;
-
-    public void tableSelected() {
-        chkSites.setSelected(false);
-        selectedItemIndex = table.getSelectionModel().getSelectedIndex();
-        selectedRoute = table.getSelectionModel().getSelectedItem();
-        selctedRow = table.getSelectionModel().getSelectedIndex();
-        datePicker.setValue(LocalDate.parse(selectedRoute.getDatum()));
-        if (!selectedRoute.isMagan()) {
-            cbClient.setValue(getClientNumberFromRoute(selectedRoute.getUgyfel()));
-        } else {
-            cbClient.setValue(selectedRoute.getUgyfel());
-        }
-        txtDistance.setEditable(true);
-        txtDepart.setText(selectedRoute.getIndulas());
-        txtArrive.setText(selectedRoute.getErkezes());
-        txtDistance.setText(String.valueOf(selectedRoute.getTavolsag()));
-        chkPrivate.setSelected(selectedRoute.isMagan());
-        selectedClientSpedometer = selectedRoute.getSpedometer();
-        selectedClientOdaVissza = selectedRoute.isVissza();
-        chkBack.setSelected(selectedRoute.isVissza());
-        txtFueling.setText(String.valueOf(selectedRoute.getFueling()));
-        startClientTemp = startClient;
-        targetClientTemp = targetClient;
-        startClient = db.getClientFromAddress(selectedRoute.getIndulas());
-        targetClient = db.getClientFromAddress(selectedRoute.getErkezes());
-        paneCorr.setVisible(true);
-        paneNormal.setVisible(false);
-    }
 //Kiszedi a Route-bol a csupasz gépszámot    
 
     public String getClientNumberFromRoute(String clientNumber) {
@@ -1348,8 +1262,8 @@ public class ViewController implements Initializable {
         txtFueling.clear();
         lblVerzio.setText(lblVer.getText());
         lblRendszam.setText("Rendszám: " + settings.getRendszam());
-        setLabelMaganKm();
-        setTelephely();
+        functions(this).setLabelMaganKm();
+        functions(this).setTelephely();
 
     }
 
@@ -1520,7 +1434,7 @@ public class ViewController implements Initializable {
 // a kétgombos ablak nem működik, meg kellene oldani, hogy a program várjon amíg nem nyomjuk meg 
 // valamelyik gombot.(Pillanatnyilag nem fontos)
 
-    public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {
+    /*public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {
         alertClick = false;
 //mivel pillanatnyilag csak az egy gombos működik ezért beállítottam true-ra
         singleOrDualButton = true;
@@ -1555,6 +1469,8 @@ public class ViewController implements Initializable {
             paneSingleButton.setVisible(false);
         }
     }
+
+     */
 // a logika ahhoz, hogy a + - gomb 12 hónapnak megfelelően működjön.
 
     public String workDateDecOrInc(String value) {
@@ -1611,7 +1527,7 @@ public class ViewController implements Initializable {
                 setLabels();
             } else {
                 observableList.clear();
-                showAlert(workDate + " hónapban nincsenek adatok. ", true, "info");
+                showAlert(this, workDate + " hónapban nincsenek adatok. ", true, "info");
             }
         }
 
@@ -1656,146 +1572,16 @@ public class ViewController implements Initializable {
         }
     }
     //}
-//Éppen aktuális hónap kiválasztása(amivel utoljára dolgoztunk)
 
-    public void setDate() {
-        String dateValue = db.getDateOfLastRoute();
-        if (dateValue != null) {
-            workDate = dateValue.substring(0, 7);
-            System.out.println("setDate: " + workDate);
-            datePicker.setValue(LocalDate.parse(dateValue));
-        }
-    }
-// ha vesszőt írnak a törtbe kicseréli pontra
 
-    public String checkFueling(String fuel) {
-        System.out.println(fuel);
-        if (fuel.contains(",")) {
-            fuel = fuel.replace(",", ".");
-        }
-        return fuel;
-    }
+
+
 // Egy saját uticélt ad az adatbázishoz
 
-    public void addSajatCim() {
-
-        int zipcode;
-        try {
-            zipcode = Integer.parseInt(txtSajatIranyitoSzam.getText());
-        } catch (NumberFormatException ex) {
-            zipcode = 0;
-        }
-        String sajatClientNumber = txtSajatClientNumber.getText();
-        if (sajatClientNumber.trim().length() == 0) {
-            sajatClientNumber = txtSajatClient.getText();
-            if (sajatClientNumber.contains(" ")) {
-                sajatClientNumber = sajatClientNumber.replaceAll(" ", "_");
-            }
-
-        }
-        String sajatCli = txtSajatClient.getText();
-        if (sajatCli.contains(" ")) {
-            sajatCli = sajatCli.replaceAll(" ", "_");
-        }
-
-        Client sajatClient = new Client(
-                sajatCli,
-                sajatClientNumber,
-                txtSajatEgyebAdat.getText(),
-                txtSajatClient.getText(),
-                zipcode,
-                txtSajatVaros.getText(),
-                txtSajatCim.getText(),
-                true,
-                0,
-                settings.getNev());
-        txtSajatClientNumber.clear();
-        txtSajatClient.clear();
-        txtSajatEgyebAdat.clear();
-        txtSajatVaros.clear();
-        txtSajatIranyitoSzam.clear();
-        txtSajatCim.clear();
-
-        String field = settings.getNev();
-        db.addClient(sajatClient, true);
-        db.addClient(sajatClient, false);
-        cbSajat.getItems().clear();
-        cbSajat.getItems().addAll(db.getAllClient(true));
-        //cbClient.getEditor().clear();
-        cbClient.getItems().remove(0, cbClient.getItems().size());
-        cbClient.getItems().addAll(db.getAllClient(true));
-        cbClient.getItems().addAll(db.getAllClient(false));
-    }
-//Egy saját uticélt töröl az adatbázisból
-
-    public void delSajatCim() {
-        String value = cbSajat.getValue().toString();
-        db.delClient(value, true);
-        db.delClient(value, false);
-        cbSajat.getItems().clear();
-        cbSajat.getItems().addAll(db.getAllClient(true));
-        cbClient.getItems().remove(0, cbClient.getItems().size());
-        cbClient.getItems().addAll(db.getAllClient(true));
-        cbClient.getItems().addAll(db.getAllClient(false));
-    }
-
-    public void checkDateForPlusButton() {
-        int yearNow = Integer.parseInt(LocalDate.now().toString().substring(0, 4));
-        int monthNow = Integer.parseInt(LocalDate.now().toString().substring(5, 7));
-        int workYear = Integer.parseInt(workDate.substring(0, 4));
-        int workMonth = Integer.parseInt(workDate.substring(5, 7));
-
-        if (workYear == yearNow && workMonth == monthNow) {
-            btnPlus.setDisable(true);
-        } else {
-            btnPlus.setDisable(false);
-        }
-    }
-
-    public void setLabelMaganKm() {
-        double km = 0;
-        double osszKm = 0;
-        double eredmeny = 0;
-        for (int i = 0; i < observableList.size(); i++) {
-            osszKm = osszKm + observableList.get(i).getTavolsag();
-            System.out.println(observableList.get(i).isMagan());
-            if (observableList.get(i).isMagan()) {
-                km = km + observableList.get(i).getTavolsag();
-            }
-        }
-        System.out.println("km=" + km);
-        System.out.println("összKm=" + osszKm);
-//         eredmeny=(km/osszKm)*100;
-        try {
-            eredmeny = (km / osszKm) * 100;
-        } catch (Exception e) {
-            eredmeny = 0;
-        }
-
-        lblMaganKm.setText("Magánút: " + (int) km + " km" + ", " + (int) eredmeny + "%");
-        if (eredmeny >= 10 || km >= 500)
-            lblMaganKm.setStyle(" -fx-text-fill: red");
-        else
-            lblMaganKm.setStyle(" -fx-text-fill: green");
-
-    }
-
-    public void setTelephely() {
-        String indValue = txtDepart.getText();
-        System.out.println("indV= " + indValue);
-        String erkValue = txtArrive.getText();
-        System.out.println("erkV= " + erkValue);
-        System.out.println(telephely.getAddress());
-        String telephValue = getClientFullAddress(telephely);
-        System.out.println("th= " + telephValue);
-        if (indValue.startsWith(telephValue)) {
-            chkSites.setSelected(true);
-            txtDepart.setText(telephely.getClient());
-        }
 
 
-        //if(erkValue.startsWith(telephValue))
-        // chkBackToSites.setSelected(true);
-    }
-
+    //if(erkValue.startsWith(telephValue))
+    // chkBackToSites.setSelected(true);
 }
+
+
