@@ -7,13 +7,22 @@ import utnyilvantartojava.ViewController;
 
 public class Alert   {
 
+    ViewController context;
+    String alertText;
+    boolean singleOrDualButton;
+    String alertLevel;
 
-    public Alert( ViewController context,Boolean singleOrDualButton, String alertLevel, String alertText) {
+    public Alert( ViewController context, String alertText, Boolean singleOrDualButton, String alertLevel) {
 
+        this.context=context;
+        this.alertText=alertText;
+        this.alertLevel=alertLevel;
+        this.singleOrDualButton=singleOrDualButton;
 
         // public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {
-
-        context.alertClick = false;
+    }
+    public void show() {
+       context.alertClick = false;
 //mivel pillanatnyilag csak az egy gombos működik ezért beállítottam true-ra
         singleOrDualButton = true;
         String color = "83b1f5";//kék
@@ -25,7 +34,7 @@ public class Alert   {
         }
         if (alertLevel == "warn") {
             color = "f2cc5a";//sárga
-          context.lblAlert.textFillProperty().setValue(Paint.valueOf("000000"));
+            context.lblAlert.textFillProperty().setValue(Paint.valueOf("000000"));
             context.lblAlert.setText("Figyelmeztetés!");
         }
         if (alertLevel == "succ") {
@@ -48,7 +57,10 @@ public class Alert   {
         }
     }
 
-    public static void showAlert(ViewController context, String alertText, Boolean singleOrDualButton, String alertLevel) {
+
+    /*public Alert showAlert(ViewController context, String alertText, Boolean singleOrDualButton, String alertLevel) {
         Alert alert = new Alert(context,singleOrDualButton, alertLevel, alertText);
-    }
+        alert.start();
+        return alert;
+    }*/
 }

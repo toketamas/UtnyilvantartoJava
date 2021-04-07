@@ -110,16 +110,21 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Alert.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Functions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/TableFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/UtnyilvantartoJava_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/UtnyilvantartoJava_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Alert.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Alert.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Alert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Alert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/DbModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DbModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,6 +254,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
@@ -264,7 +270,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="C:/lib" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />

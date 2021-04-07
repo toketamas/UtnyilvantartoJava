@@ -21,7 +21,7 @@
 <?import javafx.scene.web.WebView?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utnyilvantartojava.ViewController">
     <TabPane id="tabPane" fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <Tab id="tabNyilv" fx:id="tabNyilv" closable="false" text="Útnyilvántartó">
             <AnchorPane id="lblRendsz" fx:id="lblRendsz" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1200.0" styleClass="secondPane" stylesheets="@style.css">
@@ -435,7 +435,7 @@
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.4.2">
+                        <Label id="lblVer" fx:id="lblVer" layoutX="537.0" layoutY="689.0" text="Verzió: 0.4.3">
                             <font>
                                 <Font size="14.0" />
                             </font>

@@ -1,9 +1,5 @@
 package utnyilvantartojava;
 
-import com.mysql.cj.xdevapi.JsonString;
-import com.sun.glass.ui.Cursor;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,10 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebView;
@@ -32,13 +26,10 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
-import static utnyilvantartojava.Alert.showAlert;
+import static java.lang.Thread.*;
+
 import static utnyilvantartojava.Functions.functions;
 import static utnyilvantartojava.TableFunctions.tableFunctions;
-
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import org.json.JSONObject;
 
 public class ViewController implements Initializable {
 
@@ -276,10 +267,10 @@ public class ViewController implements Initializable {
     //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
 
-        start();
+        run();
     }
 
-    public void start() {
+    public void run() {
         db = new DbModel();
 // átnevezi a lezárt tábla oszlopot active-ra        
         db.renColToActive();
@@ -337,7 +328,8 @@ public class ViewController implements Initializable {
             settings.setRendszam("");
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
-            showAlert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
+            Alert alert= new Alert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
+            alert.show();
 // ha megvannak akkor folytatódik
         } else {
             runResume();
@@ -345,23 +337,6 @@ public class ViewController implements Initializable {
     }
 
     public void runResume() {
-// regisztrál a mysql-be
-        // Remote remote=new Remote();
-        //jsonResult=null;
-        //jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        // System.out.println(remote.post(utnyilvUrl,jsonResult));
-
-        //db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
-// frissíti a hozzáférés idejét        
-        //db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
-        //String utnyilvUrl = "https://mju7nhz6bgt5vfr4cde3xsw2yaq1.tfsoft.hu/";
-        //String utnyilvUrl ="http://localhost/utnyilvDB/";
-
-        //System.out.println(remote.run(utnyilvUrl));
-        //jsonResult=null;
-        //jsonResult = remote.createJson("mod",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        //System.out.println(jsonResult);
-        //System.out.println(remote.post(utnyilvUrl,jsonResult));
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -430,31 +405,20 @@ public class ViewController implements Initializable {
 //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
 
         //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*
-         //remote=new Remote();
-        //System.out.println(remote.run(utnyilvUrl));
-        //jsonResult=null;
-        jsonResult = remote.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        System.out.println(jsonResult);
-        System.out.println(utnyilvUrl);
-        String req =remote.post(utnyilvUrl,jsonResult);
-
-        json = new JSONObject(req);
-        System.out.println(json.getInt("engedelyezve"));
-       if((json.getInt("engedelyezve")==1))
-           System.out.println("Engedélyezve");
-       else {
-           showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
-           tabNyilv.setDisable(true);
-       }
-
- */
+        Remote remote = new Remote();
+// regisztrál a mysql-be
+        remote.regUser(settings);
+//ellenőrzi hogy engedélyezve van e és frissíti az utolsó hozzáférés idejét.
+        if (remote.checkUser(settings, tabNyilv)){
+            System.out.println("Engedélyezve");
+        remote.updateTimeStamp(settings);
+        }
+       else{
+            Alert alert = new Alert(this, "Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+            alert.show();
+            tabNyilv.setDisable(true);
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        // if (db.checkRegMySql(settings.getNev(), settings.getVaros(), settings.getCim()) == 0) {
-        //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
-        //tabNyilv.setDisable(true);
-        // }
     }
 
     @FXML
@@ -477,8 +441,10 @@ public class ViewController implements Initializable {
 
 
             } else {
-                showAlert(this, "A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
+
+                Alert alert = new Alert(this, "A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
+alert.show();
             }
 
         }
@@ -560,11 +526,13 @@ public class ViewController implements Initializable {
                 selectionModel.select(0);
 //Beállítja a telephelyhez a címet és a várost                
                 checkSpecialClients();
-                showAlert(this, "A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
+                Alert alert = new Alert(this, "A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
+alert.show();
                 runResume();
 
             } else {
-                showAlert(this, "Nem adtál meg minden szükséges\nadatot!", true, "err");
+                Alert alert = new Alert(this, "Nem adtál meg minden szükséges\nadatot!", true, "err");
+alert.show();
             }
 
         }
@@ -583,7 +551,7 @@ public class ViewController implements Initializable {
                 btnReadExcel.setText("Excel beolvasása");
                 tabNyilv.setDisable(false);
                 cbClient.getItems().clear();
-                start();
+                run();
                 selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(0);
             } else {
@@ -706,7 +674,8 @@ public class ViewController implements Initializable {
                 chkBack.setSelected(false);
 
             } else {
-                showAlert(this, "Csak az utolsó sort törölheted! ", true, "warn");
+                Alert alert = new Alert(this, "Csak az utolsó sort törölheted! ", true, "warn");
+alert.show();
                 txtDistance.setEditable(false);
             }
         }
@@ -954,7 +923,8 @@ public class ViewController implements Initializable {
             cbClient.setValue("Uticél");
 
         } catch (NumberFormatException e) {
-            showAlert(this, "A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
+            Alert alert = new Alert(this, "A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
+alert.show();
             btnBev.setDisable(false);
             txtDistance.clear();
         }
@@ -1113,20 +1083,42 @@ public class ViewController implements Initializable {
 // lekéri a távot a gmapstól a webview segítségével a webview nem látszik a felhasználói felületen
 
     public void getDistanceFromGmaps(String sAddress, String tAddress) {
-        if (txtDistance.getText() != "" || txtDistance != null) {
-            String gUrl = "https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress;
-            ///System.out.println(gUrl);
-            // itt lekérdezi a távolságot a google mapstól           
-            WV.getEngine().load(gUrl);
+        Alert alert = new Alert(this, "Távolság lekérése a Google Maps-tól", true, "info");
 
+        String gotUrl = "";
+        String gUrl = "";
+        if (txtDistance.getText() != "" || txtDistance != null) {
+            gUrl = "https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress;
+            System.out.println(gUrl);
+            ///System.out.println(gUrl);
+            // itt lekérdezi a távolságot a google mapstól
+            Remote remote = new Remote();
+            gotUrl = remote.httpGet(gUrl);
+
+            //  WV.getEngine().load(gUrl);
+            //showAlert.stop();
         }
         btnBev.setDisable(true);
         btnDistance.setDisable(true);
-        showAlert(this, "Távolság lekérése a Google Maps-tól", true, "info");
-        btnAlertSingleOK.setDisable(true);
+
+
+        // String gotUrl = Remote.httpGet(gUrl);
+
+        // btnAlertSingleOK.setDisable(true);
+//kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl
+        int index = gotUrl.indexOf(" km");
+//kiszedi a távolságot megfelelően kerekíti és beírja a textboxba
+        String sub = gotUrl.substring(index - 6, index);
+        System.out.println(sub);
+        sub = sub.replace(',', '.');
+        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+        txtDistance.setText(distance.toString());
+        btnBev.setDisable(false);
+        cbClient.setDisable(false);
+        txtDistance.setEditable(false);
 
 //figyeli hogy betöltődött-e az oldal és vár míg meg nem történt
-        WV.getEngine().getLoadWorker().stateProperty().addListener(
+       /* WV.getEngine().getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
                     @Override
                     public void changed(
@@ -1152,7 +1144,9 @@ public class ViewController implements Initializable {
                             return;
                         }
 //bekerül a html oldal forráskódja (amit a gmapstól kapott) a gotUrl változóba  
-                        String gotUrl = getURL(WV.getEngine().getLocation());
+                        //String gotUrl = getURL(WV.getEngine().getLocation());
+                        String gotUrl=Remote.httpGet(gUrl);
+        System.out.println(gotUrl);
 //kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl               
                         int index = gotUrl.indexOf(" km");
 //kiszedi a távolságot megfelelően kerekíti és beírja a textboxba                
@@ -1166,7 +1160,7 @@ public class ViewController implements Initializable {
                         txtDistance.setEditable(false);
 
                     }
-                });
+                });*/
     }
 
 
@@ -1527,7 +1521,8 @@ public class ViewController implements Initializable {
                 setLabels();
             } else {
                 observableList.clear();
-                showAlert(this, workDate + " hónapban nincsenek adatok. ", true, "info");
+                Alert alert = new Alert(this, workDate + " hónapban nincsenek adatok. ", true, "info");
+alert.show();
             }
         }
 
@@ -1574,10 +1569,7 @@ public class ViewController implements Initializable {
     //}
 
 
-
-
 // Egy saját uticélt ad az adatbázishoz
-
 
 
     //if(erkValue.startsWith(telephValue))

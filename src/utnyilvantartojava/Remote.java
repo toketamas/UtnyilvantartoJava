@@ -11,17 +11,27 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-abstract class Remote extends ViewController{
+public class Remote  implements Runnable{
+
+    private String url;
+    private  String json;
+   // final String URL=Constants.WebapiUrl.TEST_LINK_FOR_DATABASE_WEBAPI;
+    final String URL=Constants.WebapiUrl.REMOTE_LINK_FOR_DATABASE_WEBAPI;
 
 
-    JSONObject json;
+public Remote(){}
+public Remote(String url,String jsonStr){
+    this.url=url;
+    this.json=jsonStr;
 
-    private static String jsonresult;
+}
 
-    public static final MediaType JSON= MediaType.get("application/json; charset=utf-8");
-    static OkHttpClient client = new OkHttpClient();
 
-    private String httpGet(String url) {
+
+    public  final MediaType JSON= MediaType.get("application/json; charset=utf-8");
+    OkHttpClient client = new OkHttpClient();
+
+    public String httpGet(String url) {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -38,7 +48,7 @@ abstract class Remote extends ViewController{
     }
 
 
-    private static String httpPost(String url, String json) {
+    private String httpPost(String url, String json) {
         RequestBody body = RequestBody.create(json,JSON);
         System.err.println(url);
         System.err.println(json);
@@ -48,8 +58,6 @@ abstract class Remote extends ViewController{
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-
-            System.err.println(response.body().string());
             return response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,42 +66,57 @@ abstract class Remote extends ViewController{
 
     }
 
-    private  String createJson(String queryType,String nev,String varos,String cim){
+    private  String createJson(String queryType,String cim){
         String json = new JSONObject()
                 .put("lekerdezes",queryType)
-                .put("nev",nev)
-                .put("varos",varos)
                 .put("cim",cim)
                 .toString();
         return json;
     }
 
-    private static String createJson(String queryType, String nev, String varos, String cim, String rendszam){
+    private String createJson(String queryType, String nev,  String rendszam){
         String json = new JSONObject()
                 .put("lekerdezes",queryType)
                 .put("nev",nev)
-                .put("varos",varos)
-                .put("cim",cim)
                 .put("rendszam",rendszam)
                 .toString();
         return json;
     }
 
-    static String jsonResult;
-    public static boolean checkUser(Settings settings, Tab tab){
+    public void updateTimeStamp(Settings settings){
+        String jsonResult=createJson("mod",settings.getNev(),settings.getRendszam());
+        httpPost(URL,jsonResult);
+    }
 
-        jsonResult=createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        String request= httpPost(Constants.WebapiUrl.TEST_LINK_FOR_DATABASE_WEBAPI,jsonResult);
+
+    public boolean checkUser(Settings settings, Tab tab){
+
+        boolean result;
+        String jsonResult=createJson("check",settings.getNev(),settings.getRendszam());
+        String request= httpPost(URL,jsonResult);
         JSONObject json = new JSONObject(request);
-        if((json.getInt("engedelyezve")==1))
+        if((json.getInt("engedelyezve")==1)){
             System.out.println("Engedélyezve");
+        result=true;
+        }
         else {
             //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
             tab.setDisable(true);
+            result=false;
         }
 
 
-        return true;
+        return result;
+    }
+
+    public void regUser(Settings settings){
+        String jsonResult=createJson("reg",settings.getNev(),settings.getRendszam());
+        httpPost(URL,jsonResult);
+    }
+
+    @Override
+    public void run() {
+
     }
 
     //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben

@@ -621,7 +621,7 @@ public class DbModel {
         return clients;
     }
 
-    public void addDistanceToMySql(String clientId1, String clientId2, int distance) {
+    /*public void addDistanceToMySql(String clientId1, String clientId2, int distance) {
         String sqlQuery = "insert into distances  values (?,?,?)";
         try {
             preparedStatement1 = conn1.prepareStatement(sqlQuery);
@@ -713,7 +713,7 @@ public class DbModel {
         }
 
         return distance;
-    }
+    }*/
 
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
     public int convertBool(Boolean value) {
