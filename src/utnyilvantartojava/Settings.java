@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings {
+public class Settings implements IDbObject {
 
     private String nev;
     private String varos;
@@ -173,6 +173,7 @@ public class Settings {
         this.utolso_ugyfel = utolso_ugyfel;
     }
 
+    @Override
     public List<Object> getAllSettings(){
         List<Object>list=new ArrayList<>();
         list.add(this.nev);
@@ -195,29 +196,3 @@ public class Settings {
 
 
 }
-
-    /*
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, settings.getNev());
-            preparedStatement.setString(2, settings.getVaros());
-            preparedStatement.setString(3, settings.getCim());
-            preparedStatement.setString(4, settings.getAuto());
-            preparedStatement.setString(5, settings.getRendszam());
-            preparedStatement.setString(6, settings.getLoketterfogat());
-            preparedStatement.setString(7, settings.getFogyasztas());
-            preparedStatement.setInt(8, settings.getElozo_zaro());
-            preparedStatement.setString(9, honap);
-            System.out.println("add közben:" + settings.getAktualis_honap());
-            preparedStatement.setString(10, settings.getUtolso_ugyfel());
-            preparedStatement.setInt(11, settings.getZaroKm());
-            preparedStatement.setString(12, settings.getId());
-            preparedStatement.setString(13, null);
-            preparedStatement.setString(14, LocalDateTime.now().toString());
-            preparedStatement.setBoolean(15, settings.getActive());
-            preparedStatement.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
-            System.out.println("" + ex);
-        }
-
-         */

@@ -110,21 +110,10 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/SqlHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/DbModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Functions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Functions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Route.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Route.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/IDbObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/TableFunctions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/TableFunctions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/DbModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DataBaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Route.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +169,7 @@
       <list>
         <option value="JavaFXApplication" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
