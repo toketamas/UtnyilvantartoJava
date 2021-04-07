@@ -110,21 +110,21 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/UtnyilvantartoJava_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/UtnyilvantartoJava_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/SqlHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Alert.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Alert.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/DbModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Functions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Functions.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Route.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Route.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/TableFunctions.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/TableFunctions.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Alert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Alert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/DbModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DbModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/DbModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DataBaseConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,7 +189,13 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="teszt" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
@@ -405,7 +411,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="teszt" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -415,6 +433,16 @@
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">

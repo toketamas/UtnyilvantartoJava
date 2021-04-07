@@ -2,26 +2,19 @@
 package utnyilvantartojava;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DbModel {
+public class DataBaseConnection {
 
-    final String JDBC_DRIVER = "org.sqlite.JDBC";
-    final String URL = "jdbc:sqlite:routeregister.db";
-    final String USERNAME = "";
-    final String PASSWORD = "";
+    final String JDBC_DRIVER = Constants.SqliteDataBase.JDBC_DRIVER;
+    final String URL = Constants.SqliteDataBase.URL;
+    final String USERNAME = Constants.SqliteDataBase.USERNAME;
+    final String PASSWORD = Constants.SqliteDataBase.PASSWORD;
 
-    final String JDBC_DRIVER_MYSQL = "com.mysql.jdbc.Driver";
-    //final String URLMYSQL2 = "jdbc:mysql://192.168.1.11:3306/routeregister?serverTimezone=Europe/Budapest&useUnicode=true&characterEncoding=UTF-8";
-    //final String URLMYSQL = "jdbc:mysql://b4a00aba1329.sn.mynetname.net:3306/routeregister?serverTimezone=Europe/Budapest&useUnicode=true&characterEncoding=UTF-8";
-    final String URLMYSQL = "jdbc:mysql:// mysql.nethely.hu:3306/utnyilv_dieb?serverTimezone=Europe/Budapest&useUnicode=true&characterEncoding=UTF-8";
-    final String USERNAME_MYSQL = "utnyilv_dieb";
-    final String PASSWORD_MYSQL = "8V2lrQnq()Tb";
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     Connection conn = null;
@@ -37,7 +30,7 @@ public class DbModel {
     PreparedStatement preparedStatement1 = null;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    public DbModel() {
+    public DataBaseConnection() {
 
         try {
             conn = DriverManager.getConnection(URL);
@@ -63,7 +56,7 @@ public class DbModel {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////
-        try {
+        /*try {
             conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
             System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
             ViewController.mySqlActive = true;
@@ -92,21 +85,23 @@ public class DbModel {
             }
         }
 
+         */
+
         //sajat_cimek tábla létrehozása
         try {
             rs = dbmeta.getTables(null, "APP", "SAJAT_CIMEK", null);
             if (!rs.next()) {
                 createStatement.execute(
                         "CREATE TABLE sajat_cimek("
-                        + "client text,"
-                        + "clientnumber text primary key,"
-                        + "type text,factorynumber text,"
-                        + "zipcode integer,"
-                        + "city text,"
-                        + "address text,"
-                        + "exist integer,"
-                        + "maintenanceperyear integer,"
-                        + "field text);"
+                                + "client text,"
+                                + "clientnumber text primary key,"
+                                + "type text,factorynumber text,"
+                                + "zipcode integer,"
+                                + "city text,"
+                                + "address text,"
+                                + "exist integer,"
+                                + "maintenanceperyear integer,"
+                                + "field text);"
                 );
                 System.out.println("A sajat_cimek tábla létrehozva.");
             }
@@ -129,14 +124,45 @@ public class DbModel {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DbModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
+
+
+
+    //SqlHelper sqlHelper=new SqlHelper();
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
-        System.out.println("add: " + settings.getAktualis_honap());
+        //Itt valami string buildert kellene használni a lekérdezés összeállításához!
+        String sqlQuery = "insert into settings values (";
+        insert(settings.getAllSettings(), sqlQuery);
+    }
+
+
+    public void insert(List<Object> list, String sqlQuery) {
+        if (list.size() != 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i < list.size() - 1)
+                    sqlQuery = sqlQuery + "?,";
+                else
+                    sqlQuery = sqlQuery + "?);";
+            }
+        }
+        try {
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            for (int i = 0; i < list.size(); i++) {
+                preparedStatement.setObject(i + 1, list.get(i));
+            }
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült a táblához adatot hozzáadni");
+            System.out.println("" + ex);
+        }
+    }
+
+       /* System.out.println("add: " + settings.getAktualis_honap());
         String honap = settings.getAktualis_honap();
         System.out.println("a honap változó: " + honap);
         System.out.println("id: " + settings.getId());
@@ -164,7 +190,11 @@ public class DbModel {
             System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
             System.out.println("" + ex);
         }
-    }
+
+        */
+
+
+
 
     public void updateSettings(Settings settings, String idValue) {
         System.out.println("update: " + settings.getAktualis_honap());
@@ -202,7 +232,7 @@ public class DbModel {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings WHERE active='true' ;";
         return querySettings(sqlQuery);
     }
-    
+
     public Settings getLastSettingsIfActiveNullAll() {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings  ;";
         return querySettings(sqlQuery);
@@ -238,7 +268,7 @@ public class DbModel {
         return settings;
     }
 
-// routes táblához tartozó lekérdezések
+    // routes táblához tartozó lekérdezések
     public void addRoute(Route route, String rendszam) {
 
         String sqlQuery = "insert into Routes values (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -445,20 +475,23 @@ public class DbModel {
             System.out.println("" + ex);
         }
     }
+
     public void updateDistanceRev(String clientid1, String clientid2, int distance) {
         String sqlQuery = "update distances set "
                 + "distance=" + distance + " "
                 + "where clientid1 = '" + clientid2 + "' and clientid2='" + clientid1 + "';";
         updateDist(sqlQuery);
     }
+
     public void updateDistance(String clientid1, String clientid2, int distance) {
         String sqlQuery = "update distances set "
                 + "distance=" + distance + " "
-                + "where clientid1 = '" + clientid1 + "' and clientid2='" + clientid2 + "';";    
+                + "where clientid1 = '" + clientid1 + "' and clientid2='" + clientid2 + "';";
         updateDist(sqlQuery);
     }
+
     private void updateDist(String sqlQuery) {
-        
+
 
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);

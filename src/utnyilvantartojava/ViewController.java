@@ -1,10 +1,7 @@
 package utnyilvantartojava;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,11 +19,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.Thread.*;
 
 import static utnyilvantartojava.Functions.functions;
 import static utnyilvantartojava.TableFunctions.tableFunctions;
@@ -221,7 +218,7 @@ public class ViewController implements Initializable {
     @FXML
     SearchableComboBox<String> cbClient;
 
-    DbModel db;
+    DataBaseConnection db;
     // RemoteDb remoteDb = new RemoteDb();
 
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
@@ -269,9 +266,36 @@ public class ViewController implements Initializable {
 
         run();
     }
+    public void typeOf(List<Object> list){
+        for (int i = 0;i<list.size();i++){
+            Class<?> z=list.get(i).getClass();
+
+
+            System.err.println(z);
+        }
+
+    }
 
     public void run() {
-        db = new DbModel();
+        int a=5;
+        char b='f';
+        boolean c=false;
+        float d=2;
+        double e=3;
+        List<Object> list= new ArrayList<Object>();
+        list.add(2);
+        list.add("hali");
+        list.add(2.1234);
+        list.add('d');
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        list.add(d);
+        list.add(e);
+        typeOf(list);
+
+
+        db = new DataBaseConnection();
 // átnevezi a lezárt tábla oszlopot active-ra        
         db.renColToActive();
         cbClient.getItems().clear();
@@ -491,7 +515,7 @@ alert.show();
                 settings.setId(settingsId);
 //Ha az aktuális settings objektum üres beállítjuk a szükséges 
 //értékeket, hogy ne akadjon ki a program induláskor és mentjük az adatbázisba
-//ez első induláskor történik utána be kell állítani a használónak az adatait
+//ez első induláskor történik utána be kell állítani a felhasználónak az adatait
                 if (db.getSettings(settingsId) == null) {
                     settings.setAktualis_honap(workDate);
                     settings.setId(settingsId);

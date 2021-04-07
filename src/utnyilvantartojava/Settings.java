@@ -1,5 +1,9 @@
 package utnyilvantartojava;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Settings {
 
     private String nev;
@@ -169,5 +173,51 @@ public class Settings {
         this.utolso_ugyfel = utolso_ugyfel;
     }
 
+    public List<Object> getAllSettings(){
+        List<Object>list=new ArrayList<>();
+        list.add(this.nev);
+        list.add(this.varos);
+        list.add(this.cim);
+        list.add(this.auto);
+        list.add(this.rendszam);
+        list.add(this.loketterfogat);
+        list.add(this.fogyasztas);
+        list.add(this.elozo_zaro);
+        list.add(this.aktualis_honap);
+        list.add(this.utolso_ugyfel);
+        list.add(this.zaro_km);
+        list.add(this.getId());
+        list.add(this.sorszam);
+        list.add(LocalDateTime.now().toString());
+        list.add(this.active);
+        return list;
+    }
+
 
 }
+
+    /*
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, settings.getNev());
+            preparedStatement.setString(2, settings.getVaros());
+            preparedStatement.setString(3, settings.getCim());
+            preparedStatement.setString(4, settings.getAuto());
+            preparedStatement.setString(5, settings.getRendszam());
+            preparedStatement.setString(6, settings.getLoketterfogat());
+            preparedStatement.setString(7, settings.getFogyasztas());
+            preparedStatement.setInt(8, settings.getElozo_zaro());
+            preparedStatement.setString(9, honap);
+            System.out.println("add közben:" + settings.getAktualis_honap());
+            preparedStatement.setString(10, settings.getUtolso_ugyfel());
+            preparedStatement.setInt(11, settings.getZaroKm());
+            preparedStatement.setString(12, settings.getId());
+            preparedStatement.setString(13, null);
+            preparedStatement.setString(14, LocalDateTime.now().toString());
+            preparedStatement.setBoolean(15, settings.getActive());
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
+            System.out.println("" + ex);
+        }
+
+         */

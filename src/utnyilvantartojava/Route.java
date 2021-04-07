@@ -223,7 +223,7 @@ public class Route {
                 list.add(read.nextLine());
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DbModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return list;
