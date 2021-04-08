@@ -1,6 +1,10 @@
 package utnyilvantartojava;
+
+import java.util.ArrayList;
+import java.util.List;
+
 //Ez egy helyszínt reprezentál(egy gépet a clientnumber lesz a gépszám ez lesz elsődleges kulcs )
-public class Client {
+public class Client implements IDbObject {
     private String client;
     private String clientNumber;
     private String type;
@@ -103,5 +107,21 @@ public class Client {
 
     public void setField(String field) {
         this.field = field;
+    }
+
+    @Override
+    public List<Object> getAll() {
+        List<Object> list = new ArrayList<>();
+        list.add(this.client);
+        list.add(this.clientNumber);
+        list.add(this.type);
+        list.add(this.factoryNumber);
+        list.add(this.zipCode);
+        list.add(this.city);
+        list.add(this.address);
+        list.add(this.exist);
+        list.add(this.maintenancePerYear);
+        list.add(this.field);
+        return list;
     }
 }

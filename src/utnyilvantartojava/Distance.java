@@ -1,6 +1,9 @@
 package utnyilvantartojava;
 
-public class Distance {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Distance implements IDbObject {
     private String clientid1;
     private String clientid2;
     private int distance;
@@ -41,4 +44,12 @@ public class Distance {
     }
 
 
+    @Override
+    public List<Object> getAll() {
+        List<Object>list=new ArrayList<>();
+        list.add(this.clientid1);
+        list.add(this.clientid2);
+        list.add(this.distance);
+        return list;
+    }
 }

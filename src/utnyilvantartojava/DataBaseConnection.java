@@ -56,36 +56,7 @@ public class DataBaseConnection {
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////
-        /*try {
-            conn1 = DriverManager.getConnection(URLMYSQL, USERNAME_MYSQL, PASSWORD_MYSQL);
-            System.out.println("A kapcsolat létrejött a távoli mysql adatbázissal,");
-            ViewController.mySqlActive = true;
 
-        } catch (Exception e) {
-            System.out.println("Hiba! A távoli mysql server nem érhető el!");
-            System.out.println("" + e);
-            ViewController.mySqlActive = false;
-            System.out.println(ViewController.mySqlActive);
-        }
-
-        if (conn1 != null) {
-            try {
-                createStatement1 = conn1.createStatement();
-            } catch (SQLException ex) {
-                System.out.println("Hiba!");
-                System.out.println("" + ex);
-            }
-        }
-        if (conn1 != null) {
-            try {
-                dbmeta1 = conn1.getMetaData();
-            } catch (SQLException ex) {
-                System.out.println("Hiba!");
-                System.out.println("" + ex);
-            }
-        }
-
-         */
 
         //sajat_cimek tábla létrehozása
         try {
@@ -131,17 +102,17 @@ public class DataBaseConnection {
 
 
 
-
     //SqlHelper sqlHelper=new SqlHelper();
     //settings táblához tartozó lekérdezések
     public void addSettings(Settings settings) {
         //Itt valami string buildert kellene használni a lekérdezés összeállításához!
         String sqlQuery = "insert into settings values (";
-        insert(settings.getAllSettings(), sqlQuery);
+        insertUpdate(settings.getAll(), sqlQuery);
     }
 
 
-    public void insert(List<Object> list, String sqlQuery) {
+
+    public void insertUpdate(List<Object> list, String sqlQuery) {
         if (list.size() != 0) {
             for (int i = 0; i < list.size(); i++) {
                 if (i < list.size() - 1)
@@ -161,40 +132,6 @@ public class DataBaseConnection {
             System.out.println("" + ex);
         }
     }
-
-       /* System.out.println("add: " + settings.getAktualis_honap());
-        String honap = settings.getAktualis_honap();
-        System.out.println("a honap változó: " + honap);
-        System.out.println("id: " + settings.getId());
-        String sqlQuery = "insert into settings values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        try {
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, settings.getNev());
-            preparedStatement.setString(2, settings.getVaros());
-            preparedStatement.setString(3, settings.getCim());
-            preparedStatement.setString(4, settings.getAuto());
-            preparedStatement.setString(5, settings.getRendszam());
-            preparedStatement.setString(6, settings.getLoketterfogat());
-            preparedStatement.setString(7, settings.getFogyasztas());
-            preparedStatement.setInt(8, settings.getElozo_zaro());
-            preparedStatement.setString(9, honap);
-            System.out.println("add közben:" + settings.getAktualis_honap());
-            preparedStatement.setString(10, settings.getUtolso_ugyfel());
-            preparedStatement.setInt(11, settings.getZaroKm());
-            preparedStatement.setString(12, settings.getId());
-            preparedStatement.setString(13, null);
-            preparedStatement.setString(14, LocalDateTime.now().toString());
-            preparedStatement.setBoolean(15, settings.getActive());
-            preparedStatement.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült a settings táblához adatot hozzáadni");
-            System.out.println("" + ex);
-        }
-
-        */
-
-
-
 
     public void updateSettings(Settings settings, String idValue) {
         System.out.println("update: " + settings.getAktualis_honap());
@@ -429,19 +366,9 @@ public class DataBaseConnection {
     }
 
     //distances táblához tartozó lekérdezések
-    public void addDistance(String clientId1, String clientId2, int distance) {
-        String sqlQuery = "insert into distances values (?,?,?)";
-        try {
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, clientId1);
-            preparedStatement.setString(2, clientId2);
-            preparedStatement.setInt(3, distance);
-            preparedStatement.execute();
-            //  System.out.println(sqlQuery);
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült a Distance táblába írni írni");
-            System.out.println("" + ex);
-        }
+    public void addDistance(Distance distance){
+        String sqlQuery = "insert into distances values (";
+        insertUpdate(distance.getAll(),sqlQuery);
     }
 
     public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
@@ -459,21 +386,6 @@ public class DataBaseConnection {
         }
 
         return distance;
-    }
-//Beállítja a távolságot a két meglévő helyszín között
-
-    public void setDistance(String clientid1, String clientid2, int distance) {
-        String sqlQuery = "insert into distance values (?,?,?)";
-        try {
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, clientid1);
-            preparedStatement.setString(2, clientid2);
-            preparedStatement.setInt(3, distance);
-            preparedStatement.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerűlt a distance táblába írni");
-            System.out.println("" + ex);
-        }
     }
 
     public void updateDistanceRev(String clientid1, String clientid2, int distance) {
@@ -507,28 +419,11 @@ public class DataBaseConnection {
     public void addClient(Client client, boolean sajatKliens) {
         String sqlQuery;
         if (sajatKliens) {
-            sqlQuery = "insert into sajat_cimek values (?,?,?,?,?,?,?,?,?,?)";
+            sqlQuery = "insert into sajat_cimek values (";
         } else {
-            sqlQuery = "insert into clients values (?,?,?,?,?,?,?,?,?,?)";
+            sqlQuery = "insert into clients values (";
         }
-        try {
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            System.out.println(sqlQuery);
-            preparedStatement.setString(1, client.getClient());
-            preparedStatement.setString(2, client.getClientNumber());
-            preparedStatement.setString(3, client.getType());
-            preparedStatement.setString(4, client.getFactoryNumber());
-            preparedStatement.setInt(5, client.getZipCode());
-            preparedStatement.setString(6, client.getCity());
-            preparedStatement.setString(7, client.getAddress());
-            preparedStatement.setInt(8, convertBool(client.getExist()));
-            preparedStatement.setInt(9, client.getMaintenancePerYear());
-            preparedStatement.setString(10, client.getField());
-            preparedStatement.execute();
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült a clients táblába írni");
-            System.out.println("" + ex);
-        }
+        insertUpdate(client.getAll(),sqlQuery);
     }
 
     public void addAllSajatClientToClients() {
@@ -653,100 +548,6 @@ public class DataBaseConnection {
         }
         return clients;
     }
-
-    /*public void addDistanceToMySql(String clientId1, String clientId2, int distance) {
-        String sqlQuery = "insert into distances  values (?,?,?)";
-        try {
-            preparedStatement1 = conn1.prepareStatement(sqlQuery);
-            preparedStatement1.setString(1, clientId1);
-            preparedStatement1.setString(2, clientId2);
-            preparedStatement1.setInt(3, distance);
-            preparedStatement1.execute();
-            //   System.out.println(sqlQuery);
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült a mysql distances táblába írni írni");
-            System.out.println("" + ex);
-        }
-    }
-
-    public void addRegToMySql(String nev, String varos, String cim, String rendszam) {
-        String sqlQuery = "insert into felhasznalok  (nev,varos,cim,rendszam,regisztracio,utolso_hozzaferes,engedelyezve) values (?,?,?,?,?,?,?)";
-        try {
-            if (conn1 != null) {
-                preparedStatement1 = conn1.prepareStatement(sqlQuery);
-                preparedStatement1.setString(1, nev);
-                preparedStatement1.setString(2, varos);
-                preparedStatement1.setString(3, cim);
-                preparedStatement1.setString(4, rendszam);
-                preparedStatement1.setString(5, LocalDate.now().toString());
-                preparedStatement1.setString(6, LocalDateTime.now().toString());
-                preparedStatement1.setInt(7, 1);
-                preparedStatement1.execute();
-                System.out.println(LocalDateTime.now());
-            }
-            //   System.out.println(sqlQuery);
-        } catch (SQLException ex) {
-            System.out.println("Hiba! Nem sikerült a mysql distances táblába írni írni");
-            System.out.println("" + ex);
-        }
-    }
-
-    public void updateRegMysql(String nev, String varos, String cim, String rendszam) {
-        String sqlQuery = "update felhasznalok set "
-                + "utolso_hozzaferes='" + LocalDateTime.now() + "', "
-                + "rendszam='" + rendszam + "' "
-                + "where nev ='" + nev + "' and varos='" + varos + "' and cim='" + cim + "';";
-
-        System.out.println(sqlQuery);
-        try {
-            if (conn1 != null) {
-                preparedStatement1 = conn1.prepareStatement(sqlQuery);
-                preparedStatement1.execute();
-                System.out.println("A felhasnalok tábla frissítése sikeres.");
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            System.out.println("Nem sikerült a felhasznalok tábla frissítése.");
-        }
-    }
-
-    public int checkRegMySql(String nev, String varos, String cim) {
-        int result = 0;
-        String sqlQuery = "select * from felhasznalok where nev='" + nev + "' and varos='" + varos + "' and cim='" + cim + "';";
-        System.out.println(sqlQuery);
-
-        try {
-            if (conn1 != null) {
-                preparedStatement1 = conn1.prepareStatement(sqlQuery);
-                rs1 = preparedStatement1.executeQuery();
-                if (rs1.next()) {
-                    result = rs1.getInt("engedelyezve");
-                }
-                System.out.println(result);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Nem sikerült a mysql felhasznalok táblából olvasni!");
-            System.out.println(ex);
-        }
-        return result;
-
-    }
-
-    public Distance getDistanceFromMySql(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
-        Distance distance = new Distance(client1, client2);
-        String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
-        try {
-            preparedStatement1 = conn1.prepareStatement(sqlQuery);
-            rs1 = preparedStatement1.executeQuery();
-
-            distance.setDistance(rs1.getInt("distance"));
-
-        } catch (SQLException ex) {
-            System.out.println("Nem sikerűlt a mysql distances táblából olvasni!");;
-        }
-
-        return distance;
-    }*/
 
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
     public int convertBool(Boolean value) {

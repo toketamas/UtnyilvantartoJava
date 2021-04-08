@@ -49,6 +49,7 @@
       <change afterPath="$PROJECT_DIR$/../../anc/gradlew.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../anc/settings.gradle" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../httpTest/httpTest.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/Útnyilvántartó Projekt.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../AdatBeolvaso" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../ExcelToDB/.vs/ExcelToDB/v16/.suo" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../ExcelToDB/ExcelToDB.sln" afterDir="false" />
@@ -95,6 +96,7 @@
       <change afterPath="$PROJECT_DIR$/../IoExcel/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/ATM_karb_20200525.xlsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/ExcelToDB.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoExcel/IoExcel.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/clients.db" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/out/artifacts/ExcelToDB_jar/ExcelToDB.jar" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/out/production/ExcelToDB/META-INF/MANIFEST.MF" afterDir="false" />
@@ -107,13 +109,24 @@
       <change afterPath="$PROJECT_DIR$/../IoExcel/src/exceltodb/DBModel.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/src/exceltodb/ExcelToDB.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/src/exceltodb/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Norbi_1/Norbi_1.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/IDbObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/DataBaseConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/DataBaseConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/DbObject.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Distance.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Distance.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/DataBaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DataBaseConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Distance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Distance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/IDbObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/IDbObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

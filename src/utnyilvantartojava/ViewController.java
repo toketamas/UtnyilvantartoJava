@@ -965,7 +965,8 @@ alert.show();
         // ha a visszakapott érték 0 akkor beírja az adatbázisba új távolságként
         if (start.getDistance() == 0 && target.getDistance() == 0) {
             //       if (start == null && target == null) {
-            db.addDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            Distance dist =new Distance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            db.addDistance(dist);
             btnBev.setDisable(false);
             btnDistance.setDisable(true);
             System.out.println("beírtam");
