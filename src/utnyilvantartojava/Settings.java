@@ -174,7 +174,7 @@ public class Settings implements IDbObject {
     }
 
     @Override
-    public List<Object> getAll(){
+    public List<Object> list(){
         List<Object>list=new ArrayList<>();
         list.add(this.nev);
         list.add(this.varos);

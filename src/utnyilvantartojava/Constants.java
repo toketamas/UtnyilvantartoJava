@@ -28,7 +28,7 @@ public class Constants
 
 
     public  static class SqlQuery{
-        //public static final String SQL_QUERY_INSERT = "insert into settings values (";
+        public static final String INSERT = "INSERT";
 
     }
 

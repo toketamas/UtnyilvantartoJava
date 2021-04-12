@@ -23,11 +23,13 @@ public class DataBaseConnection {
     ResultSet rs = null;
     PreparedStatement preparedStatement = null;
 
-    Connection conn1 = null;
+    /*Connection conn1 = null;
     Statement createStatement1 = null;
     DatabaseMetaData dbmeta1 = null;
     ResultSet rs1 = null;
     PreparedStatement preparedStatement1 = null;
+
+     */
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     public DataBaseConnection() {
@@ -107,7 +109,7 @@ public class DataBaseConnection {
     public void addSettings(Settings settings) {
         //Itt valami string buildert kellene használni a lekérdezés összeállításához!
         String sqlQuery = "insert into settings values (";
-        insertUpdate(settings.getAll(), sqlQuery);
+        insertUpdate(settings.list(), sqlQuery);
     }
 
 
@@ -133,7 +135,7 @@ public class DataBaseConnection {
         }
     }
 
-    public void updateSettings(Settings settings, String idValue) {
+   public void updateSettings(Settings settings, String idValue) {
         System.out.println("update: " + settings.getAktualis_honap());
         String sqlQuery = "update settings set "
                 + "nev= '" + settings.getNev() + "',"
@@ -159,6 +161,8 @@ public class DataBaseConnection {
             throwables.printStackTrace();
         }
     }
+
+
 
     public Settings getSettings(String settingsId) {
         String sqlQuery = "select * from settings where id='" + settingsId + "'";
@@ -364,11 +368,10 @@ public class DataBaseConnection {
             throwables.printStackTrace();
         }
     }
-
+    SqlHelper sqlHelper=new SqlHelper();
     //distances táblához tartozó lekérdezések
     public void addDistance(Distance distance){
-        String sqlQuery = "insert into distances values (";
-        insertUpdate(distance.getAll(),sqlQuery);
+        sqlHelper.sqlStringBuilder(distance.list(),Constants.SqlQuery.INSERT);
     }
 
     public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
@@ -423,7 +426,7 @@ public class DataBaseConnection {
         } else {
             sqlQuery = "insert into clients values (";
         }
-        insertUpdate(client.getAll(),sqlQuery);
+        insertUpdate(client.list(),sqlQuery);
     }
 
     public void addAllSajatClientToClients() {

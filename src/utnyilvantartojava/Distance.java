@@ -45,7 +45,7 @@ public class Distance implements IDbObject {
 
 
     @Override
-    public List<Object> getAll() {
+    public List<Object> list() {
         List<Object>list=new ArrayList<>();
         list.add(this.clientid1);
         list.add(this.clientid2);
