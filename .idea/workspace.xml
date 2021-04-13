@@ -83,12 +83,6 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/DbConn.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/DbConn.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UtnyilvantartoJava.iml" beforeDir="false" afterPath="$PROJECT_DIR$/UtnyilvantartoJava.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/DataBaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DataBaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/IDbObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/IDbObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
