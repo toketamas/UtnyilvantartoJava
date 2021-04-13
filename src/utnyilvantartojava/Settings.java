@@ -1,8 +1,12 @@
 package utnyilvantartojava;
 
+import org.json.JSONObject;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -20,18 +24,15 @@ public class Settings implements IDbObject {
     private String utolso_ugyfel;
     private int zaro_km;
     private String id;
-    private  int sorszam;
+    private int sorszam;
     private String utolsoSzerkesztes;
     private Boolean active;
 
 
-
-
-
     public Settings(String id) {
         this.id = id;
-        this.nev ="";
-        this.varos ="";
+        this.nev = "";
+        this.varos = "";
         this.cim = "";
         this.auto = "";
         this.rendszam = "";
@@ -40,14 +41,13 @@ public class Settings implements IDbObject {
         this.elozo_zaro = 0;
         this.aktualis_honap = "";
         this.utolso_ugyfel = "telephely";
-        this.zaro_km =0;
-        this.active=true;
+        this.zaro_km = 0;
+        this.active = true;
 
     }
 
     public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas,
-                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean active)
-    {
+                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean active) {
         this.nev = nev;
         this.varos = varos;
         this.cim = cim;
@@ -59,12 +59,13 @@ public class Settings implements IDbObject {
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = utolso_ugyfel;
         this.zaro_km = zaro_km;
-        this.id =id;
-        this.sorszam=sorszam;
-        this.utolsoSzerkesztes=utolsoSzerkesztes;
-        this.active=active;
-    };
+        this.id = id;
+        this.sorszam = sorszam;
+        this.utolsoSzerkesztes = utolsoSzerkesztes;
+        this.active = active;
+    }
 
+    ;
 
 
     public String getId() {
@@ -176,8 +177,9 @@ public class Settings implements IDbObject {
     }
 
     @Override
-    public List<Object> list(){
-        List<Object>list=new ArrayList<>();
+    public List<Object> list() {
+        List<Object> list = new ArrayList<>();
+
         list.add(this.nev);
         list.add(this.varos);
         list.add(this.cim);
@@ -195,6 +197,28 @@ public class Settings implements IDbObject {
         list.add(this.active);
         return list;
     }
+
+    @Override
+    public List<String> keys() {
+        keys().add("nev");
+        keys().add("varos");
+        keys().add("cim");
+        keys().add("auto");
+        keys().add("rendszam");
+        keys().add("loketterfogat");
+        keys().add("fogyasztas");
+        keys().add("elozo_zaro");
+        keys().add("aktualis_honap");
+        keys().add("utolso_ugyfel");
+        keys().add("zaro_km");
+        keys().add("id");
+        keys().add("sorszam");
+        keys().add("");
+        keys().add("active");
+        return keys();
+    }
+
+    ;
 
 
 

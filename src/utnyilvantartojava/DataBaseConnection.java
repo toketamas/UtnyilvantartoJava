@@ -109,12 +109,12 @@ public class DataBaseConnection {
     public void addSettings(Settings settings) {
         //Itt valami string buildert kellene használni a lekérdezés összeállításához!
         String sqlQuery = "insert into settings values (";
-        insertUpdate(settings.list(), sqlQuery);
+        insert(settings.list(), sqlQuery);
     }
 
 
 
-    public void insertUpdate(List<Object> list, String sqlQuery) {
+    public void insert(List<Object> list, String sqlQuery) {
         if (list.size() != 0) {
             for (int i = 0; i < list.size(); i++) {
                 if (i < list.size() - 1)
@@ -426,7 +426,7 @@ public class DataBaseConnection {
         } else {
             sqlQuery = "insert into clients values (";
         }
-        insertUpdate(client.list(),sqlQuery);
+        insert(client.list(),sqlQuery);
     }
 
     public void addAllSajatClientToClients() {
