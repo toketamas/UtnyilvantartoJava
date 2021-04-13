@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
@@ -12,3 +13,6 @@
     <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
+=======
+<module type="JAVA_MODULE" version="4" />
+>>>>>>> bfc92e9233b7ea65ea5e24cc52f384fcfacc563e
