@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class Settings implements IDbObject {
 
     private String nev;
@@ -193,6 +195,29 @@ public class Settings implements IDbObject {
         list.add(this.active);
         return list;
     }
+
+
+
+    public DoubleList doubleList(){
+        DoubleList list = new DoubleList();
+        list.add("nev",this.nev);
+        list.add("varos",this.varos);
+        list.add("cim",this.cim);
+        list.add("auto",this.auto);
+        list.add("rendszam",this.rendszam);
+        list.add("loketterfogat",this.loketterfogat);
+        list.add("fogyasztas",this.fogyasztas);
+        list.add("elozo_zaro",this.elozo_zaro);
+        list.add("aktualis_honap",this.aktualis_honap);
+        list.add("utolso_ugyfel",this.utolso_ugyfel);
+        list.add("zaro_km",this.zaro_km);
+        list.add("id",this.getId());
+        list.add("sorszam",this.sorszam);
+        list.add("utolso_szerkesztes",LocalDateTime.now().toString());
+        list.add("active",this.active);
+        return list;
+    }
+
 
 
 }

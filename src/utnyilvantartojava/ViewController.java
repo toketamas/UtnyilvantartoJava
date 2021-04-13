@@ -361,6 +361,10 @@ public class ViewController implements Initializable {
     }
 
     public void runResume() {
+        SqlBuilder sqlBuilder=new SqlBuilder(Constants.SqliteDataBase.JDBC_DRIVER,Constants.SqliteDataBase.URL,Constants.SqliteDataBase.USERNAME,Constants.SqliteDataBase.PASSWORD);
+        System.out.println(settings.doubleList().size());
+        System.out.println(settings.list().size());
+        sqlBuilder.sqlStringBuilder(settings.doubleList(),Constants.SqlQuery.UPDATE);
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -638,7 +642,7 @@ alert.show();
 
                 startClient = db.getClientFromAddress(elozoCim);
 
-                db.delRoute(selectedRoute.getRouteId());
+                db.delRoute(selectedRoute.getId());
                 setLabels();
                 if (observableList.size() > 1) {
                     elozoCim = observableList.get(observableList.size() - 1).getErkezes();
@@ -656,7 +660,7 @@ alert.show();
                     settings.setUtolso_ugyfel(elozoKliens);
 
                     observableList.remove(selectedRoute);
-                    db.delRoute(selectedRoute.getRouteId());
+                    db.delRoute(selectedRoute.getId());
                     setLabels();
                     paneNormal.setVisible(true);
                     paneCorr.setVisible(false);
@@ -716,7 +720,7 @@ alert.show();
             fuel = functions(this).checkFueling(fuel);
             selectedRoute.setFueling(Double.parseDouble(fuel));
             observableList.set(selectedRoute.getCellId(), selectedRoute);
-            db.updateRoute(selectedRoute, selectedRoute.getRouteId());
+            db.updateRoute(selectedRoute, selectedRoute.getId());
 //Elmenti az adatbázisba a distance táblába a módosított távolságot
             updateDistance(selectedRoute, settings.getUtolso_ugyfel(), txtDistance.getText());
             observableList.clear();
@@ -1420,7 +1424,7 @@ alert.show();
         for (int i = 0; i < observableList.size(); i++) {
             currentValue = currentValue + observableList.get(i).getTavolsag();
             observableList.get(i).setSpedometer(currentValue);
-            db.updateRoute(observableList.get(i), observableList.get(i).getRouteId());
+            db.updateRoute(observableList.get(i), observableList.get(i).getId());
         }
         setLabels();
     }

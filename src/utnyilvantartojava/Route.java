@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class Route {
 
 // private LocalDate datum;
-    private Integer routeId;
+    private Integer id;
     private StringProperty datum;
     private StringProperty indulas;
     private StringProperty erkezes;
@@ -27,8 +27,8 @@ public class Route {
 
     
 
-    public Route(int routeId, String datum,Boolean magan, String indulas, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int celId) {
-        this.routeId=routeId;
+    public Route(int id, String datum, Boolean magan, String indulas, String erkezes, String ugyfel , Double tankolas, Integer spedometer, Integer tavolsag, Boolean odaVissza, int celId) {
+        this.id = id;
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
         this.erkezes = new SimpleStringProperty(erkezes);
@@ -41,8 +41,8 @@ public class Route {
         this.cellId=celId;
     }
     
-    public Route(int routeId, String datum,Boolean magan, String indulas, String induloUgyfel, String erkezes,String ugyfel ,Double tankolas,Integer spedometer,Integer tavolsag, Boolean odaVissza,int celId) {
-        this.routeId=routeId;
+    public Route(int id, String datum, Boolean magan, String indulas, String induloUgyfel, String erkezes, String ugyfel , Double tankolas, Integer spedometer, Integer tavolsag, Boolean odaVissza, int celId) {
+        this.id = id;
         this.datum = new SimpleStringProperty(datum);
         this.indulas = new SimpleStringProperty(indulas);
         this.erkezes = new SimpleStringProperty(erkezes);
@@ -81,12 +81,12 @@ public class Route {
 
     }
 
-    public Integer getRouteId() {
-        return routeId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setRouteId(Integer routeId) {
-        this.routeId = routeId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getDatum() {

@@ -29,6 +29,7 @@ public class Constants
 
     public  static class SqlQuery{
         public static final String INSERT = "INSERT";
+        public static final String UPDATE="UPDATE";
 
     }
 
