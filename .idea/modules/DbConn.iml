@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="DbConn:main" external.linked.project.path="$USER_HOME$/IdeaProjects/DbConn" external.root.project.path="$USER_HOME$/IdeaProjects/DbConn" external.system.id="GRADLE" external.system.module.group="org.example" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4" />
+<module external.linked.project.id="DbConn:main" external.linked.project.path="$USER_HOME$/IdeaProjects/DbConn" external.root.project.path="$USER_HOME$/IdeaProjects/DbConn" external.system.id="GRADLE" external.system.module.group="org.example" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/IdeaProjects/DBConnect">
+      <excludeFolder url="file://$USER_HOME$/IdeaProjects/DBConnect/.gradle" />
+      <excludeFolder url="file://$USER_HOME$/IdeaProjects/DBConnect/build" />
+    </content>
+    <orderEntry type="jdk" jdkName="15" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
