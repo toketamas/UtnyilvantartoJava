@@ -83,25 +83,6 @@
       <change afterPath="$PROJECT_DIR$/../Utnyilvantarto" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../UtnyilvantartoJava.old" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/DBConnect.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Connect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/DoubleList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/SqlBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utnyilvantartojava/SqlCommands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UtnyilvantartoJava.iml" beforeDir="false" afterPath="$PROJECT_DIR$/UtnyilvantartoJava.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/adatbeolvaso/Karbantart.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/adatbeolvaso/Karbantart.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants$SqlQuery.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants$SqlQuery.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Route.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Route.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Settings.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Route.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
