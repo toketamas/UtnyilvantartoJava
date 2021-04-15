@@ -39,13 +39,7 @@ public class Functions {
         }
     }
 
-    public String checkFueling(String fuel) {
-        System.out.println(fuel);
-        if (fuel.contains(",")) {
-            fuel = fuel.replace(",", ".");
-        }
-        return fuel;
-    }
+
 
     public void addSajatCim() {
 

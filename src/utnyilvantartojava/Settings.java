@@ -218,6 +218,13 @@ public class Settings implements IDbObject {
         return list;
     }
 
+    public void dbUpdate(){
 
+    }
+
+    public void dbInsert(){
+
+
+    }
 
 }

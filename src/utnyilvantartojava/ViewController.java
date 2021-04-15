@@ -16,10 +16,8 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -246,7 +244,7 @@ public class ViewController implements Initializable {
     boolean alertOkOrCancel;
     boolean alertClick;
     public static boolean mySqlActive;
-    Integer distance;
+    //Integer distance;
     Integer spedometer;
     int selctedRow;
     int selectedClientSpedometer;
@@ -261,40 +259,20 @@ public class ViewController implements Initializable {
     TableColumn ugyfCol;
     TableColumn spedometerCol;
 
+
+    //Változók optimalizálása/////////////////////////////////////////////////////////////////////////////
+    Remote remote;
+    NonFxFunctions nonFxFunctions;
+
     //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
 
         run();
     }
-    public void typeOf(List<Object> list){
-        for (int i = 0;i<list.size();i++){
-            Class<?> z=list.get(i).getClass();
 
-
-            System.err.println(z);
-        }
-
-    }
 
     public void run() {
-        int a=5;
-        char b='f';
-        boolean c=false;
-        float d=2;
-        double e=3;
-        List<Object> list= new ArrayList<Object>();
-        list.add(2);
-        list.add("hali");
-        list.add(2.1234);
-        list.add('d');
-        list.add(a);
-        list.add(b);
-        list.add(c);
-        list.add(d);
-        list.add(e);
-        typeOf(list);
-
-
+        nonFxFunctions =new NonFxFunctions();
         db = new DataBaseConnection();
 // átnevezi a lezárt tábla oszlopot active-ra        
         db.renColToActive();
@@ -352,7 +330,7 @@ public class ViewController implements Initializable {
             settings.setRendszam("");
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
-            Alert alert= new Alert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
+            Alert alert = new Alert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
             alert.show();
 // ha megvannak akkor folytatódik
         } else {
@@ -361,10 +339,10 @@ public class ViewController implements Initializable {
     }
 
     public void runResume() {
-        SqlBuilder sqlBuilder=new SqlBuilder(Constants.SqliteDataBase.JDBC_DRIVER,Constants.SqliteDataBase.URL,Constants.SqliteDataBase.USERNAME,Constants.SqliteDataBase.PASSWORD);
+        SqlBuilder sqlBuilder = new SqlBuilder(Constants.SqliteDataBase.JDBC_DRIVER, Constants.SqliteDataBase.URL, Constants.SqliteDataBase.USERNAME, Constants.SqliteDataBase.PASSWORD);
         System.out.println(settings.doubleList().size());
         System.out.println(settings.list().size());
-        sqlBuilder.sqlStringBuilder(settings.doubleList(),Constants.SqlQuery.UPDATE);
+        sqlBuilder.sqlStringBuilder(settings.doubleList(), Constants.SqlQuery.UPDATE);
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -433,11 +411,12 @@ public class ViewController implements Initializable {
 //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
 
         //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Remote remote = new Remote();
+        remote = new Remote(settings);
 // regisztrál a mysql-be
-        remote.regUser(settings);
+        remote.regUser();
 //ellenőrzi hogy engedélyezve van e és frissíti az utolsó hozzáférés idejét.
-        if (remote.checkUser(settings, tabNyilv)){
+        remote.checkUser(tabNyilv);
+        /*if (remote.checkUser(settings, tabNyilv)){
             System.out.println("Engedélyezve");
         remote.updateTimeStamp(settings);
         }
@@ -446,6 +425,8 @@ public class ViewController implements Initializable {
             alert.show();
             tabNyilv.setDisable(true);
         }
+
+         */
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
@@ -472,7 +453,7 @@ public class ViewController implements Initializable {
 
                 Alert alert = new Alert(this, "A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
                         + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
-alert.show();
+                alert.show();
             }
 
         }
@@ -555,12 +536,12 @@ alert.show();
 //Beállítja a telephelyhez a címet és a várost                
                 checkSpecialClients();
                 Alert alert = new Alert(this, "A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
-alert.show();
+                alert.show();
                 runResume();
 
             } else {
                 Alert alert = new Alert(this, "Nem adtál meg minden szükséges\nadatot!", true, "err");
-alert.show();
+                alert.show();
             }
 
         }
@@ -703,7 +684,7 @@ alert.show();
 
             } else {
                 Alert alert = new Alert(this, "Csak az utolsó sort törölheted! ", true, "warn");
-alert.show();
+                alert.show();
                 txtDistance.setEditable(false);
             }
         }
@@ -717,7 +698,7 @@ alert.show();
             selectedRoute.setVissza(chkBack.isSelected());
             selectedRoute.setMagan(chkPrivate.isSelected());
             String fuel = txtFueling.getText();
-            fuel = functions(this).checkFueling(fuel);
+            fuel = nonFxFunctions.checkFueling(fuel);
             selectedRoute.setFueling(Double.parseDouble(fuel));
             observableList.set(selectedRoute.getCellId(), selectedRoute);
             db.updateRoute(selectedRoute, selectedRoute.getId());
@@ -752,7 +733,7 @@ alert.show();
 
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
-            txtDate.setText(workDateDecOrInc("+"));
+            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings,workDate,"+"));
             setWorkdate("+");
             functions(this).checkDateForPlusButton();
         }
@@ -760,7 +741,7 @@ alert.show();
 
             settings.setActive(false);
             db.updateSettings(settings, settings.getId());
-            txtDate.setText(workDateDecOrInc("-"));
+            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings,workDate,"-"));
             setWorkdate("-");
             functions(this).checkDateForPlusButton();
         }
@@ -806,7 +787,7 @@ alert.show();
     }
 //magánutat ad a listához
 
-    public void privateRoute() {
+    public void privateRoute(int distance) {
         observableList.add(new Route(
                 datePicker.getValue().toString(),
                 chkPrivate.isSelected(),
@@ -840,7 +821,7 @@ alert.show();
     }
 //ez ad hozzá egy utat    
 
-    public void oneRoute() {
+    public void oneRoute(int distance) {
         observableList.add(
                 new Route(
                         date,
@@ -855,7 +836,7 @@ alert.show();
     }
 // ez egy visszautat ad hozzá, ez előtt van a listában egy odaút
 
-    public void backRoute() {
+    public void backRoute(int distance) {
         fueling = 0.0;
         observableList.add(
                 new Route(
@@ -881,36 +862,37 @@ alert.show();
     public void insertRoute() {
 //dátum beolvasás
         //fueling=0.0;
-//ha üres a txtFueling  akkor a parseDouble kiakad ezért akkor 0.0 éréküvé tesszük        
+//ha üres a txtFueling  akkor a parseDouble kiakad ezért akkor 0.0 éréküvé tesszük
+
         String fueltext = txtFueling.getText();
         if (fueltext.isEmpty()) {
             fueltext = "0.0";
         }
-        fueling = Double.parseDouble(functions(this).checkFueling(fueltext));
+        fueling = Double.parseDouble(nonFxFunctions.checkFueling(fueltext));
 
         date = datePicker.getValue().toString();
 //kivételkezelés a parseInt miatt itt olvassa be a távolságot a textboxból
         try {
-            distance = parseInt(txtDistance.getText());
+            int distance = parseInt(txtDistance.getText());
 
 // beállítja a címkéket az útnyilvántartó oldalon
             setLabels();
 //ha a magánút be van pipálva
             if (chkPrivate.isSelected()) {
 //hozzáad egy magánutat
-                privateRoute();
+                privateRoute(distance);
 //ha be van pipélva az oda-vissza
             } else if (chkBack.isSelected()) {
 //hozzáadja az utat a listához   
-                oneRoute();
+                oneRoute(distance);
                 checkDistInDb();
 //mégegyszer bekerül az út de most s kezdőcím és a cél fel van cserélve
-                backRoute();
+                backRoute(distance);
             } else {
 
                 chkSites.setSelected(false);
 //hozzáadja az utat a listához            
-                oneRoute();
+                oneRoute(distance);
 //beállítja utolsó ügyfélnek a cél ügyfél client numberét beírja az indulás mezőbe a teljes címet
 //mert a köv. út innen indul majd 
                 settings.setUtolso_ugyfel(targetClient.getClientNumber());
@@ -952,7 +934,7 @@ alert.show();
 
         } catch (NumberFormatException e) {
             Alert alert = new Alert(this, "A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
-alert.show();
+            alert.show();
             btnBev.setDisable(false);
             txtDistance.clear();
         }
@@ -969,7 +951,7 @@ alert.show();
         // ha a visszakapott érték 0 akkor beírja az adatbázisba új távolságként
         if (start.getDistance() == 0 && target.getDistance() == 0) {
             //       if (start == null && target == null) {
-            Distance dist =new Distance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            Distance dist = new Distance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
             db.addDistance(dist);
             btnBev.setDisable(false);
             btnDistance.setDisable(true);
@@ -1079,54 +1061,25 @@ alert.show();
 
         }
     }
-//ez lesz  az openstreetmaps lekérdezés ha kész lesz
 
-    public void getDistanceFromOsm(String sAddress, String tAddress) {
-        if (txtDistance.getText() != "" || txtDistance != null) {
-            String startUrl = "192.168.1.20:8080/search/search?q=" + sAddress + "&format=xml&polygon_geojson=1&addressdetails=1";
-            String targetUrl = "192.168.1.20:8080/search/search?q=" + tAddress + "&format=xml&polygon_geojson=1&addressdetails=1";
-            System.out.println(startUrl);
-            System.out.println(targetUrl);
-            WV.getEngine().load(startUrl);
-            String value = getURL(WV.getEngine().getLocation());
-            System.out.println(value);
-            //String gUrl = "192.168.1.20:5500/" + sAddress + "/" + tAddress;
-            //System.out.println(gUrl);
-            //  WV.getEngine().load(gUrl); // lekérdezi a távolságot a google mapstól
-            //String gotUrl = getURL(WV.getEngine().getLocation());
-            //System.out.println(gotUrl);
-            /*int index = gotUrl.indexOf(" km");
-                        String sub = gotUrl.substring(index - 6, index);
-                        System.out.println(sub);
-                        sub = sub.replace(',', '.');
-                        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
-                        txtDistance.setText(distance.toString());
-                        btnBev.setDisable(false);
-                        cbClient.setDisable(false);
-                        txtDistance.setEditable(false);
-             */
 
-        }
+// lekéri a távot a gmapstól
 
-    }
-// lekéri a távot a gmapstól a webview segítségével a webview nem látszik a felhasználói felületen
 
-    public void getDistanceFromGmaps(String sAddress, String tAddress) {
-        Alert alert = new Alert(this, "Távolság lekérése a Google Maps-tól", true, "info");
+
+
+  /*  public void getDistanceFromGmaps(String sAddress, String tAddress) {
+        //Alert alert = new Alert(this, "Távolság lekérése a Google Maps-tól", true, "info");
 
         String gotUrl = "";
         String gUrl = "";
         if (txtDistance.getText() != "" || txtDistance != null) {
             gUrl = "https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress;
             System.out.println(gUrl);
-            ///System.out.println(gUrl);
             // itt lekérdezi a távolságot a google mapstól
-            Remote remote = new Remote();
+            Remote remote = new Remote(settings);
             gotUrl = remote.httpGet(gUrl);
-
-            //  WV.getEngine().load(gUrl);
-            //showAlert.stop();
-        }
+         }
         btnBev.setDisable(true);
         btnDistance.setDisable(true);
 
@@ -1189,30 +1142,11 @@ alert.show();
                         txtDistance.setEditable(false);
 
                     }
-                });*/
+                });
     }
+    */
 
 
-    // URL beolvasása
-    public static String getURL(String url) {
-        StringBuilder response = null;
-        try {
-            URL website = new URL(url);
-            URLConnection connection = website.openConnection();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                            connection.getInputStream()));
-            response = new StringBuilder();
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine + "\n");
-            }
-            in.close();
-        } catch (Exception e) {
-            System.out.println("hiba");
-        }
-        return response.toString();
-    }
 // dinamikusan állítja be a tábla oszlopait
 
 
@@ -1453,83 +1387,10 @@ alert.show();
         return client.getCity() + " " + client.getAddress();
 
     }
-//Single button => true , dual button => false; típusok info(vagy bármilyen string),err,warn,succ
-// a kétgombos ablak nem működik, meg kellene oldani, hogy a program várjon amíg nem nyomjuk meg 
-// valamelyik gombot.(Pillanatnyilag nem fontos)
 
-    /*public void showAlert(String alertText, Boolean singleOrDualButton, String alertLevel) {
-        alertClick = false;
-//mivel pillanatnyilag csak az egy gombos működik ezért beállítottam true-ra
-        singleOrDualButton = true;
-        String color = "83b1f5";//kék
-        lblAlert.textFillProperty().setValue(Paint.valueOf("ffffff"));
-        lblAlert.setText("Információ");
-        if (alertLevel == "err") {
-            color = "ff4d4d";//piros
-            lblAlert.setText("Hiba!");
-        }
-        if (alertLevel == "warn") {
-            color = "f2cc5a";//sárga
-            lblAlert.textFillProperty().setValue(Paint.valueOf("000000"));
-            lblAlert.setText("Figyelmeztetés!");
-        }
-        if (alertLevel == "succ") {
-            color = "8bdb70";//zöld
-            lblAlert.textFillProperty().setValue(Paint.valueOf("ffffff"));
-            lblAlert.setText("Siker!");
-        }
-        alertPane.setVisible(true);
-        alertTextArea.clear();
-        alertTextArea.setText(alertText);
-        //alertCircle.fillProperty().setValue(Paint.valueOf(color));
-        alertRectangle.fillProperty().setValue(Paint.valueOf(color));
-        if (singleOrDualButton) {
-            paneSingleButton.setVisible(true);
-            paneDualButton.setVisible(false);
 
-        } else {
-            paneDualButton.setVisible(true);
-            paneSingleButton.setVisible(false);
-        }
-    }
 
-     */
-// a logika ahhoz, hogy a + - gomb 12 hónapnak megfelelően működjön.
 
-    public String workDateDecOrInc(String value) {
-
-        Integer year = Integer.parseInt(workDate.substring(0, 4));
-        Integer month = Integer.parseInt(workDate.substring(5, 7));
-        if (value == "+") {
-            if (month < 12) {
-                month = month + 1;
-            } else {
-                year = year + 1;
-                month = 1;
-            }
-        }
-
-        if (value == "-") {
-            if (month > 1) {
-                month--;
-            } else {
-                year--;
-                month = 12;
-            }
-        }
-        String mnt;
-        if (month < 10) {
-            mnt = "0" + month.toString();
-        } else {
-            mnt = month.toString();
-        }
-        //tempSettings=settings;
-        settings.setAktualis_honap(year.toString() + "-" + mnt);
-        settings.setId(settings.getRendszam() + year.toString() + "-" + mnt);
-
-        return year.toString() + "-" + mnt;
-
-    }
 //"+" = plus gomb; "-" = - gomb; Ha nem volt + vagy - akkor  "#" = beirt érték után Kész gomb
 
     public void setWorkdate(String plusOrMinus) {
@@ -1550,8 +1411,7 @@ alert.show();
                 setLabels();
             } else {
                 observableList.clear();
-                Alert alert = new Alert(this, workDate + " hónapban nincsenek adatok. ", true, "info");
-alert.show();
+                new Alert(this, workDate + " hónapban nincsenek adatok. ", true, "info").show();
             }
         }
 
@@ -1595,14 +1455,19 @@ alert.show();
             }
         }
     }
-    //}
 
 
-// Egy saját uticélt ad az adatbázishoz
+    //Meghívja a távolság lekérdező függvényt majd beállítja a vizuális objektumok értékét
+    public void getDistanceFromGmaps(String sAddress, String tAddress) {
+        String txtDistanceValue = txtDistance.getText();
 
+        Integer distance = remote.getDistanceFromGmaps(txtDistanceValue, sAddress, tAddress);
 
-    //if(erkValue.startsWith(telephValue))
-    // chkBackToSites.setSelected(true);
+        txtDistance.setText(distance.toString());
+        btnBev.setDisable(false);
+        cbClient.setDisable(false);
+        txtDistance.setEditable(false);
+    }
 }
 
 

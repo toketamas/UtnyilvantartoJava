@@ -2,33 +2,43 @@ package utnyilvantartojava;
 
 import com.mysql.cj.xdevapi.JsonParser;
 import com.mysql.cj.xdevapi.JsonString;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextField;
 import okhttp3.*;
+import org.controlsfx.control.SearchableComboBox;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 
 import java.util.Map;
 
-public class Remote  implements Runnable{
+public class Remote implements Runnable {
 
     private String url;
-    private  String json;
-   // final String URL=Constants.WebapiUrl.TEST_LINK_FOR_DATABASE_WEBAPI;
-    final String URL=Constants.WebapiUrl.REMOTE_LINK_FOR_DATABASE_WEBAPI;
+    private String json;
+    private Settings settings;
+    // final String URL=Constants.WebapiUrl.TEST_LINK_FOR_DATABASE_WEBAPI;
+    final String URL = Constants.WebapiUrl.REMOTE_LINK_FOR_DATABASE_WEBAPI;
 
 
-public Remote(){}
-public Remote(String url,String jsonStr){
-    this.url=url;
-    this.json=jsonStr;
+    public Remote(Settings settings) {
+        this.settings = settings;
+    }
 
-}
+    public Remote(String url, String jsonStr) {
+        this.url = url;
+        this.json = jsonStr;
+
+    }
 
 
-
-    public  final MediaType JSON= MediaType.get("application/json; charset=utf-8");
+    public final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
 
     public String httpGet(String url) {
@@ -49,7 +59,7 @@ public Remote(String url,String jsonStr){
 
 
     private String httpPost(String url, String json) {
-        RequestBody body = RequestBody.create(json,JSON);
+        RequestBody body = RequestBody.create(json, JSON);
         System.err.println(url);
         System.err.println(json);
         Request request = new Request.Builder()
@@ -66,52 +76,51 @@ public Remote(String url,String jsonStr){
 
     }
 
-    private  String createJson(String queryType,String cim){
+    private String createJson(String queryType, String cim) {
         String json = new JSONObject()
-                .put("lekerdezes",queryType)
-                .put("cim",cim)
+                .put("lekerdezes", queryType)
+                .put("cim", cim)
                 .toString();
         return json;
     }
 
-    private String createJson(String queryType, String nev,  String rendszam){
+    private String createJson(String queryType, String nev, String rendszam) {
         String json = new JSONObject()
-                .put("lekerdezes",queryType)
-                .put("nev",nev)
-                .put("rendszam",rendszam)
+                .put("lekerdezes", queryType)
+                .put("nev", nev)
+                .put("rendszam", rendszam)
                 .toString();
         return json;
     }
 
-    public void updateTimeStamp(Settings settings){
-        String jsonResult=createJson("mod",settings.getNev(),settings.getRendszam());
-        httpPost(URL,jsonResult);
+    public void updateTimeStamp(Settings settings) {
+        String jsonResult = createJson("mod", settings.getNev(), settings.getRendszam());
+        httpPost(URL, jsonResult);
     }
 
 
-    public boolean checkUser(Settings settings, Tab tab){
+    public boolean checkUser(Tab tab) { //tab az utyilvántartó oldal amit le kell tiltani ha megbukik az ellenőrzésen a felhasználó
 
         boolean result;
-        String jsonResult=createJson("check",settings.getNev(),settings.getRendszam());
-        String request= httpPost(URL,jsonResult);
+        String jsonResult = createJson("check", settings.getNev(), settings.getRendszam());
+        String request = httpPost(URL, jsonResult);
         JSONObject json = new JSONObject(request);
-        if((json.getInt("engedelyezve")==1)){
+        if ((json.getInt("engedelyezve") == 1)) {
             System.out.println("Engedélyezve");
-        result=true;
-        }
-        else {
+            result = true;
+        } else {
             //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
             tab.setDisable(true);
-            result=false;
+            result = false;
         }
 
 
         return result;
     }
 
-    public void regUser(Settings settings){
-        String jsonResult=createJson("reg",settings.getNev(),settings.getRendszam());
-        httpPost(URL,jsonResult);
+    public void regUser() {
+        String jsonResult = createJson("reg", settings.getNev(), settings.getRendszam());
+        httpPost(URL, jsonResult);
     }
 
     @Override
@@ -119,48 +128,81 @@ public Remote(String url,String jsonStr){
 
     }
 
-    //Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
+    public Integer getDistanceFromGmaps(String txtDistance, String sAddress, String tAddress) {
+        Integer distance;
+        String response = "";
+        String gUrl = "";
+        if (txtDistance != "" || txtDistance != null) {
+            gUrl = "https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress;
+            System.out.println(gUrl);
+// itt lekérdezi a távolságot a google mapstól visszakap egy html oldalt amiben szerepel a távolság
+            Remote remote = new Remote(settings);
+            response = remote.httpGet(gUrl);
+        }
+//kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl
+        int index = response.indexOf(" km");
+        //kiszedi a távolságot megfelelően kerekíti és beírja a textboxba
+        String sub = response.substring(index - 6, index);
+        System.out.println(sub);
+        sub = sub.replace(',', '.');
+        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+//visszaadja a távolságot
 
-    //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*
-         //remote=new Remote();
-        //System.out.println(remote.run(utnyilvUrl));
-        //jsonResult=null;
-        jsonResult = remote.createJson("check",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-        System.out.println(jsonResult);
-        System.out.println(utnyilvUrl);
-        String req =remote.post(utnyilvUrl,jsonResult);
+        return distance;
+    }
 
-        json = new JSONObject(req);
-        System.out.println(json.getInt("engedelyezve"));
-       if((json.getInt("engedelyezve")==1))
-           System.out.println("Engedélyezve");
-       else {
-           showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
-           tabNyilv.setDisable(true);
-       }
+    // URL beolvasása
+    public static String getURL(String url) {
+        StringBuilder response = null;
+        try {
+            java.net.URL website = new URL(url);
+            URLConnection connection = website.openConnection();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
+            response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine + "\n");
+            }
+            in.close();
+        } catch (Exception e) {
+            System.out.println("hiba");
+        }
+        return response.toString();
+    }
 
- */
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //ez lesz  az openstreetmaps lekérdezés ha kész lesz
 
-// regisztrál a mysql-be
-    // Remote remote=new Remote();
-    //jsonResult=null;
-    //jsonResult = remote.createJson("add",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-    // System.out.println(remote.post(utnyilvUrl,jsonResult));
+    /*public void getDistanceFromOsm(String sAddress, String tAddress) {
+        if (txtDistance.getText() != "" || txtDistance != null) {
+            String startUrl = "192.168.1.20:8080/search/search?q=" + sAddress + "&format=xml&polygon_geojson=1&addressdetails=1";
+            String targetUrl = "192.168.1.20:8080/search/search?q=" + tAddress + "&format=xml&polygon_geojson=1&addressdetails=1";
+            System.out.println(startUrl);
+            System.out.println(targetUrl);
+            WV.getEngine().load(startUrl);
+            String value = getURL(WV.getEngine().getLocation());
+            System.out.println(value);
+            //String gUrl = "192.168.1.20:5500/" + sAddress + "/" + tAddress;
+            //System.out.println(gUrl);
+            //  WV.getEngine().load(gUrl); // lekérdezi a távolságot a google mapstól
+            //String gotUrl = getURL(WV.getEngine().getLocation());
+            //System.out.println(gotUrl);
+            /*int index = gotUrl.indexOf(" km");
+                        String sub = gotUrl.substring(index - 6, index);
+                        System.out.println(sub);
+                        sub = sub.replace(',', '.');
+                        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+                        txtDistance.setText(distance.toString());
+                        btnBev.setDisable(false);
+                        cbClient.setDisable(false);
+                        txtDistance.setEditable(false);
 
-    //db.addRegToMySql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
-// frissíti a hozzáférés idejét
-    //db.updateRegMysql(settings.getNev(), settings.getVaros(), settings.getCim(), settings.getRendszam());
-    //String utnyilvUrl = "https://mju7nhz6bgt5vfr4cde3xsw2yaq1.tfsoft.hu/";
-    //String utnyilvUrl ="http://localhost/utnyilvDB/";
 
-    //System.out.println(remote.run(utnyilvUrl));
-    //jsonResult=null;
-    //jsonResult = remote.createJson("mod",settings.getNev(),settings.getVaros(),settings.getCim(),settings.getRendszam());
-    //System.out.println(jsonResult);
-    //System.out.println(remote.post(utnyilvUrl,jsonResult));
+        }
 
+    }   */
 
 }
+
 
