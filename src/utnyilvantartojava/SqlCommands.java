@@ -31,8 +31,10 @@ abstract class SqlCommands extends Connect {
             preparedStatement = conn.prepareStatement(sqlQuery);
             for (int i = 0; i < list.size(); i++) {
                 preparedStatement.setObject(i + 1, list.get(i));
+                System.out.println((i+1)+" : "+list.get(i).getClass());
             }
             preparedStatement.execute();
+
         } catch (SQLException ex) {
             System.err.println("Hiba! Nem sikerült a "+tableName+" táblához adatot hozzáadni");
             System.err.println(sqlQuery);

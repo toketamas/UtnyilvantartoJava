@@ -110,18 +110,18 @@ public class Client implements IDbObject {
     }
 
     @Override
-    public List<Object> list() {
-        List<Object> list = new ArrayList<>();
-        list.add(this.client);
-        list.add(this.clientNumber);
-        list.add(this.type);
-        list.add(this.factoryNumber);
-        list.add(this.zipCode);
-        list.add(this.city);
-        list.add(this.address);
-        list.add(this.exist);
-        list.add(this.maintenancePerYear);
-        list.add(this.field);
+    public DoubleList doubleList() {
+        DoubleList list = new DoubleList();
+        list.add("client",this.client);
+        list.add("clientNumber",this.clientNumber);
+        list.add("type",this.type);
+        list.add("factoryNumber",this.factoryNumber);
+        list.add("zipCode",this.zipCode);
+        list.add("city",this.city);
+        list.add("address",this.address);
+        list.add("exist",this.exist);
+        list.add("maintenancePerYear",this.maintenancePerYear);
+        list.add("field",this.field);
         return list;
     }
 }

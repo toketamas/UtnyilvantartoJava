@@ -263,6 +263,7 @@ public class ViewController implements Initializable {
     //Változók optimalizálása/////////////////////////////////////////////////////////////////////////////
     Remote remote;
     NonFxFunctions nonFxFunctions;
+    SqlBuilder sqlBuilder;
 
     //Itt Indul
     public void initialize(URL url, ResourceBundle rb) {
@@ -274,6 +275,7 @@ public class ViewController implements Initializable {
     public void run() {
         nonFxFunctions =new NonFxFunctions();
         db = new DataBaseConnection();
+        sqlBuilder = new SqlBuilder(Constants.SqliteDataBase.JDBC_DRIVER, Constants.SqliteDataBase.URL, Constants.SqliteDataBase.USERNAME, Constants.SqliteDataBase.PASSWORD);
 // átnevezi a lezárt tábla oszlopot active-ra        
         db.renColToActive();
         cbClient.getItems().clear();
@@ -339,10 +341,10 @@ public class ViewController implements Initializable {
     }
 
     public void runResume() {
-        SqlBuilder sqlBuilder = new SqlBuilder(Constants.SqliteDataBase.JDBC_DRIVER, Constants.SqliteDataBase.URL, Constants.SqliteDataBase.USERNAME, Constants.SqliteDataBase.PASSWORD);
+
         System.out.println(settings.doubleList().size());
-        System.out.println(settings.list().size());
-        sqlBuilder.sqlStringBuilder(settings.doubleList(), Constants.SqlQuery.UPDATE);
+        System.out.println(settings.doubleList().size());
+        sqlBuilder.insert(settings.doubleList(), "settings");
 
 // kivesszük az adatbázisból a telephely címét
         telephely = db.getClient("telephely");
@@ -387,7 +389,7 @@ public class ViewController implements Initializable {
             chkSites.setSelected(true);
         } else {
 //ha nem kivesszük a startclientből a címet
-            txtDepart.setText(getClientFullAddress(startClient));
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
 //kivesszük az indulás a telephelyről chkboxból a pipát
             chkSites.setSelected(false);
         }
@@ -506,7 +508,9 @@ public class ViewController implements Initializable {
                     settings.setId(settingsId);
                     settings.setUtolso_ugyfel("telephely");
                     settings.setActive(true);
-                    db.addSettings(settings);
+                    //itt
+                    //db.addSettings(settings);
+                    sqlBuilder.insert(settings.doubleList(),"settings");
                     telephely = db.getClient("telephely");
                     spedometer = settings.getElozo_zaro();
 
@@ -598,7 +602,7 @@ public class ViewController implements Initializable {
         if (btnCancel.isArmed()) {
             startClient = startClientTemp;
             targetClient = targetClientTemp;
-            txtDepart.setText(getClientFullAddress(startClient));
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
             txtArrive.clear();
             txtDistance.clear();
             paneNormal.setVisible(true);
@@ -611,7 +615,7 @@ public class ViewController implements Initializable {
         if (btnDelete.isArmed()) {
 //Ellenőrzi hogy az utolsó út van e kijelölve            
             if (selectedRoute == observableList.get(observableList.size() - 1)) {
-                String elozoCim = getClientFullAddress(telephely);
+                String elozoCim = nonFxFunctions.getClientFullAddress(telephely);
                 String elozoKliens = "telephely";
                 //chkSites.setSelected(true);
                 observableList.remove(selectedRoute);
@@ -630,7 +634,7 @@ public class ViewController implements Initializable {
                     elozoKliens = observableList.get(observableList.size() - 1).getUgyfel();
                     if (elozoCim.startsWith("Magánhasználat") && observableList.size() > 2) {
                         elozoCim = observableList.get(observableList.size() - 2).getErkezes();
-                        elozoKliens = getClientNumberFromRoute(observableList.get(observableList.size() - 2).getUgyfel());
+                        elozoKliens = nonFxFunctions.getClientNumberFromRoute(observableList.get(observableList.size() - 2).getUgyfel());
                     }
                     txtDepart.setText(elozoCim);
                     startClient = db.getClientFromClientNumber(elozoKliens);
@@ -708,7 +712,7 @@ public class ViewController implements Initializable {
             observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
             startClient = startClientTemp;
             targetClient = targetClientTemp;
-            txtDepart.setText(getClientFullAddress(startClient));
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
             txtArrive.clear();
             txtFueling.clear();
             paneNormal.setVisible(true);
@@ -767,6 +771,21 @@ public class ViewController implements Initializable {
         }
 
     }
+
+    public void setTelephely() {
+        String indValue = txtDepart.getText();
+        System.out.println("indV= " + indValue);
+        String erkValue = txtArrive.getText();
+        System.out.println("erkV= " + erkValue);
+        System.out.println(telephely.getAddress());
+        String telephValue = nonFxFunctions.getClientFullAddress(telephely);
+        System.out.println("th= " + telephValue);
+        if (indValue.startsWith(telephValue)) {
+            chkSites.setSelected(true);
+            txtDepart.setText(telephely.getClient());
+        }
+    }
+
 // kinyeri az adatbázisból a címeket a distances tábla frissítéséhez és frissíti
 
     public void updateDistance(Route selectedRoute, String elozoUgyfel, String distance) {
@@ -778,9 +797,9 @@ public class ViewController implements Initializable {
         }
 //kiveszi a settingsből az indulás helyét(ez az utolsó gépszám vagy a telephely) ez alapján lekéri a client-et
 //az adatbázisból és elkészíti a teljes címet
-        String elsoCim = getClientFullAddress(db.getClientFromClientNumber(elozoUgyfel));
+        String elsoCim = nonFxFunctions.getClientFullAddress(db.getClientFromClientNumber(elozoUgyfel));
 //ugyanaz mint feljebb csak a selectedRoute-ból kinyert címmel.
-        String masodikCim = getClientFullAddress(db.getClientFromClientNumber(gepszam));
+        String masodikCim = nonFxFunctions.getClientFullAddress(db.getClientFromClientNumber(gepszam));
 //frissíti az adatbázist.
         db.updateDistance(elsoCim, masodikCim, Integer.parseInt(distance));
         db.updateDistanceRev(elsoCim, masodikCim, Integer.parseInt(distance));
@@ -811,7 +830,7 @@ public class ViewController implements Initializable {
             System.out.println(startClient.getClientNumber());
         } else {
             chkSites.setSelected(false);
-            txtDepart.setText(getClientFullAddress(startClient));
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
         }
 
         txtDistance.clear();
@@ -826,7 +845,7 @@ public class ViewController implements Initializable {
                 new Route(
                         date,
                         chkPrivate.isSelected(),
-                        getClientFullAddress(startClient), getClientFullAddress(targetClient),
+                        nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient),
                         targetClient.getClientNumber() + "/" + targetClient.getClient(),
                         fueling,
                         spedometer,
@@ -842,7 +861,7 @@ public class ViewController implements Initializable {
                 new Route(
                         date,
                         chkPrivate.isSelected(),
-                        getClientFullAddress(targetClient), getClientFullAddress(startClient),
+                        nonFxFunctions.getClientFullAddress(targetClient), nonFxFunctions.getClientFullAddress(startClient),
                         startClient.getClientNumber() + "/" + startClient.getClient(),
                         fueling,
                         spedometer,
@@ -898,7 +917,7 @@ public class ViewController implements Initializable {
                 settings.setUtolso_ugyfel(targetClient.getClientNumber());
                 settings.setActive(true);
                 db.updateSettings(settings, settings.getId());
-                txtDepart.setText(getClientFullAddress(targetClient));
+                txtDepart.setText(nonFxFunctions.getClientFullAddress(targetClient));
                 checkDistInDb();
                 startClient = targetClient;
                 targetClient = null;
@@ -943,15 +962,15 @@ public class ViewController implements Initializable {
 
     private void checkDistInDb() {
 //odaút        
-        Distance start = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        Distance start = db.getDistance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient));
         System.out.println("start " + start.getDistance());
 //visszaút        
-        Distance target = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
+        Distance target = db.getDistance(nonFxFunctions.getClientFullAddress(targetClient), nonFxFunctions.getClientFullAddress(startClient));
         System.out.println("target " + target.getDistance());
         // ha a visszakapott érték 0 akkor beírja az adatbázisba új távolságként
         if (start.getDistance() == 0 && target.getDistance() == 0) {
             //       if (start == null && target == null) {
-            Distance dist = new Distance(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            Distance dist = new Distance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
             db.addDistance(dist);
             btnBev.setDisable(false);
             btnDistance.setDisable(true);
@@ -980,9 +999,9 @@ public class ViewController implements Initializable {
             targetClient.setAddress(address);
             db.updateClient(targetClient, targetClient.getClientNumber());
         }
-        Distance actualDist = db.getDistance(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        Distance actualDist = db.getDistance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient));
         //egy visszafele út       
-        Distance revDist = db.getDistance(getClientFullAddress(targetClient), getClientFullAddress(startClient));
+        Distance revDist = db.getDistance(nonFxFunctions.getClientFullAddress(targetClient), nonFxFunctions.getClientFullAddress(startClient));
         // ha igen akkor beírja a textboxba a távot 
         if (actualDist.getDistance() != 0 && noGmaps) {
             txtDistance.setText(String.valueOf(actualDist.getDistance()));
@@ -995,7 +1014,7 @@ public class ViewController implements Initializable {
             btnBev.setDisable(false);
             // ha nincs az adatbázisban akkor lekérés a gmapstól           
         } else {
-            getDistanceFromGmaps(cleanString(getClientFullAddress(startClient)), cleanString(getClientFullAddress(targetClient)));
+            getDistanceFromGmaps(nonFxFunctions.cleanString(nonFxFunctions.getClientFullAddress(startClient)), nonFxFunctions.cleanString(nonFxFunctions.getClientFullAddress(targetClient)));
         }
     }
 
@@ -1056,7 +1075,7 @@ public class ViewController implements Initializable {
         targetClient = db.getClient(cbClient.getValue());
         if (targetClient != null) {
             txtArrive.clear();
-            txtArrive.appendText(getClientFullAddress(targetClient));
+            txtArrive.appendText(nonFxFunctions.getClientFullAddress(targetClient));
             txtArrive.setEditable(true);
 
         }
@@ -1152,14 +1171,7 @@ public class ViewController implements Initializable {
 
 //Kiszedi a Route-bol a csupasz gépszámot    
 
-    public String getClientNumberFromRoute(String clientNumber) {
-        if (clientNumber.contains("/")) {
-            int index = clientNumber.indexOf('/');
-            return clientNumber.substring(0, index);
-        } else {
-            return clientNumber;
-        }
-    }
+
 
     public static void saveFile(String filename, String[] list) {
         PrintWriter writer = null;
@@ -1220,7 +1232,7 @@ public class ViewController implements Initializable {
         lblVerzio.setText(lblVer.getText());
         lblRendszam.setText("Rendszám: " + settings.getRendszam());
         functions(this).setLabelMaganKm();
-        functions(this).setTelephely();
+        setTelephely();
 
     }
 
@@ -1362,31 +1374,8 @@ public class ViewController implements Initializable {
         }
         setLabels();
     }
-//Kicseréli a nemkivánatos karaktereket szóközre
 
-    public String cleanString(String str) {
-        if (str.contains("/")) {
-            str = str.replaceAll("/", " ");
-        }
-        if (str.contains("'")) {
-            str = str.replaceAll("'", " ");
-        }
-        if (str.contains("\\")) {
-            str = str.replaceAll("\\", " ");
-        }
-        if (str.contains("\"")) {
-            str = str.replaceAll("\"", " ");
-        }
 
-        return str;
-    }
-// összerakja a várost és a címet egy stringbe
-
-    public String getClientFullAddress(Client client) {
-        System.out.println(client.getCity() + " " + client.getAddress());
-        return client.getCity() + " " + client.getAddress();
-
-    }
 
 
 
@@ -1442,7 +1431,8 @@ public class ViewController implements Initializable {
                 settings.setElozo_zaro(closingKmValue);    //beállítja a mentett zárót nyitónak
                 settings.setZaro_km(closingKmValue);        //zárónak is
                 settings.setActive(true);
-                db.addSettings(settings);
+                //db.addSettings(settings);
+                sqlBuilder.insert(settings.doubleList(),"settings");
                 System.out.println("setworkdate2" + workDate);
                 observableList.clear();
                 observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));

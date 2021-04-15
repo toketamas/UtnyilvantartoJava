@@ -45,11 +45,11 @@ public class Distance implements IDbObject {
 
 
     @Override
-    public List<Object> list() {
-        List<Object>list=new ArrayList<>();
-        list.add(this.clientid1);
-        list.add(this.clientid2);
-        list.add(this.distance);
+    public DoubleList doubleList() {
+        DoubleList list=new DoubleList();
+        list.add("clientid1",this.clientid1);
+        list.add("clientid2",this.clientid2);
+        list.add("distance",this.distance);
         return list;
     }
 }

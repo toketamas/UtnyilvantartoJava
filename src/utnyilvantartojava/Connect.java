@@ -24,7 +24,7 @@ import java.sql.*;
             this.url = url;
             this.username = username;
             this.passworld = passworld;
-
+            connectDb(jdbcDriver,url,username,passworld);
         }
 
         private void connectDb(String jdbcDriver, String url, String username, String passworld) {

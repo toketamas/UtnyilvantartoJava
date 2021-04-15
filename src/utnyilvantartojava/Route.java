@@ -5,11 +5,12 @@ import javafx.beans.property.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Route {
+public class Route implements IDbObject {
 
 // private LocalDate datum;
     private Integer id;
@@ -228,6 +229,10 @@ public class Route {
 
         return list;
     }
-    
-    
+
+
+    @Override
+    public List<Object> doubleList() {
+        return null;
+    }
 }

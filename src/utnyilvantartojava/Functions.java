@@ -15,6 +15,7 @@ public class Functions {
         return functions;
     }
 
+
     //Éppen aktuális hónap kiválasztása(amivel utoljára dolgoztunk)
     public  void setDate() {
         String dateValue = context.db.getDateOfLastRoute();
@@ -25,19 +26,7 @@ public class Functions {
         }
     }
 
-    public void setTelephely() {
-        String indValue = context.txtDepart.getText();
-        System.out.println("indV= " + indValue);
-        String erkValue = context.txtArrive.getText();
-        System.out.println("erkV= " + erkValue);
-        System.out.println(context.telephely.getAddress());
-        String telephValue = context.getClientFullAddress(context.telephely);
-        System.out.println("th= " + telephValue);
-        if (indValue.startsWith(telephValue)) {
-            context.chkSites.setSelected(true);
-            context.txtDepart.setText(context.telephely.getClient());
-        }
-    }
+
 
 
 

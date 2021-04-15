@@ -18,10 +18,12 @@ public class TableFunctions {
     TableColumn tavCol;
     TableColumn ugyfCol;
     TableColumn spedometerCol;
+    NonFxFunctions nonFxFunctions;
 
     public TableFunctions(ViewController context){
 
         this.context=context;
+        nonFxFunctions=new NonFxFunctions();
     }
 
     public static TableFunctions tableFunctions(ViewController context){
@@ -96,7 +98,7 @@ public class TableFunctions {
         context.selctedRow = context.table.getSelectionModel().getSelectedIndex();
         context.datePicker.setValue(LocalDate.parse(context.selectedRoute.getDatum()));
         if (!context.selectedRoute.isMagan()) {
-            context.cbClient.setValue(context.getClientNumberFromRoute(context.selectedRoute.getUgyfel()));
+            context.cbClient.setValue(nonFxFunctions.getClientNumberFromRoute(context.selectedRoute.getUgyfel()));
         } else {
             context.cbClient.setValue(context.selectedRoute.getUgyfel());
         }

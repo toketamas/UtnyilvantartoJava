@@ -109,7 +109,7 @@ public class DataBaseConnection {
     public void addSettings(Settings settings) {
         //Itt valami string buildert kellene használni a lekérdezés összeállításához!
         String sqlQuery = "insert into settings values (";
-        insertUpdate(settings.list(), sqlQuery);
+        //insertUpdate(settings.list(), sqlQuery);
     }
 
 
@@ -368,10 +368,10 @@ public class DataBaseConnection {
             throwables.printStackTrace();
         }
     }
-    SqlHelper sqlHelper=new SqlHelper();
+
     //distances táblához tartozó lekérdezések
     public void addDistance(Distance distance){
-        sqlHelper.sqlStringBuilder(distance.list(),Constants.SqlQuery.INSERT);
+       insertUpdate(distance.doubleList().getSimple("second"),Constants.SqlQuery.INSERT);
     }
 
     public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
@@ -426,7 +426,7 @@ public class DataBaseConnection {
         } else {
             sqlQuery = "insert into clients values (";
         }
-        insertUpdate(client.list(),sqlQuery);
+        insertUpdate(client.doubleList().getSimple("second"),sqlQuery);
     }
 
     public void addAllSajatClientToClients() {

@@ -46,6 +46,40 @@ public class NonFxFunctions {
         }
         return fuel;
     }
+    // összerakja a várost és a címet egy stringbe
+    public String getClientFullAddress(Client client) {
+        System.out.println(client.getCity() + " " + client.getAddress());
+        return client.getCity() + " " + client.getAddress();
+
+    }
+
+    //Kicseréli a nemkivánatos karaktereket szóközre
+
+    public String cleanString(String str) {
+        if (str.contains("/")) {
+            str = str.replaceAll("/", " ");
+        }
+        if (str.contains("'")) {
+            str = str.replaceAll("'", " ");
+        }
+        if (str.contains("\\")) {
+            str = str.replaceAll("\\", " ");
+        }
+        if (str.contains("\"")) {
+            str = str.replaceAll("\"", " ");
+        }
+
+        return str;
+    }
+
+    public String getClientNumberFromRoute(String clientNumber) {
+        if (clientNumber.contains("/")) {
+            int index = clientNumber.indexOf('/');
+            return clientNumber.substring(0, index);
+        } else {
+            return clientNumber;
+        }
+    }
 
 
 }

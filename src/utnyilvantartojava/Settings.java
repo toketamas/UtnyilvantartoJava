@@ -175,26 +175,7 @@ public class Settings implements IDbObject {
         this.utolso_ugyfel = utolso_ugyfel;
     }
 
-    @Override
-    public List<Object> list(){
-        List<Object>list=new ArrayList<>();
-        list.add(this.nev);
-        list.add(this.varos);
-        list.add(this.cim);
-        list.add(this.auto);
-        list.add(this.rendszam);
-        list.add(this.loketterfogat);
-        list.add(this.fogyasztas);
-        list.add(this.elozo_zaro);
-        list.add(this.aktualis_honap);
-        list.add(this.utolso_ugyfel);
-        list.add(this.zaro_km);
-        list.add(this.getId());
-        list.add(this.sorszam);
-        list.add(LocalDateTime.now().toString());
-        list.add(this.active);
-        return list;
-    }
+
 
 
 
@@ -211,8 +192,8 @@ public class Settings implements IDbObject {
         list.add("aktualis_honap",this.aktualis_honap);
         list.add("utolso_ugyfel",this.utolso_ugyfel);
         list.add("zaro_km",this.zaro_km);
-        list.add("id",this.getId());
-        list.add("sorszam",this.sorszam);
+       // list.add("id",this.getId());
+        //list.add("sorszam",this.sorszam);
         list.add("utolso_szerkesztes",LocalDateTime.now().toString());
         list.add("active",this.active);
         return list;
