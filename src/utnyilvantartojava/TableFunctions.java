@@ -19,12 +19,20 @@ public class TableFunctions {
     TableColumn ugyfCol;
     TableColumn spedometerCol;
     NonFxFunctions nonFxFunctions;
+    SqlBuilder sqlBuilder;
 
     public TableFunctions(ViewController context){
 
         this.context=context;
         nonFxFunctions=new NonFxFunctions();
+        sqlBuilder = new SqlBuilder(
+                Constants.SqliteDataBase.JDBC_DRIVER,
+                Constants.SqliteDataBase.URL,
+                Constants.SqliteDataBase.USERNAME,
+                Constants.SqliteDataBase.PASSWORD);
     }
+
+
 
     public static TableFunctions tableFunctions(ViewController context){
         TableFunctions tableFunctions=new TableFunctions(context);
@@ -113,8 +121,8 @@ public class TableFunctions {
         context.txtFueling.setText(String.valueOf(context.selectedRoute.getFueling()));
         context.startClientTemp = context.startClient;
         context.targetClientTemp = context.targetClient;
-        context.startClient = context.db.getClientFromAddress(context.selectedRoute.getIndulas());
-        context.targetClient = context.db.getClientFromAddress(context.selectedRoute.getErkezes());
+        context.startClient = sqlBuilder.getClientFromAddress(context.selectedRoute.getIndulas());
+        context.targetClient = sqlBuilder.getClientFromAddress(context.selectedRoute.getErkezes());
         context.paneCorr.setVisible(true);
         context.paneNormal.setVisible(false);
     }

@@ -30,6 +30,8 @@ public class SqlBuilder extends SqlCommands {
         insertStm(list, sqlQuery, tableName);
     }
 
+
+
     public void update(DoubleList list, String tableName, String condition) {
         System.out.println("listaméret " + list.size());
         List<Object> objList = new ArrayList<>();
@@ -50,55 +52,117 @@ public class SqlBuilder extends SqlCommands {
     }
 
 
+    //<editor-fold desc="Egyetlen érték lekérdezés">
+    public Client getClient(String value) {
+        return (Client) query("select * from clients where clientnumber='" + value + "';");
+    }
+
+    public Client getSajatClient(String value) {
+        return (Client) query("select * from sajat_cimek where clientnumber='" + value + "';");
+    }
+
+    public Client getClientFromAddress(String value) {
+        return (Client) query("select * from clients where city || ' ' || address='" + value + "';");
+    }
+
+    public Client getClientFromClientNumber(String value) {
+        return (Client) query("select * from clients where clientnumber='" + value + "';");
+    }
+
     public int getMaxKmFromMonth(String workDate) {
         String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '" + workDate + "-%%';";
-        return queryIntValueFromRoute(sqlQuery, "spedometer");
+        return (int) query(sqlQuery);
     }
 
 
     // a routes listából a havi összes tankolást adja vissza
     public double getFueling(String workDate, String rendszam) {
         String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
-        return queryDoubleValueFromRoute(sqlQuery, "sum(fueling)");
+        return (double) query(sqlQuery);
     }
     // a routes listából a havi összes távolságot adja vissza
 
     public int getSpedometer(String workDate, String rendszam) {
         String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
         System.out.println(sqlQuery);
-        return queryIntValueFromRoute(sqlQuery, "sum(distance)");
+        return (int) query(sqlQuery);
     }
     // a routes listából a havi összes távolságot adja vissza
 
     public int getMaganut(String workDate, String rendszam) {
         String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
         System.out.println(sqlQuery);
-        return queryIntValueFromRoute(sqlQuery, "sum(distance)");
-    }
-// egy int értékkel tér vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
-
-    public int queryIntValueFromRoute(String sqlQuery, String returnColumn) {
-        int value = 0;
-        try {
-            rs = createStatement.executeQuery(sqlQuery);
-            value = rs.getInt(returnColumn);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return value;
+        return (int) query(sqlQuery);
     }
 
-    // egy double értéket ad vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
-    public double queryDoubleValueFromRoute(String sqlQuery, String returnColumn) {
-        double value = 0;
-        try {
-            rs = createStatement.executeQuery(sqlQuery);
-            value = rs.getDouble(returnColumn);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return value;
+    public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
+        Distance distance = new Distance(client1, client2);
+        String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
+        return (Distance) query(sqlQuery);
     }
+
+    public Settings getSettings(String settingsId) {
+        String sqlQuery = "select * from settings where id='" + settingsId + "'";
+        return (Settings) query(sqlQuery);
+    }
+
+    public Settings getLastSettings() {
+        String sqlQuery = "SELECT MAX(sorszam), * FROM settings WHERE active='true' ;";
+        return (Settings) query(sqlQuery);
+    }
+
+    public Settings getLastSettingsIfActiveNullAll() {
+        String sqlQuery = "SELECT MAX(sorszam), * FROM settings  ;";
+        return (Settings) query(sqlQuery);
+    }
+    public String getDateOfLastRoute() {
+        String value = null;
+        String sqlQuery = "select * from routes\n"
+                + "where routeid = (select max (routeid) from routes);\n"
+                + "; ";
+        return (String) query(sqlQuery);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Nincs visszaadott érték">
+
+    public void addAllSajatClientToClients() {
+        nonQuery("create table clients as select * from sajat_cimek");
+    }
+
+    public void delRoute(int routeId) {
+        String sqlQuery = "delete from routes where routeid='" + routeId + "';";
+        nonQuery(sqlQuery);
+    }
+
+
+    public void delClient(String value, boolean sajatKliens) {
+
+        String sqlQuery;
+        if (sajatKliens) {
+            sqlQuery = "delete from sajat_cimek where clientnumber='" + value + "'";
+        } else {
+            sqlQuery = "delete from clients where clientnumber='" + value + "'";
+        }
+        nonQuery(sqlQuery);
+
+    }
+
+    public void updateDistanceRev(String clientid1, String clientid2, int distance) {
+        String sqlQuery = "update distances set "
+                + "distance=" + distance + " "
+                + "where clientid1 = '" + clientid2 + "' and clientid2='" + clientid1 + "';";
+        nonQuery(sqlQuery);
+    }
+
+    public void updateDistance(String clientid1, String clientid2, int distance) {
+        String sqlQuery = "update distances set "
+                + "distance=" + distance + " "
+                + "where clientid1 = '" + clientid1 + "' and clientid2='" + clientid2 + "';";
+        nonQuery(sqlQuery);
+    }
+    //</editor-fold>
 
 
 }

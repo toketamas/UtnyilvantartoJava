@@ -106,7 +106,7 @@ public class DataBaseConnection {
 
     //SqlHelper sqlHelper=new SqlHelper();
     //settings táblához tartozó lekérdezések
-    public void addSettings(Settings settings) {
+ /*   public void addSettings(Settings settings) {
         //Itt valami string buildert kellene használni a lekérdezés összeállításához!
         String sqlQuery = "insert into settings values (";
         //insertUpdate(settings.list(), sqlQuery);
@@ -134,6 +134,8 @@ public class DataBaseConnection {
             System.out.println("" + ex);
         }
     }
+
+  */
 
    public void updateSettings(Settings settings, String idValue) {
         System.out.println("update: " + settings.getAktualis_honap());
@@ -163,8 +165,8 @@ public class DataBaseConnection {
     }
 
 
-
-    public Settings getSettings(String settingsId) {
+/*
+   public Settings getSettings(String settingsId) {
         String sqlQuery = "select * from settings where id='" + settingsId + "'";
         return querySettings(sqlQuery);
     }
@@ -177,7 +179,9 @@ public class DataBaseConnection {
     public Settings getLastSettingsIfActiveNullAll() {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings  ;";
         return querySettings(sqlQuery);
-    }
+    }*/
+
+
 
     public Settings querySettings(String sqlQuery) {
         Settings settings = null;
@@ -265,7 +269,7 @@ public class DataBaseConnection {
         return routes;
     }
 
-    public void delRoute(int routeId) {
+ /*   public void delRoute(int routeId) {
         String sqlQuery = "delete from routes where routeid='" + routeId + "';";
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -274,6 +278,8 @@ public class DataBaseConnection {
             throwables.printStackTrace();
         }
     }
+
+  */
 /*
     // a routes listából a havi összes tankolást adja vissza
     public double getFueling(String workDate, String rendszam) {
@@ -322,7 +328,7 @@ public class DataBaseConnection {
  */
 // a legutolsó dátumot adja vissza
 
-    public String getDateOfLastRoute() {
+   /* public String getDateOfLastRoute() {
         String value = null;
         String sqlQuery = "select * from routes\n"
                 + "where routeid = (select max (routeid) from routes);\n"
@@ -336,6 +342,8 @@ public class DataBaseConnection {
         }
         return value;
     }
+
+    */
 
     //     
    /* public int getMaxKmFromMonth(String workDate) {
@@ -374,11 +382,13 @@ public class DataBaseConnection {
     }
 
     //distances táblához tartozó lekérdezések
-    public void addDistance(Distance distance){
+  /*  public void addDistance(Distance distance){
        insertUpdate(distance.doubleList().second(),Constants.SqlQuery.INSERT);
     }
 
-    public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
+   */
+
+   /* public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
         Distance distance = new Distance(client1, client2);
         String sqlQuery = "select distance from distances where clientid1='" + client1 + "' and clientid2='" + client2 + "';";
         try {
@@ -394,13 +404,16 @@ public class DataBaseConnection {
 
         return distance;
     }
-
+*/
+    /*
     public void updateDistanceRev(String clientid1, String clientid2, int distance) {
         String sqlQuery = "update distances set "
                 + "distance=" + distance + " "
                 + "where clientid1 = '" + clientid2 + "' and clientid2='" + clientid1 + "';";
         updateDist(sqlQuery);
     }
+
+
 
     public void updateDistance(String clientid1, String clientid2, int distance) {
         String sqlQuery = "update distances set "
@@ -419,25 +432,29 @@ public class DataBaseConnection {
             System.out.println("Hiba! Nem sikerűlt a distance táblát frissíteni");
             System.out.println("" + ex);
         }
-    }
+    }*/
 
     //  client táblához kapcsolódó lekérdezések
     //ha a sajatKliens=true a sajat_cimek táblába teszi ha fals akkor a clients táblába
-    public void addClient(Client client, boolean sajatKliens) {
+    /*public void addClient(Client client, boolean sajatKliens) {
         String sqlQuery;
         if (sajatKliens) {
             sqlQuery = "insert into sajat_cimek values (";
         } else {
             sqlQuery = "insert into clients values (";
         }
-        insertUpdate(client.doubleList().second(),sqlQuery);
+        //insertUpdate(client.doubleList().second(),sqlQuery);
     }
 
+     */
+/*
     public void addAllSajatClientToClients() {
         queryClient("create table clients as select * from sajat_cimek");
     }
 
-    public Client getClient(String value) {
+ */
+
+  /*  public Client getClient(String value) {
         return queryClient("select * from clients where clientnumber='" + value + "';");
     }
 
@@ -478,6 +495,8 @@ public class DataBaseConnection {
         return client;
     }
 
+   */
+
     public void updateClient(Client client, String clientNumber) {
         System.out.println("client:" + client);
         System.out.println("cn:" + clientNumber);
@@ -503,7 +522,7 @@ public class DataBaseConnection {
         }
     }
 
-    public void delClient(String value, boolean sajatKliens) {
+   /* public void delClient(String value, boolean sajatKliens) {
 
         String sqlQuery;
         if (sajatKliens) {
@@ -517,7 +536,7 @@ public class DataBaseConnection {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
+    }*/
 
     public ArrayList getAllClient(boolean sajatKliens) {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
@@ -557,7 +576,7 @@ public class DataBaseConnection {
     }
 
     // convertBool átalakítás Boolean->int int->Boleean mert az SQLite nem ismeri a Booleant true=1 false=0
-    public int convertBool(Boolean value) {
+   public int convertBool(Boolean value) {
         int convertedValue;
         if (value) {
             return 1;
@@ -581,4 +600,6 @@ public class DataBaseConnection {
             return false;
         }
     }
+
+
 }

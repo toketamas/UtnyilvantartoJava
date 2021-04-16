@@ -4,10 +4,16 @@ import java.time.LocalDate;
 
 public class Functions {
     private ViewController context;
+    private SqlBuilder sqlBuilder;
 
     public Functions(ViewController context) {
 
         this.context=context;
+        sqlBuilder = new SqlBuilder(
+                Constants.SqliteDataBase.JDBC_DRIVER,
+                Constants.SqliteDataBase.URL,
+                Constants.SqliteDataBase.USERNAME,
+                Constants.SqliteDataBase.PASSWORD);
     }
 
     public static Functions functions(ViewController context){
@@ -18,7 +24,7 @@ public class Functions {
 
     //Éppen aktuális hónap kiválasztása(amivel utoljára dolgoztunk)
     public  void setDate() {
-        String dateValue = context.db.getDateOfLastRoute();
+        String dateValue = sqlBuilder.getDateOfLastRoute();
         if (dateValue != null) {
             context.workDate = dateValue.substring(0, 7);
             System.out.println("setDate: " + context.workDate);
@@ -70,8 +76,8 @@ public class Functions {
         context.txtSajatCim.clear();
 
         String field = context.settings.getNev();
-        context.db.addClient(sajatClient, true);
-        context.db.addClient(sajatClient, false);
+        sqlBuilder.insert(sajatClient.doubleList(), "sajat_cimek");
+        sqlBuilder.insert(sajatClient.doubleList(), "clients");
         context.cbSajat.getItems().clear();
         context.cbSajat.getItems().addAll(context.db.getAllClient(true));
         //cbClient.getEditor().clear();
@@ -83,8 +89,8 @@ public class Functions {
 
     public void delSajatCim() {
         String value = context.cbSajat.getValue().toString();
-        context.db.delClient(value, true);
-        context.db.delClient(value, false);
+        sqlBuilder.delClient(value, true);
+        sqlBuilder.delClient(value, false);
         context.cbSajat.getItems().clear();
         context.cbSajat.getItems().addAll(context.db.getAllClient(true));
         context.cbClient.getItems().remove(0, context.cbClient.getItems().size());
