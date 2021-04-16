@@ -152,7 +152,7 @@ public class Remote implements Runnable {
     }
 
     // URL beolvasása
-    public static String getURL(String url) {
+   /* public static String getURL(String url) {
         StringBuilder response = null;
         try {
             java.net.URL website = new URL(url);

@@ -275,7 +275,11 @@ public class ViewController implements Initializable {
     public void run() {
         nonFxFunctions =new NonFxFunctions();
         db = new DataBaseConnection();
-        sqlBuilder = new SqlBuilder(Constants.SqliteDataBase.JDBC_DRIVER, Constants.SqliteDataBase.URL, Constants.SqliteDataBase.USERNAME, Constants.SqliteDataBase.PASSWORD);
+        sqlBuilder = new SqlBuilder(
+                Constants.SqliteDataBase.JDBC_DRIVER,
+                Constants.SqliteDataBase.URL,
+                Constants.SqliteDataBase.USERNAME,
+                Constants.SqliteDataBase.PASSWORD);
 // átnevezi a lezárt tábla oszlopot active-ra        
         db.renColToActive();
         cbClient.getItems().clear();
@@ -332,8 +336,8 @@ public class ViewController implements Initializable {
             settings.setRendszam("");
             selectionModel = tabPane.getSelectionModel();
             selectionModel.select(1);
-            Alert alert = new Alert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info");
-            alert.show();
+            new Alert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info").show();
+
 // ha megvannak akkor folytatódik
         } else {
             runResume();

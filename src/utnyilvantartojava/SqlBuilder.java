@@ -16,18 +16,6 @@ public class SqlBuilder extends SqlCommands {
         super(jdbcDriver, url, username, passworld);
     }
 
-    /*public String sqlStringBuilder(Object list, String queryType) {
-
-        String sqlQuery = "";
-        if (String.valueOf(queryType).toUpperCase() == "INSERT") {
-            insert((DoubleList) list, sqlQuery);
-            System.out.println(sqlQuery);
-        } else if (String.valueOf(queryType).toUpperCase() == "UPDATE") {
-            sqlQuery = update((DoubleList) list, "settings");
-
-        }
-        return sqlQuery;
-    }*/
 
     public void insert(List<Object> list, String tableName) {
         String sqlQuery = "INSERT INTO " + tableName + " VALUES (";
@@ -45,7 +33,7 @@ public class SqlBuilder extends SqlCommands {
     public void update(DoubleList list, String tableName, String condition) {
         System.out.println("listaméret " + list.size());
         List<Object> objList = new ArrayList<>();
-        String sqlString = "UPDATE " + tableName + " set ";
+        String sqlString = "UPDATE " + tableName + " SET ";
         for (int i = 0; i < list.size(); i++) {
 
             sqlString += " " + list.get(i).get(0) + " = ?";
