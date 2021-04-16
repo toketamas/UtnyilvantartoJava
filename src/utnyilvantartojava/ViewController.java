@@ -26,8 +26,10 @@ import static java.lang.Integer.parseInt;
 import static utnyilvantartojava.Functions.functions;
 import static utnyilvantartojava.TableFunctions.tableFunctions;
 
-public class ViewController implements Initializable {
 
+
+//<editor-fold desc="FXML Annotations">
+public class ViewController implements Initializable {
     @FXML
     TabPane tabPane;
     @FXML
@@ -215,6 +217,9 @@ public class ViewController implements Initializable {
 
     @FXML
     SearchableComboBox<String> cbClient;
+    //</editor-fold>
+
+
 
     DataBaseConnection db;
     // RemoteDb remoteDb = new RemoteDb();
@@ -249,7 +254,7 @@ public class ViewController implements Initializable {
     int selctedRow;
     int selectedClientSpedometer;
 
-    TableColumn datCol;
+    /*TableColumn datCol;
     TableColumn maganCol;
     TableColumn odaVisszaCol;
     TableColumn tankolCol;
@@ -258,7 +263,7 @@ public class ViewController implements Initializable {
     TableColumn tavCol;
     TableColumn ugyfCol;
     TableColumn spedometerCol;
-
+*/
 
     //Változók optimalizálása/////////////////////////////////////////////////////////////////////////////
     Remote remote;
@@ -590,9 +595,10 @@ public class ViewController implements Initializable {
         }
 
         if (btnMakeExcel.isArmed()) {               //Excel készítése
+            Excel excel =new Excel();
             rebuildDistanceInDb();
             excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
-            makeExcel(excelName, "nyomtat");
+            excel.make(excelName, "nyomtat",settings,observableList);
 
             try {
 
@@ -1302,11 +1308,13 @@ public class ViewController implements Initializable {
     }
 //Elkészíti az excel táblát
 
-    public void makeExcel(String fileName, String sheetName) {
-        Integer megtettKM = db.getSpedometer(workDate, settings.getRendszam());
+   /* public void make(String fileName, String sheetName) {
+        //**workdate->settings.getAktualis_honap()
+        Integer megtettKM = db.getSpedometer(settings.getAktualis_honap(), settings.getRendszam());
         RowToExcel rowToExcel = new RowToExcel();
         rowToExcel.createNewExcelFile(fileName);
-        rowToExcel.setCell(fileName, sheetName, "D2", workDate);
+        //**workdate->settings.getAktualis_honap()
+        rowToExcel.setCell(fileName, sheetName, "D2", settings.getAktualis_honap());
         rowToExcel.setCell(fileName, sheetName, "C3", settings.getAuto());
         rowToExcel.setCell(fileName, sheetName, "C4", settings.getRendszam());
         rowToExcel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
@@ -1317,19 +1325,22 @@ public class ViewController implements Initializable {
         rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
         rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
         rowToExcel.setCell(fileName, sheetName, "L172", megtettKM.toString());
-        String fuelValue = String.valueOf(db.getFueling(workDate, settings.getRendszam()));
+        //**workdate->settings.getAktualis_honap()
+        String fuelValue = String.valueOf(db.getFueling(settings.getAktualis_honap(), settings.getRendszam()));
         if (fuelValue.length() > 6) {
             fuelValue = fuelValue.substring(0, 7);
         }
         rowToExcel.setCell(fileName, sheetName, "G7", fuelValue);
-        Double value = 100 * db.getFueling(workDate, settings.getRendszam()) / megtettKM;
+        //**workdate->settings.getAktualis_honap()
+        Double value = 100 * db.getFueling(settings.getAktualis_honap(), settings.getRendszam()) / megtettKM;
         String dValue = "";
         if (value.toString().length() > 4) {
             dValue = value.toString().substring(0, 5);
         }
         rowToExcel.setCell(fileName, sheetName, "G6", dValue);
         rowToExcel.setCell(fileName, sheetName, "L173", String.valueOf(db.getMaganut(workDate, settings.getRendszam())));
-        Double doubleValue = (double) db.getMaganut(workDate, settings.getRendszam()) / megtettKM * 100;
+        //**workdate->settings.getAktualis_honap()
+        Double doubleValue = (double) db.getMaganut(settings.getAktualis_honap(), settings.getRendszam()) / megtettKM * 100;
         if (doubleValue.toString().length() > 2 && doubleValue != 100) {
             dValue = doubleValue.toString().substring(0, 2);
         } else {
@@ -1365,7 +1376,9 @@ public class ViewController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
+
+
 //Újraszámolja a kilométeróra állást az adatbázisban
 
     public void rebuildDistanceInDb() {

@@ -28,7 +28,7 @@ public class DoubleList extends ArrayList {
         return doubleList.size();
     }
 
-    public List getSimple(String firstOrSecond) {
+    /*public List getSimple(String firstOrSecond) {
         int fs;
         List<Object> list = new ArrayList<>();
         if (String.valueOf(firstOrSecond) == "first") {
@@ -40,6 +40,31 @@ public class DoubleList extends ArrayList {
         }
         for (int i = 0; i < doubleList.size(); i++) {
             list.add(doubleList.get(i).get(fs));
+
+        }
+        return list;
+
+
+    }*/
+
+    public List first(String firstOrSecond) {
+        int fs;
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < doubleList.size(); i++) {
+            list.add(doubleList.get(i).get(0));
+
+        }
+        return list;
+
+
+    }
+
+    public List second() {
+        int fs;
+        List<Object> list = new ArrayList<>();
+
+        for (int i = 0; i < doubleList.size(); i++) {
+            list.add(doubleList.get(i).get(1));
 
         }
         return list;

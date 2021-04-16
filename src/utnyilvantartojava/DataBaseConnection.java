@@ -274,7 +274,7 @@ public class DataBaseConnection {
             throwables.printStackTrace();
         }
     }
-
+/*
     // a routes listából a havi összes tankolást adja vissza
     public double getFueling(String workDate, String rendszam) {
         String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
@@ -318,6 +318,8 @@ public class DataBaseConnection {
         }
         return value;
     }
+
+ */
 // a legutolsó dátumot adja vissza
 
     public String getDateOfLastRoute() {
@@ -336,10 +338,12 @@ public class DataBaseConnection {
     }
 
     //     
-    public int getMaxKmFromMonth(String workDate) {
+   /* public int getMaxKmFromMonth(String workDate) {
         String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '" + workDate + "-%%';";
         return queryIntValueFromRoute(sqlQuery, "spedometer");
     }
+    
+    */
 
     /* Az összes tankolás az adott hónapban
      public double getFuelingMonth(String workDate){
@@ -371,7 +375,7 @@ public class DataBaseConnection {
 
     //distances táblához tartozó lekérdezések
     public void addDistance(Distance distance){
-       insertUpdate(distance.doubleList().getSimple("second"),Constants.SqlQuery.INSERT);
+       insertUpdate(distance.doubleList().second(),Constants.SqlQuery.INSERT);
     }
 
     public Distance getDistance(String client1, String client2) {      // a distances listából két ügyfél távolságát adja vissza
@@ -426,7 +430,7 @@ public class DataBaseConnection {
         } else {
             sqlQuery = "insert into clients values (";
         }
-        insertUpdate(client.doubleList().getSimple("second"),sqlQuery);
+        insertUpdate(client.doubleList().second(),sqlQuery);
     }
 
     public void addAllSajatClientToClients() {

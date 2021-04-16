@@ -48,4 +48,57 @@ public class SqlBuilder extends SqlCommands {
             System.out.println(objList.get(j)+" , "+objList.get(j).getClass());
         insertStm(objList,sqlString,tableName);
     }
+
+
+    public int getMaxKmFromMonth(String workDate) {
+        String sqlQuery = "select max(routeid) and max(date),spedometer from routes where date like '" + workDate + "-%%';";
+        return queryIntValueFromRoute(sqlQuery, "spedometer");
+    }
+
+
+    // a routes listából a havi összes tankolást adja vissza
+    public double getFueling(String workDate, String rendszam) {
+        String sqlQuery = "select sum(fueling) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
+        return queryDoubleValueFromRoute(sqlQuery, "sum(fueling)");
+    }
+    // a routes listából a havi összes távolságot adja vissza
+
+    public int getSpedometer(String workDate, String rendszam) {
+        String sqlQuery = "select sum(distance) from routes where date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
+        System.out.println(sqlQuery);
+        return queryIntValueFromRoute(sqlQuery, "sum(distance)");
+    }
+    // a routes listából a havi összes távolságot adja vissza
+
+    public int getMaganut(String workDate, String rendszam) {
+        String sqlQuery = "select sum(distance) from routes where client='Magánhasználat' and  date like '" + workDate + "-%%' and rendszam='" + rendszam + "'; ";
+        System.out.println(sqlQuery);
+        return queryIntValueFromRoute(sqlQuery, "sum(distance)");
+    }
+// egy int értékkel tér vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
+
+    public int queryIntValueFromRoute(String sqlQuery, String returnColumn) {
+        int value = 0;
+        try {
+            rs = createStatement.executeQuery(sqlQuery);
+            value = rs.getInt(returnColumn);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return value;
+    }
+
+    // egy double értéket ad vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
+    public double queryDoubleValueFromRoute(String sqlQuery, String returnColumn) {
+        double value = 0;
+        try {
+            rs = createStatement.executeQuery(sqlQuery);
+            value = rs.getDouble(returnColumn);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return value;
+    }
+
+
 }

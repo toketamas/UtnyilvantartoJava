@@ -1,5 +1,6 @@
 package utnyilvantartojava;
 
+import javafx.collections.ObservableList;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -8,7 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 
 
-class RowToExcel {
+class Excel {
     private String date;
     private String travelType;
     private String depart;
@@ -19,10 +20,9 @@ class RowToExcel {
     private Integer distance;
     private String mORc;
     private int rowLength=9;
-    public RowToExcel(){
-
+    public Excel(){
     }
-    public RowToExcel(String date, String travelType, String depart, String arrive, String client, Integer speedometer, Double fueling, Integer distance, String mORc) {
+    public Excel(String date, String travelType, String depart, String arrive, String client, Integer speedometer, Double fueling, Integer distance, String mORc) {
         this.date = date;
         this.travelType = travelType;
         this.depart = depart;
@@ -35,6 +35,7 @@ class RowToExcel {
 
     }
 
+    //<editor-fold desc="getter-setter">
     public String getDate() {
         return date;
     }
@@ -114,8 +115,9 @@ class RowToExcel {
     public void setRowLength(int rowLength) {
         this.rowLength = rowLength;
     }
+    //</editor-fold>
 
-    public void createNewExcelFile(String fileName){
+  private void createNewExcelFile(String fileName){
         FileInputStream file = null;
         try {
             file = new FileInputStream("blank.xlsx");
@@ -131,7 +133,7 @@ class RowToExcel {
         }
     }
 
-    public void setRow (String fileName, String sheetName, int rowNumber) {
+    private void setRow (String fileName, String sheetName, int rowNumber) {
 
         try {
             FileInputStream file = new FileInputStream(fileName);
@@ -180,7 +182,7 @@ class RowToExcel {
 
 
 
-    public void setCell (String fileName, String sheetName, String cellAddr, String value) {
+    private void setCell (String fileName, String sheetName, String cellAddr, String value) {
 
         //fileName="proba.xlsx";
         try {
@@ -208,8 +210,78 @@ class RowToExcel {
         }
     }
 
-    }
 
+    public void make(String fileName, String sheetName, Settings settings, ObservableList<Route> observableList) {
+        //**workdate->settings.getAktualis_honap()
+        Integer megtettKM = db.getSpedometer(settings.getAktualis_honap(), settings.getRendszam());
+        Excel excel = new Excel();
+        excel.createNewExcelFile(fileName);
+        //**workdate->settings.getAktualis_honap()
+        excel.setCell(fileName, sheetName, "D2", settings.getAktualis_honap());
+        excel.setCell(fileName, sheetName, "C3", settings.getAuto());
+        excel.setCell(fileName, sheetName, "C4", settings.getRendszam());
+        excel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
+        excel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getZaroKm()));
+        excel.setCell(fileName, sheetName, "L174", String.valueOf(settings.getZaroKm()));
+        excel.setCell(fileName, sheetName, "D4", settings.getNev());
+        excel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
+        excel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
+        excel.setCell(fileName, sheetName, "G5", megtettKM.toString());
+        excel.setCell(fileName, sheetName, "L172", megtettKM.toString());
+        //**workdate->settings.getAktualis_honap()
+        String fuelValue = String.valueOf(db.getFueling(settings.getAktualis_honap(), settings.getRendszam()));
+        if (fuelValue.length() > 6) {
+            fuelValue = fuelValue.substring(0, 7);
+        }
+        excel.setCell(fileName, sheetName, "G7", fuelValue);
+        //**workdate->settings.getAktualis_honap()
+        Double value = 100 * db.getFueling(settings.getAktualis_honap(), settings.getRendszam()) / megtettKM;
+        String dValue = "";
+        if (value.toString().length() > 4) {
+            dValue = value.toString().substring(0, 5);
+        }
+        excel.setCell(fileName, sheetName, "G6", dValue);
+        //**workdate->settings.getAktualis_honap()
+        excel.setCell(fileName, sheetName, "L173", String.valueOf(db.getMaganut(settings.getAktualis_honap(), settings.getRendszam())));
+        //**workdate->settings.getAktualis_honap()
+        Double doubleValue = (double) db.getMaganut(settings.getAktualis_honap(), settings.getRendszam()) / megtettKM * 100;
+        if (doubleValue.toString().length() > 2 && doubleValue != 100) {
+            dValue = doubleValue.toString().substring(0, 2);
+        } else {
+            dValue = doubleValue.toString();
+        }
+
+        excel.setCell(fileName, sheetName, "M173", dValue + "%");
+
+        for (int i = 0; i < observableList.size(); i++) {
+            String utCelja;
+            String mORc;
+            if (observableList.get(i).isMagan()) {
+                utCelja = "Magán";
+                mORc = "M";
+            } else {
+                utCelja = "Hibajavítás";
+                mORc = "C";
+            }
+            Excel row = new Excel(
+                    observableList.get(i).getDatum(),
+                    utCelja,
+                    observableList.get(i).getIndulas(),
+                    observableList.get(i).getErkezes(),
+                    observableList.get(i).getUgyfel(),
+                    observableList.get(i).getSpedometer(),
+                    observableList.get(i).getFueling(),
+                    observableList.get(i).getTavolsag(),
+                    mORc);
+            row.setRow(fileName, sheetName, i + 9);
+        }
+        try {
+            Runtime.getRuntime().exec(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
 
 
