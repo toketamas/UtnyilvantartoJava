@@ -66,7 +66,7 @@ abstract class SqlCommands extends Connect {
         throwables.printStackTrace();
     }}
 
-    public ArrayList getQueryList(String sqlQuery, IDbObject object){
+   /* public ArrayList getQueryList(String sqlQuery, IDbObject object){
         List<Object> resultList=null;
         List<String> valueList=object.doubleList()
 
