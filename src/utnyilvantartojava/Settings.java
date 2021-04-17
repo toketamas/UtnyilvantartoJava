@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+//<editor-fold desc="constructors">
 public class Settings implements IDbObject {
 
     private String nev;
@@ -59,10 +60,9 @@ public class Settings implements IDbObject {
         this.utolsoSzerkesztes = utolsoSzerkesztes;
         this.active = active;
     }
+    //</editor-fold>
 
-    ;
-
-
+    //<editor-fold desc="getters-setters">
     public String getId() {
         return id;
     }
@@ -170,9 +170,11 @@ public class Settings implements IDbObject {
     public void setUtolso_ugyfel(String utolso_ugyfel) {
         this.utolso_ugyfel = utolso_ugyfel;
     }
+    //</editor-fold>
 
     @Override
-    public int colmnsInDb() {
+    public int columnsInDb() {
+
         return 15;
     }
 
@@ -188,15 +190,24 @@ public class Settings implements IDbObject {
 
     @Override
     public List<String> keysFromDoubleList() {
-        return null;
+        List<String> keyList = new ArrayList<>();
+        for (int i = 0; i < this.doubleList().size(); i++) {
+            keyList.add((String) doubleList().get(i).get(0));
+        }
+        return keyList;
     }
 
     @Override
     public List<Object> valuesFromDoubleList() {
-        return null;
+        List<Object> keyList = new ArrayList<>();
+        for (int i = 0; i < this.doubleList().size(); i++) {
+            keyList.add(doubleList().get(i).get(1));
+        }
+        return keyList;
     }
 
 
+    @Override
     public DoubleList doubleList() {
         DoubleList list = new DoubleList();
         list.add("nev", this.nev);
@@ -216,7 +227,6 @@ public class Settings implements IDbObject {
         list.add("active", this.active);
         return list;
     }
-
 
 
 }

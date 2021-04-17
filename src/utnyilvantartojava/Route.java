@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -232,13 +233,29 @@ public class Route implements IDbObject {
 
 
     @Override
-    public List<Object> doubleList() {
+    public DoubleList doubleList() {
+   /*     DoubleList list = new DoubleList();
+        list.add("routeid", this.routeid);
+        list.add("varos", this.varos);
+        list.add("cim", this.cim);
+        list.add("auto", this.auto);
+        list.add("rendszam", this.rendszam);
+        list.add("loketterfogat", this.loketterfogat);
+        list.add("fogyasztas", this.fogyasztas);
+        list.add("elozo_zaro", this.elozo_zaro);
+        list.add("aktualis_honap", this.aktualis_honap);
+        list.add("utolso_ugyfel", this.utolso_ugyfel);
+        list.add("zaro_km", this.zaro_km);
+        // list.add("id",this.getId());
+        //list.add("sorszam",this.sorszam);
+        list.add("utolso_szerkesztes", LocalDateTime.now().toString());
+        list.add("active", this.active);*/
         return null;
     }
 
     @Override
-    public int colmnsInDb() {
-        return 0;
+    public int columnsInDb() {
+        return 12;
     }
 
     @Override
@@ -253,11 +270,17 @@ public class Route implements IDbObject {
 
     @Override
     public List<String> keysFromDoubleList() {
-        return null;
+        List<String> keyList=new ArrayList<>();
+        for(int i=0; i< this.doubleList().size();i++){
+            keyList.add((String) doubleList().get(i).get(0));
+        }
+        return keyList;
     }
-
-    @Override
     public List<Object> valuesFromDoubleList() {
-        return null;
+        List<Object> keyList=new ArrayList<>();
+        for(int i=0; i< this.doubleList().size();i++){
+            keyList.add(doubleList().get(i).get(1));
+        }
+        return keyList;
     }
 }

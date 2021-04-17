@@ -126,8 +126,8 @@ public class Client implements IDbObject {
     }
 
     @Override
-    public int colmnsInDb() {
-        return 0;
+    public int columnsInDb() {
+        return 10;
     }
 
     @Override
@@ -142,11 +142,19 @@ public class Client implements IDbObject {
 
     @Override
     public List<String> keysFromDoubleList() {
-        return null;
+        List<String> keyList=new ArrayList<>();
+        for(int i=0; i< this.doubleList().size();i++){
+            keyList.add((String) doubleList().get(i).get(0));
+        }
+        return keyList;
     }
 
     @Override
     public List<Object> valuesFromDoubleList() {
-        return null;
+        List<Object> keyList=new ArrayList<>();
+        for(int i=0; i< this.doubleList().size();i++){
+            keyList.add(doubleList().get(i).get(1));
+        }
+        return keyList;
     }
 }
