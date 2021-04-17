@@ -1,0 +1,1481 @@
+package utnyilvantartojava;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.web.WebView;
+import org.controlsfx.control.SearchableComboBox;
+import org.controlsfx.control.textfield.TextFields;
+
+import java.io.*;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+import java.util.Scanner;
+
+import static java.lang.Integer.parseInt;
+
+import static utnyilvantartojava.Functions.functions;
+import static utnyilvantartojava.TableFunctions.tableFunctions;
+
+
+
+//<editor-fold desc="FXML Annotations">
+public class ViewController implements Initializable {
+    @FXML
+    TabPane tabPane;
+    @FXML
+    AnchorPane setPane;
+    @FXML
+    Pane paneCorr;
+    @FXML
+    Pane paneNormal;
+    @FXML
+    Pane alertPane;
+    @FXML
+    AnchorPane paneDualButton;
+    @FXML
+    AnchorPane paneSingleButton;
+    @FXML
+    AnchorPane datePane;
+    @FXML
+    AnchorPane startPane;
+    @FXML
+    AnchorPane clientPane;
+
+    @FXML
+    Rectangle alertRectangle;
+    @FXML
+    Circle alertCircle;
+
+    //Tábla
+    @FXML
+    TableView<Route> table;
+    @FXML
+    Tab tabNyilv;
+    @FXML
+    Tab tabBeallit;
+
+    //webview
+    @FXML
+    WebView WV;
+
+    // gombok
+    @FXML
+    Button btnBev;
+    @FXML
+    Button btnSetOk;
+    @FXML
+    Button btnSet;
+    @FXML
+    Button btnDistance;
+    @FXML
+    Button btnDistance1;
+    @FXML
+    Button btnReadExcel;
+    @FXML
+    Button btnReady;
+    @FXML
+    Button btnMakeExcel;
+    @FXML
+    Button btnSave;
+    @FXML
+    Button btnInsert;
+    @FXML
+    Button btnDelete;
+    @FXML
+    Button btnCancel;
+    @FXML
+    Button btnAlertDoubleCancel;
+    @FXML
+    Button btnAlertDoubleOk;
+    @FXML
+    Button btnAlertSingleOK;
+    @FXML
+    Button btnPlus;
+    @FXML
+    Button btnMinus;
+    @FXML
+    Button btnDateMinus;
+    @FXML
+    Button btnDatePlus;
+
+    // Checkboxok
+    @FXML
+    CheckBox chkBack;
+    @FXML
+    CheckBox chkSites;
+    @FXML
+    CheckBox chkPrivate;
+    @FXML
+    CheckBox chkBackToSites;
+
+    // Labelek
+    @FXML
+    Label lblName;
+    @FXML
+    Label lblKm;
+    @FXML
+    Label lblSites;
+    @FXML
+    Label lblMegtett;
+    @FXML
+    Label lblKezdo;
+    @FXML
+    Label lblVer;
+    @FXML
+    Label lblVerzio;
+    @FXML
+    Label lblAlert;
+    @FXML
+    Label lblAtlagFogy;
+    @FXML
+    Label lblRendszam;
+    @FXML
+    Label lblMaganKm;
+
+    @FXML
+    TextArea alertTextArea;
+
+    //textfildek
+// Utnyilvántartó tab
+    @FXML
+    TextField txtDepart;
+    @FXML
+    TextField txtArrive;
+    @FXML
+    TextField txtDistance;
+    @FXML
+    TextField txtDate;
+    @FXML
+    TextField txtFueling;
+
+    // Beállítások szakasz
+    @FXML
+    TextField txfNev;
+    @FXML
+    TextField txfTelep;
+    @FXML
+    TextField txfTelepCim;
+    @FXML
+    TextField txfAuto;
+    @FXML
+    TextField txfRendsz;
+    @FXML
+    TextField txfLoket;
+    @FXML
+    TextField txfElozo;
+    @FXML
+    TextField textZaro;
+    @FXML
+    TextField txfFogyaszt;
+
+    @FXML
+    TextField txtBeallit;
+
+    //Saját uticélok megadása szakasz
+    @FXML
+    AnchorPane sajatUticelokPane;
+    @FXML
+    TextField txtSajatClient;
+    @FXML
+    TextField txtSajatClientNumber;
+    @FXML
+    TextField txtSajatEgyebAdat;
+    @FXML
+    TextField txtSajatIranyitoSzam;
+    @FXML
+    TextField txtSajatVaros;
+    @FXML
+    TextField txtSajatCim;
+    @FXML
+    Button btnSajatBev;
+    @FXML
+    Button btnSajatTorles;
+    @FXML
+    ComboBox cbSajat;
+
+    //Filebetöltés
+    @FXML
+    TextField txtFile;
+
+    @FXML
+    RadioButton radioBtnTh;
+    @FXML
+    RadioButton radioBtnFile;
+
+    @FXML
+    DatePicker datePicker;
+
+    @FXML
+    SearchableComboBox<String> cbClient;
+    //</editor-fold>
+
+
+
+    DataBaseConnection db;
+    // RemoteDb remoteDb = new RemoteDb();
+
+    public ObservableList<Route> observableList = FXCollections.observableArrayList();
+    SingleSelectionModel<Tab> selectionModel;
+    Settings settings; //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap 9.utolsó kliens
+    //Változók
+    URL url1;
+
+
+    String settingsId;
+    String remoteExcel = loadFile("link.txt")[0];
+    String localExcel = "ATM_karb_*.xlsx";
+    String excelSource;
+    String workDate;//= LocalDate.now().toString().substring(0,7);            //a hónap amivel dolgozunk
+    String excelName;
+    Client startClient;             // induló kliens
+    Client targetClient;            // cél kliens
+    Client telephely;                // telephely kliens
+    Client startClientTemp;         //itt tárolja  a startklienst amikor egy másikat módosít a felhasználó
+    Client targetClientTemp;        //ugyanaz mint feljebb a célklienssel
+    Settings tempSettings;
+    Route selectedRoute;            // a táblából kiválasztott út
+    Double fueling = 0.0;
+    boolean selectedClientOdaVissza;
+    boolean alertOkOrCancel;
+    boolean alertClick;
+    public static boolean mySqlActive;
+    //Integer distance;
+    Integer spedometer;
+    int selctedRow;
+    int selectedClientSpedometer;
+
+    /*TableColumn datCol;
+    TableColumn maganCol;
+    TableColumn odaVisszaCol;
+    TableColumn tankolCol;
+    TableColumn indCol;
+    TableColumn erkCol;
+    TableColumn tavCol;
+    TableColumn ugyfCol;
+    TableColumn spedometerCol;
+*/
+
+    //Változók optimalizálása/////////////////////////////////////////////////////////////////////////////
+    Remote remote;
+    NonFxFunctions nonFxFunctions;
+    SqlBuilder sqlBuilder;
+
+    //Itt Indul
+    public void initialize(URL url, ResourceBundle rb) {
+
+        run();
+    }
+
+
+    public void run() {
+        nonFxFunctions =new NonFxFunctions();
+        db = new DataBaseConnection();
+        sqlBuilder = new SqlBuilder(
+                Constants.SqliteDataBase.JDBC_DRIVER,
+                Constants.SqliteDataBase.URL,
+                Constants.SqliteDataBase.USERNAME,
+                Constants.SqliteDataBase.PASSWORD);
+// átnevezi a lezárt tábla oszlopot active-ra        
+        db.renColToActive();
+        cbClient.getItems().clear();
+        cbSajat.getItems().clear();
+        observableList.clear();
+        table.getColumns().clear();
+        txtDistance.setEditable(false);
+
+//mai dátum a DatePickerbe
+        datePicker.setValue(LocalDate.now());
+
+//betölti a settings táblából az utolsó sort ahol az active érték true
+        settings = sqlBuilder.getLastSettings();
+//ha nem sikerül megpróbálja betölteni az utolsó sort és az active értékét true-ra állítani       
+        if (settings.getId() == null) {
+            settings = sqlBuilder.getLastSettingsIfActiveNullAll();
+            if (settings != null) {
+                settings.setActive(true);
+                db.updateSettings(settings, settings.getId());
+                settings = sqlBuilder.getLastSettings();
+            }
+
+        }
+
+        ///System.out.println("utolsó út:" + db.getDateOfLastRoute());
+//megvizsgálja hogy van e adat a routes táblában
+        if (sqlBuilder.getDateOfLastRoute() == null) {
+//ha van kiveszi belőle az év hónapot
+            workDate = LocalDate.now().toString().substring(0, 7);
+        } else {
+//ha nincs akkor a mai dátumból veszi ki és a settingsbe egy új 
+//rendszám+ÉvHónap kulcsot készít(ez az elsődleges kulcs az adatbázisban)
+            functions(this).setDate();
+            settings.setAktualis_honap(workDate);
+            settingsId = settings.getRendszam() + settings.getAktualis_honap();
+        }
+
+        btnBev.setDisable(true);
+        btnSetOk.setDisable(true);
+        //setLabels();
+
+//megnézzük szerepelnek e a nem excelből hozzáadott címek
+        checkSpecialClients();
+        /// telephely = db.getClient("telephely");
+
+//megvizsgáljuk, hogy az aktuális settings objektum tartalmazza-e a szükséges adatokat
+        if (settings.getNev() == null
+                || settings.getRendszam() == null
+                || settings.getNev().trim().length() == 0
+                || settings.getVaros().trim().length() == 0
+                || settings.getCim().trim().length() == 0) //ha nem: üres stringre állítjuk a rendszámot,ha véletlenül null lenne meghívjuk a beállít tabot
+        {
+            tabNyilv.setDisable(true);
+            settings.setRendszam("");
+            selectionModel = tabPane.getSelectionModel();
+            selectionModel.select(1);
+            new Alert(this, "Kérlek állíts be minden\nadatot a program megfelelő \nműködéséhez!", true, "info").show();
+
+// ha megvannak akkor folytatódik
+        } else {
+            runResume();
+        }
+    }
+
+    public void runResume() {
+
+        System.out.println(settings.doubleList().size());
+        System.out.println(settings.doubleList().size());
+        sqlBuilder.insert(settings.doubleList(), "settings");
+
+// kivesszük az adatbázisból a telephely címét
+        telephely = sqlBuilder.getClient("telephely");
+//beállítja a tábla oszlopokat
+        table.getColumns().clear();
+        tableFunctions(this).setTableColumns();
+        ///System.out.println(settings);
+        setLabels();
+//beállítjuk a hónapot amit szerkestünk
+        workDate = settings.getAktualis_honap();
+        functions(this).checkDateForPlusButton();
+//töröljük a listát
+        observableList.clear();
+//beállítjuk a kilométer óra állást
+        spedometer = settings.getElozo_zaro();
+//textboxok beállítása
+        setText();
+//labelek beállítása
+        setLabels();
+//telphelyről chheckbox bepipálása
+        chkSites.setSelected(true);
+//combobox szöveg beállítása
+        cbClient.setValue("Uticél");
+//betölti a WebView-ba a térképet
+        WV.getEngine().load("https://www.google.hu/maps/");
+//!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
+        excelSource = localExcel;
+//hozzáadja a listához a rendszámhoz és a szerkesztett hónaphoz tartozó adatokat
+        observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+//újraszámolja a megtett távolságot
+        rebuildDistanceInDb();
+//beállítja a labeleket
+        setLabels();
+// beállítja startclientnek az utolsó érkezés helyét
+        startClient = sqlBuilder.getClient(settings.getUtolso_ugyfel());
+        ///System.out.println("utolsó ügyfél:" + settings.getUtolso_ugyfel());
+//ha a startClient a telephely,
+        if (startClient.getClient().toLowerCase().startsWith("telephely")) {
+//beállítjuk az indulás textbox szövegét "telephely"-re
+            txtDepart.setText(startClient.getClient());
+//bepipáljuk az indulás a telephelyről chkboxot
+            chkSites.setSelected(true);
+        } else {
+//ha nem kivesszük a startclientből a címet
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
+//kivesszük az indulás a telephelyről chkboxból a pipát
+            chkSites.setSelected(false);
+        }
+//letiltja az indulás textboxot mivel a beállított érték ahonnan indulni kell mert előzőleg itt álltunk az autóval
+        txtDepart.setEditable(false);
+//hozzáadja a combobox listájához az ügyfeleket és a saját címeket az adatbázisból
+        //cbClient.getItems().addAll(db.getAllClient(true));
+        cbClient.getItems().clear();
+        cbClient.getItems().addAll(db.getAllClient(false));
+//hozzáadja a cb sajat comboboxhoz a saját címeket        
+        cbSajat.getItems().addAll(db.getAllClient(true));
+
+//betölti az összes lehetséges várost az érkezés textbox listájába 
+        fillField(txtArrive, db.getAllCitys());
+//betölti az összes lehetséges várost az indulás textbox listájába
+        fillField(txtDepart, db.getAllCitys());
+//a tábla végére görget
+        table.scrollTo(table.getItems().size() - 1);
+        setLabels();
+        setText();
+//Ellenőrzi hogy engedélyezve van e a felhasználó a mysql db-ben
+
+        //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        remote = new Remote(settings);
+// regisztrál a mysql-be
+        remote.regUser();
+//ellenőrzi hogy engedélyezve van e és frissíti az utolsó hozzáférés idejét.
+        remote.checkUser(tabNyilv);
+        /*if (remote.checkUser(settings, tabNyilv)){
+            System.out.println("Engedélyezve");
+        remote.updateTimeStamp(settings);
+        }
+       else{
+            Alert alert = new Alert(this, "Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
+            alert.show();
+            tabNyilv.setDisable(true);
+        }
+
+         */
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
+
+    @FXML
+    private void btnClick(ActionEvent event) throws Exception {
+//útnyilvántartó tab gombok
+
+//Bevitel gomb
+        if (btnBev.isArmed()) {
+// bevitel tiltás
+            btnBev.setDisable(true);
+            txtDistance.setStyle(" -fx-background-color: #ffffff;");
+            txtDistance.setEditable(false);
+//távolság engedélyezés
+            btnDistance.setDisable(false);
+            //chkBack.setSelected(false);            
+//megvizsgálja, hogy az aktuális dátum egyezik-e a hónappal amivel dolgozunk
+            if (datePicker.getValue().toString().substring(0, 7).equals(String.valueOf(workDate))) {
+
+                insertRoute();
+
+
+            } else {
+
+                Alert alert = new Alert(this, "A dátum és a hónap amivel \ndolgozol nem egyezik!! \n"
+                        + "Kérlek állítsd be a megfelelő \nértéket!", true, "warn");
+                alert.show();
+            }
+
+        }
+//lekéri a távolságot
+        if (btnDistance.isArmed()) {
+            getDist(true);
+        }
+//lekéri a távolságot a sor javítása közben
+        if (btnDistance1.isArmed()) {
+            getDist(false);
+        }
+
+        if (btnSajatBev.isArmed()) {
+            functions(this).addSajatCim();
+        }
+
+        if (btnSajatTorles.isArmed()) {
+            functions(this).delSajatCim();
+        }
+
+//A beállítás tab-on lévő gombok
+//beállításoknál az ok gomb
+        if (btnSetOk.isArmed()) {
+            settings.setActive(false);
+            db.updateSettings(settings, settings.getId());
+            settings.setActive(true);
+
+//ha van írva valami ezekbe a textboxokba akkor úgy vesszük, hogy ki van töltve az
+//összes beállítás
+            if (txfNev.getText().trim().length() != 0
+                    && txfTelep.getText().trim().length() != 0
+                    && txfTelepCim.getText().trim().length() != 0
+                    && txfRendsz.getText().trim().length() != 0) {
+//kiolvassa a textboxok tartalmát és beteszi a settings objektumba
+                settings.setNev(txfNev.getText());
+                settings.setVaros(txfTelep.getText());
+                settings.setCim(txfTelepCim.getText());
+                settings.setAuto(txfAuto.getText());
+                settings.setRendszam(txfRendsz.getText());
+                settings.setLoketterfogat(txfLoket.getText());
+                settings.setFogyasztas(txfFogyaszt.getText());
+                settings.setElozo_zaro(Integer.parseInt(txfElozo.getText().trim()));
+                settingsId = txfRendsz.getText() + workDate;
+                settings.setId(settingsId);
+//Ha az aktuális settings objektum üres beállítjuk a szükséges 
+//értékeket, hogy ne akadjon ki a program induláskor és mentjük az adatbázisba
+//ez első induláskor történik utána be kell állítani a felhasználónak az adatait
+                if (sqlBuilder.getSettings(settingsId) == null) {
+                    settings.setAktualis_honap(workDate);
+                    settings.setId(settingsId);
+                    settings.setUtolso_ugyfel("telephely");
+                    settings.setActive(true);
+                    //itt
+                    //db.addSettings(settings);
+                    sqlBuilder.insert(settings.doubleList(),"settings");
+                    telephely = sqlBuilder.getClient("telephely");
+                    spedometer = settings.getElozo_zaro();
+
+                } else {
+// ha már létezett az aktuális setting objektum akkor beállítja a megváltozott
+//adatokat és frissíti az adatbázist ez olyankor ha pl. a rendszám vagy a lakcím változott
+                    db.updateSettings(settings, settingsId);
+                }
+// betöltjük az előzőleg módosított aktuális settings objektumot 
+                settings = sqlBuilder.getLastSettings();
+// beállítjuk a telephely client értékeit
+                telephely.setField(settings.getNev());
+                telephely.setCity(settings.getVaros());
+                telephely.setAddress(settings.getCim());
+                //mentjük az adatbázisba
+                db.updateClient(telephely, "telephely");
+//Beállítjuk a mezők szerkeszthetőségét visszaugrunk az utnyilvántartás tab-ra és folytatodik a program
+                setLabels();
+                setText();
+                setPane.setDisable(true);
+                btnSet.setDisable(false);
+                btnSetOk.setDisable(true);
+                tabNyilv.setDisable(false);
+                settings = sqlBuilder.getSettings(settingsId);
+                selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(0);
+//Beállítja a telephelyhez a címet és a várost                
+                checkSpecialClients();
+                Alert alert = new Alert(this, "A beállítás sikerült " + settings.getNev() + "! \nMost már használhatod a programot!", true, "succ");
+                alert.show();
+                runResume();
+
+            } else {
+                Alert alert = new Alert(this, "Nem adtál meg minden szükséges\nadatot!", true, "err");
+                alert.show();
+            }
+
+        }
+        if (btnSet.isArmed()) {
+            setPane.setDisable(false);
+            btnSet.setDisable(true);
+            btnSetOk.setDisable(false);
+
+            setLabels();
+        }
+
+        if (btnReadExcel.isArmed()) {
+            //btnReadExcel.setDisable(true);
+            if (btnReadExcel.getText() == "Kész") {
+                //btnReadExcel.setDisable(false);
+                btnReadExcel.setText("Excel beolvasása");
+                tabNyilv.setDisable(false);
+                cbClient.getItems().clear();
+                run();
+                selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(0);
+            } else {
+
+                db.conn.close();
+                btnReadExcel.setText("Kész");
+                tabNyilv.setDisable(true);
+                try {
+                    Runtime run = Runtime.getRuntime();
+                    run.exec("cmd /c start ./adatbeolvaso/Karbantart.exe /K ");
+                    //run.wait();
+
+                } catch (Exception e) {
+                    System.out.println("Nem érhető el a fájl ! ");
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        if (btnMakeExcel.isArmed()) {               //Excel készítése
+            Excel excel =new Excel();
+            rebuildDistanceInDb();
+            excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
+            excel.make(excelName, "nyomtat",settings,observableList);
+
+            try {
+
+                Runtime.getRuntime().exec("cmd /c start excel /r " + excelName);
+            } catch (Exception e) {
+                System.out.println("Nem érhető el a fájl ! ");
+                e.printStackTrace();
+            }
+        }
+//Mégse gomb az út módosításnál
+        if (btnCancel.isArmed()) {
+            startClient = startClientTemp;
+            targetClient = targetClientTemp;
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
+            txtArrive.clear();
+            txtDistance.clear();
+            paneNormal.setVisible(true);
+            paneCorr.setVisible(false);
+            setLabels();
+            txtDistance.setEditable(false);
+            cbClient.setValue("Uticél");
+        }
+// Törlés gomb az út módosításnál
+        if (btnDelete.isArmed()) {
+//Ellenőrzi hogy az utolsó út van e kijelölve            
+            if (selectedRoute == observableList.get(observableList.size() - 1)) {
+                String elozoCim = nonFxFunctions.getClientFullAddress(telephely);
+                String elozoKliens = "telephely";
+                //chkSites.setSelected(true);
+                observableList.remove(selectedRoute);
+
+                paneNormal.setVisible(true);
+                paneCorr.setVisible(false);
+                chkBack.setSelected(false);
+                chkPrivate.setSelected(false);
+
+                startClient = sqlBuilder.getClientFromAddress(elozoCim);
+
+                sqlBuilder.delRoute(selectedRoute.getId());
+                setLabels();
+                if (observableList.size() > 1) {
+                    elozoCim = observableList.get(observableList.size() - 1).getErkezes();
+                    elozoKliens = observableList.get(observableList.size() - 1).getUgyfel();
+                    if (elozoCim.startsWith("Magánhasználat") && observableList.size() > 2) {
+                        elozoCim = observableList.get(observableList.size() - 2).getErkezes();
+                        elozoKliens = nonFxFunctions.getClientNumberFromRoute(observableList.get(observableList.size() - 2).getUgyfel());
+                    }
+                    txtDepart.setText(elozoCim);
+                    startClient = sqlBuilder.getClientFromClientNumber(elozoKliens);
+                    if (elozoKliens.contains("/")) {
+                        elozoKliens = elozoKliens.substring(0, elozoKliens.indexOf("/"));
+                    }
+                    System.out.println(elozoKliens);
+                    settings.setUtolso_ugyfel(elozoKliens);
+
+                    observableList.remove(selectedRoute);
+                    sqlBuilder.delRoute(selectedRoute.getId());
+                    setLabels();
+                    paneNormal.setVisible(true);
+                    paneCorr.setVisible(false);
+                    chkBack.setSelected(false);
+                    chkPrivate.setSelected(false);
+                    startClient = sqlBuilder.getClientFromAddress(elozoCim);
+
+                    //txtDepart.setText(targetClientTemp.getCity() + " " + targetClientTemp.getAddress());
+                    targetClient = null;
+                    txtArrive.clear();
+                    txtDistance.clear();
+                    cbClient.setValue("Uticél");
+
+                    /*if (targetClient != null) {
+                txtArrive.setText(targetClient.getCity() + " " + targetClient.getAddress());
+            } else {
+                txtArrive.clear();
+            }
+                     */
+                    txtDistance.setEditable(false);
+                    paneNormal.setVisible(true);
+                    paneCorr.setVisible(false);
+                    selectedRoute = null;
+                }
+//Ha minden adatot töröltünk a táblából beállítja indulási helynek a telephelyet
+                if (observableList.size() == 0) {
+                    startClient = telephely;
+                    targetClient = null;
+                    chkSites.setSelected(true);
+                    txtArrive.clear();
+                    txtDistance.clear();
+                    txtDepart.setText(startClient.getClientNumber());
+                    cbClient.setValue("Uticél");
+                    settings.setUtolso_ugyfel(telephely.getClientNumber());
+                }
+                settings.setZaro_km(settings.getElozo_zaro() + sqlBuilder.getSpedometer(workDate, settings.getRendszam()));
+                db.updateSettings(settings, (settings.getId()));
+                btnSave.setDisable(false);
+                chkBack.setSelected(false);
+
+            } else {
+                Alert alert = new Alert(this, "Csak az utolsó sort törölheted! ", true, "warn");
+                alert.show();
+                txtDistance.setEditable(false);
+            }
+        }
+//mentés gomb az út módősításánál
+        if (btnSave.isArmed()) {
+            selectedRoute.setDatum(datePicker.getValue().toString());
+            selectedRoute.setIndulas(txtDepart.getText());
+            selectedRoute.setErkezes(txtArrive.getText());
+            selectedRoute.setTavolsag(Integer.parseInt(txtDistance.getText()));
+            selectedRoute.setUgyfel(cbClient.getValue());
+            selectedRoute.setVissza(chkBack.isSelected());
+            selectedRoute.setMagan(chkPrivate.isSelected());
+            String fuel = txtFueling.getText();
+            fuel = nonFxFunctions.checkFueling(fuel);
+            selectedRoute.setFueling(Double.parseDouble(fuel));
+            observableList.set(selectedRoute.getCellId(), selectedRoute);
+            db.updateRoute(selectedRoute, selectedRoute.getId());
+//Elmenti az adatbázisba a distance táblába a módosított távolságot
+            updateDistance(selectedRoute, settings.getUtolso_ugyfel(), txtDistance.getText());
+            observableList.clear();
+            observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+            startClient = startClientTemp;
+            targetClient = targetClientTemp;
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
+            txtArrive.clear();
+            txtFueling.clear();
+            paneNormal.setVisible(true);
+            paneCorr.setVisible(false);
+            rebuildDistanceInDb();
+            setLabels();
+            chkBack.setSelected(false);
+            cbClient.setValue("Uticél");
+            txtDistance.clear();
+            txtDistance.setEditable(false);
+            btnDistance.setDisable(false);
+            btnBev.setDisable(true);
+        }
+
+        if (btnAlertSingleOK.isArmed()) {
+            alertClick = true;
+            alertOkOrCancel = true;
+            alertPane.setVisible(false);
+        }
+//a választott honap melletti plusz és minusz gomb
+        if (btnPlus.isArmed()) {
+
+            settings.setActive(false);
+            db.updateSettings(settings, settings.getId());
+            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings,workDate,"+"));
+            setWorkdate("+");
+            functions(this).checkDateForPlusButton();
+        }
+        if (btnMinus.isArmed()) {
+
+            settings.setActive(false);
+            db.updateSettings(settings, settings.getId());
+            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings,workDate,"-"));
+            setWorkdate("-");
+            functions(this).checkDateForPlusButton();
+        }
+
+        if (btnReady.isArmed()) {
+
+            settings.setActive(false);
+            db.updateSettings(settings, settings.getId());
+            setWorkdate("#");
+            functions(this).checkDateForPlusButton();
+
+        }
+
+        if (btnDatePlus.isArmed()) {
+
+            LocalDate d = datePicker.getValue().plusDays(1);
+            datePicker.setValue(d);
+        }
+
+        if (btnDateMinus.isArmed()) {
+            LocalDate d = datePicker.getValue().minusDays(1);
+            datePicker.setValue(d);
+        }
+
+    }
+
+    public void setTelephely() {
+        String indValue = txtDepart.getText();
+        System.out.println("indV= " + indValue);
+        String erkValue = txtArrive.getText();
+        System.out.println("erkV= " + erkValue);
+        System.out.println(telephely.getAddress());
+        String telephValue = nonFxFunctions.getClientFullAddress(telephely);
+        System.out.println("th= " + telephValue);
+        if (indValue.startsWith(telephValue)) {
+            chkSites.setSelected(true);
+            txtDepart.setText(telephely.getClient());
+        }
+    }
+
+// kinyeri az adatbázisból a címeket a distances tábla frissítéséhez és frissíti
+
+    public void updateDistance(Route selectedRoute, String elozoUgyfel, String distance) {
+// mivel a Route objektum gépszám+" "+ügyfél formátumban tárolja az ügyfél adatot le kell vágni a gépszámot
+        String gepszam = selectedRoute.getUgyfel();
+        if (selectedRoute.getUgyfel().contains(" ")) {
+            int index = selectedRoute.getUgyfel().indexOf(' ');
+            gepszam = selectedRoute.getUgyfel().substring(0, index);
+        }
+//kiveszi a settingsből az indulás helyét(ez az utolsó gépszám vagy a telephely) ez alapján lekéri a client-et
+//az adatbázisból és elkészíti a teljes címet
+        String elsoCim = nonFxFunctions.getClientFullAddress(sqlBuilder.getClientFromClientNumber(elozoUgyfel));
+//ugyanaz mint feljebb csak a selectedRoute-ból kinyert címmel.
+        String masodikCim = nonFxFunctions.getClientFullAddress(sqlBuilder.getClientFromClientNumber(gepszam));
+//frissíti az adatbázist.
+       sqlBuilder.updateDistance(elsoCim, masodikCim, Integer.parseInt(distance));
+        sqlBuilder.updateDistanceRev(elsoCim, masodikCim, Integer.parseInt(distance));
+    }
+//magánutat ad a listához
+
+    public void privateRoute(int distance) {
+        observableList.add(new Route(
+                datePicker.getValue().toString(),
+                chkPrivate.isSelected(),
+                "Magánhasználat",
+                "Magánhasználat",
+                "Magánhasználat",
+                fueling,
+                spedometer,
+                distance,
+                false,
+                observableList.size()));
+//beállítja utolsó ügyfélnek az utolsó ügyfelet ez lesz a következő út kezdőpontja            
+        //settings.setUtolso_ugyfel("telephely");
+        chkPrivate.setSelected(false);
+
+        startClient = sqlBuilder.getClientFromClientNumber(settings.getUtolso_ugyfel());
+
+        if (startClient.getClient().toLowerCase().startsWith("telephely")) {
+            chkSites.setSelected(true);
+            txtDepart.setText(startClient.getClientNumber());
+            System.out.println(startClient.getClientNumber());
+        } else {
+            chkSites.setSelected(false);
+            txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
+        }
+
+        txtDistance.clear();
+        txtArrive.clear();
+        txtFueling.clear();
+        cbClient.setValue("Uticél");
+    }
+//ez ad hozzá egy utat    
+
+    public void oneRoute(int distance) {
+        observableList.add(
+                new Route(
+                        date,
+                        chkPrivate.isSelected(),
+                        nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient),
+                        targetClient.getClientNumber() + "/" + targetClient.getClient(),
+                        fueling,
+                        spedometer,
+                        distance,
+                        chkBack.isSelected(),
+                        observableList.size()));
+    }
+// ez egy visszautat ad hozzá, ez előtt van a listában egy odaút
+
+    public void backRoute(int distance) {
+        fueling = 0.0;
+        observableList.add(
+                new Route(
+                        date,
+                        chkPrivate.isSelected(),
+                        nonFxFunctions.getClientFullAddress(targetClient), nonFxFunctions.getClientFullAddress(startClient),
+                        startClient.getClientNumber() + "/" + startClient.getClient(),
+                        fueling,
+                        spedometer,
+                        distance,
+                        chkBack.isSelected(),
+                        observableList.size()));
+        settings.setUtolso_ugyfel("telephely");
+        startClient = telephely;
+        chkSites.setSelected(true);
+        txtDepart.setText("Telephely");
+        chkBack.setSelected(false);
+
+    }
+
+    String date;
+
+    public void insertRoute() {
+//dátum beolvasás
+        //fueling=0.0;
+//ha üres a txtFueling  akkor a parseDouble kiakad ezért akkor 0.0 éréküvé tesszük
+
+        String fueltext = txtFueling.getText();
+        if (fueltext.isEmpty()) {
+            fueltext = "0.0";
+        }
+        fueling = Double.parseDouble(nonFxFunctions.checkFueling(fueltext));
+
+        date = datePicker.getValue().toString();
+//kivételkezelés a parseInt miatt itt olvassa be a távolságot a textboxból
+        try {
+            int distance = parseInt(txtDistance.getText());
+
+// beállítja a címkéket az útnyilvántartó oldalon
+            setLabels();
+//ha a magánút be van pipálva
+            if (chkPrivate.isSelected()) {
+//hozzáad egy magánutat
+                privateRoute(distance);
+//ha be van pipélva az oda-vissza
+            } else if (chkBack.isSelected()) {
+//hozzáadja az utat a listához   
+                oneRoute(distance);
+                checkDistInDb();
+//mégegyszer bekerül az út de most s kezdőcím és a cél fel van cserélve
+                backRoute(distance);
+            } else {
+
+                chkSites.setSelected(false);
+//hozzáadja az utat a listához            
+                oneRoute(distance);
+//beállítja utolsó ügyfélnek a cél ügyfél client numberét beírja az indulás mezőbe a teljes címet
+//mert a köv. út innen indul majd 
+                settings.setUtolso_ugyfel(targetClient.getClientNumber());
+                settings.setActive(true);
+                db.updateSettings(settings, settings.getId());
+                txtDepart.setText(nonFxFunctions.getClientFullAddress(targetClient));
+                checkDistInDb();
+                startClient = targetClient;
+                targetClient = null;
+            }
+//megnézi a listában hogy be volt e állítva az utolsó előtti elemnél az oda vissza 
+//ha igen akkor azt és az utolsót is küldi az adatbázisba
+            if (observableList.get(observableList.size() - 1).isVissza()) {
+                db.addRoute(observableList.get(observableList.size() - 2), settings.getRendszam());
+
+            }
+//egyébként csak az utolsó listaelem megy az adatbázisba
+            db.addRoute(observableList.get(observableList.size() - 1), settings.getRendszam());
+            observableList.clear();
+//újra betölti az adatokat a listába az adatbázisba        
+            observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+            if (chkBackToSites.isSelected()) {
+                chkSites.setSelected(true);
+                chkBackToSites.setSelected(false);
+                txtDepart.setText(telephely.getClient());
+            }
+            txtArrive.clear();
+            txtDistance.clear();
+            targetClient = null;
+            table.scrollTo(table.getItems().size() - 1);
+            btnBev.setDisable(true);
+            btnDistance.setDisable(false);
+            rebuildDistanceInDb();
+            setLabels();
+            settings.setZaro_km(sqlBuilder.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
+            settings.setActive(true);
+            db.updateSettings(settings, (settings.getRendszam() + workDate));
+            cbClient.setValue("Uticél");
+
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(this, "A TÁVOLSÁG MEZŐBE CSAK\n SZÁMOT ÍRHATSZ!!!!", true, "err");
+            alert.show();
+            btnBev.setDisable(false);
+            txtDistance.clear();
+        }
+    }
+//Ellenőrzi hogy a benne van-e a két hely közti távolság az adatbázisban
+
+    private void checkDistInDb() {
+//odaút        
+        Distance start = sqlBuilder.getDistance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient));
+        System.out.println("start " + start.getDistance());
+//visszaút        
+        Distance target = sqlBuilder.getDistance(nonFxFunctions.getClientFullAddress(targetClient), nonFxFunctions.getClientFullAddress(startClient));
+        System.out.println("target " + target.getDistance());
+        // ha a visszakapott érték 0 akkor beírja az adatbázisba új távolságként
+        if (start.getDistance() == 0 && target.getDistance() == 0) {
+            //       if (start == null && target == null) {
+            Distance distance= new Distance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+
+            sqlBuilder.insert(distance.doubleList(),"distance");
+            btnBev.setDisable(false);
+            btnDistance.setDisable(true);
+            System.out.println("beírtam");
+        }
+
+        /* Distance start1 = db.getDistanceFromMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient));
+        Distance target1 = db.getDistanceFromMySql(getClientFullAddress(targetClient), getClientFullAddress(startClient));
+        if (start1.getDistance() == 0 && target1.getDistance() == 0) {
+            db.addDistanceToMySql(getClientFullAddress(startClient), getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            btnBev.setDisable(false);
+            btnDistance.setDisable(true);
+        }
+         */
+    }
+//Távolság lekérése
+
+    private void getDist(boolean noGmaps) {
+//egy odafele út
+        String fullAddress = txtArrive.getText();
+        int index = txtArrive.getText().indexOf(' ');
+        if (fullAddress.contains(" ")) {
+            String city = fullAddress.substring(0, index).trim();
+            String address = fullAddress.substring(index).trim();
+            targetClient.setCity(city);
+            targetClient.setAddress(address);
+            db.updateClient(targetClient, targetClient.getClientNumber());
+        }
+        Distance actualDist = sqlBuilder.getDistance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient));
+        //egy visszafele út       
+        Distance revDist = sqlBuilder.getDistance(nonFxFunctions.getClientFullAddress(targetClient), nonFxFunctions.getClientFullAddress(startClient));
+        // ha igen akkor beírja a textboxba a távot 
+        if (actualDist.getDistance() != 0 && noGmaps) {
+            txtDistance.setText(String.valueOf(actualDist.getDistance()));
+            btnDistance.setDisable(true);
+            btnBev.setDisable(false);
+//ha visszafelé szerepel akkor beírja a textboxba a távot 
+        } else if (revDist.getDistance() != 0 && noGmaps) {
+            txtDistance.setText(String.valueOf(revDist.getDistance()));
+            btnDistance.setDisable(true);
+            btnBev.setDisable(false);
+            // ha nincs az adatbázisban akkor lekérés a gmapstól           
+        } else {
+            getDistanceFromGmaps(nonFxFunctions.cleanString(nonFxFunctions.getClientFullAddress(startClient)), nonFxFunctions.cleanString(nonFxFunctions.getClientFullAddress(targetClient)));
+        }
+    }
+
+    @FXML
+    private void chkCheck(ActionEvent event) {
+        if (chkSites.isSelected()) {
+            txtDepart.setText(telephely.getClientNumber());
+            txtDepart.setEditable(false);
+            chkBackToSites.setSelected(false);
+            startClient = telephely;
+            targetClient = null;
+            txtArrive.clear();
+            txtDistance.clear();
+        } else {
+            txtDepart.setEditable(true);
+        }
+        if (chkPrivate.isSelected()) {
+            txtDistance.setEditable(true);
+            txtDistance.setStyle("-fx-background-color:  #eeffcc;");
+            txtDistance.requestFocus();
+            cbClient.setValue("Magánhasználat");
+            txtDepart.setText("Magánhasználat");
+            txtArrive.setText("Magánhasználat");
+            btnBev.setDisable(false);
+            btnDistance.setDisable(true);
+            chkSites.setSelected(false);
+            chkBackToSites.setSelected(false);
+            chkBack.setSelected(false);
+
+        } else if (chkBackToSites.isSelected()) {
+            chkSites.setSelected(false);
+            txtArrive.setText("Telephely");
+            txtArrive.setEditable(false);
+            targetClient = telephely;
+
+        } else {
+            txtArrive.clear();
+            txtArrive.setEditable(true);
+            txtDistance.setEditable(false);
+        }
+    }
+
+    @FXML
+    private void chkRadio(ActionEvent event) {
+        if (radioBtnTh.isSelected()) {
+            txtFile.setText(remoteExcel);
+            excelSource = remoteExcel;
+        }
+
+        if (radioBtnFile.isSelected()) {
+            txtFile.setText(localExcel);
+            excelSource = localExcel;
+        }
+    }
+
+    @FXML
+    private void cboxTextChange(ActionEvent event) {
+        targetClient = sqlBuilder.getClient(cbClient.getValue());
+        if (targetClient != null) {
+            txtArrive.clear();
+            txtArrive.appendText(nonFxFunctions.getClientFullAddress(targetClient));
+            txtArrive.setEditable(true);
+
+        }
+    }
+
+
+// lekéri a távot a gmapstól
+
+
+
+
+  /*  public void getDistanceFromGmaps(String sAddress, String tAddress) {
+        //Alert alert = new Alert(this, "Távolság lekérése a Google Maps-tól", true, "info");
+
+        String gotUrl = "";
+        String gUrl = "";
+        if (txtDistance.getText() != "" || txtDistance != null) {
+            gUrl = "https://www.google.hu/maps/dir/" + sAddress + "/" + tAddress;
+            System.out.println(gUrl);
+            // itt lekérdezi a távolságot a google mapstól
+            Remote remote = new Remote(settings);
+            gotUrl = remote.httpGet(gUrl);
+         }
+        btnBev.setDisable(true);
+        btnDistance.setDisable(true);
+
+
+        // String gotUrl = Remote.httpGet(gUrl);
+
+        // btnAlertSingleOK.setDisable(true);
+//kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl
+        int index = gotUrl.indexOf(" km");
+//kiszedi a távolságot megfelelően kerekíti és beírja a textboxba
+        String sub = gotUrl.substring(index - 6, index);
+        System.out.println(sub);
+        sub = sub.replace(',', '.');
+        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+        txtDistance.setText(distance.toString());
+        btnBev.setDisable(false);
+        cbClient.setDisable(false);
+        txtDistance.setEditable(false);
+
+//figyeli hogy betöltődött-e az oldal és vár míg meg nem történt
+       /* WV.getEngine().getLoadWorker().stateProperty().addListener(
+                new ChangeListener<Worker.State>() {
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends Worker.State> observable,
+                            Worker.State oldValue, Worker.State newValue) {
+                        switch (newValue) {
+                            case SUCCEEDED:
+                                btnDistance.setDisable(false);
+                                btnBev.setDisable(false);
+                                btnAlertSingleOK.setDisable(false);
+                                alertPane.setVisible(false);
+                                WV
+                                        .getEngine()
+                                        .getLoadWorker()
+                                        .stateProperty()
+                                        .removeListener(this);
+                                break;
+                            case FAILED:
+                                System.out.println("Az oldal betöltése sikertelen");
+                                break;
+                        }
+                        if (newValue != Worker.State.SUCCEEDED) {
+                            return;
+                        }
+//bekerül a html oldal forráskódja (amit a gmapstól kapott) a gotUrl változóba  
+                        //String gotUrl = getURL(WV.getEngine().getLocation());
+                        String gotUrl=Remote.httpGet(gUrl);
+        System.out.println(gotUrl);
+//kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl               
+                        int index = gotUrl.indexOf(" km");
+//kiszedi a távolságot megfelelően kerekíti és beírja a textboxba                
+                        String sub = gotUrl.substring(index - 6, index);
+                        System.out.println(sub);
+                        sub = sub.replace(',', '.');
+                        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+                        txtDistance.setText(distance.toString());
+                        btnBev.setDisable(false);
+                        cbClient.setDisable(false);
+                        txtDistance.setEditable(false);
+
+                    }
+                });
+    }
+    */
+
+
+// dinamikusan állítja be a tábla oszlopait
+
+
+//Kiszedi a Route-bol a csupasz gépszámot    
+
+
+
+    public static void saveFile(String filename, String[] list) {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(filename);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        writer.print("");
+        for (int i = 0; i < list.length; i++) {
+            writer.println(list[i]);
+        }
+        writer.flush();
+        writer.close();
+    }
+
+    public static String[] loadFile(String filename) {
+
+        String[] list = new String[10];
+        File file = new File(filename);
+        try {
+            Scanner sc = new Scanner(file);
+            for (int i = 0; i < list.length; i++) {
+                list[i] = sc.nextLine();
+            }
+            sc.close();
+        } catch (Exception e) {
+            System.out.println("Nem találom a fájlt!");
+        }
+        return list;
+    }
+
+    public void setText() {
+        //0-név,1-telephely város,2-telephely cím, 3-auto tip., 4-rendszám, 5-lökett., 6-fogyasztás, 7-előző záró km. 8-aktuális hónap
+        txfNev.setText(settings.getNev());
+        txfTelep.setText(settings.getVaros());
+        txfTelepCim.setText(settings.getCim());
+        txfAuto.setText(settings.getAuto());
+        txfRendsz.setText(settings.getRendszam());
+        txfLoket.setText(settings.getLoketterfogat());
+        txfFogyaszt.setText(settings.getFogyasztas());
+        txfElozo.setText(String.valueOf(settings.getElozo_zaro()));
+        txtDate.setText(settings.getAktualis_honap());
+        System.out.println("spedometer:" + spedometer);
+        textZaro.setText(spedometer.toString());
+    }
+
+    public void setLabels() {
+        lblName.setText("Név: " + settings.getNev());
+        lblSites.setText("T.hely: " + settings.getVaros());
+        lblKezdo.setText("Kezdő: " + settings.getElozo_zaro() + " Km");
+        lblKm.setText("Jelenlegi záró: " + (settings.getElozo_zaro() + sqlBuilder.getSpedometer(workDate, settings.getRendszam())) + " Km");
+        lblMegtett.setText("Megtett út: " + sqlBuilder.getSpedometer(workDate, settings.getRendszam()) + " Km");
+        Double atlagFogy = 100 * sqlBuilder.getFueling(workDate, settings.getRendszam()) / sqlBuilder.getSpedometer(workDate, settings.getRendszam());
+        System.out.println(atlagFogy);
+        lblAtlagFogy.setText("Átlag fogyasztás: " + atlagFogy.toString().substring(0, 3));
+        txtFueling.clear();
+        lblVerzio.setText(lblVer.getText());
+        lblRendszam.setText("Rendszám: " + settings.getRendszam());
+        functions(this).setLabelMaganKm();
+        setTelephely();
+
+    }
+
+    private void fillField(TextField text, ArrayList list) {
+        TextFields.bindAutoCompletion(text, list);
+    }
+
+    private void checkSpecialClients() {
+        Client telephely = sqlBuilder.getClient("telephely");
+
+        if (telephely == null) {
+            telephely = new Client("telephely",
+                    "telephely",
+                    "telephely",
+                    "telephely",
+                    0,
+                    settings.getVaros(),
+                    settings.getCim(),
+                    true,
+                    0,
+                    settings.getNev());
+            sqlBuilder.insert(telephely.doubleList(), "clients");
+
+        } else {
+            telephely.setCity(settings.getVaros());
+            telephely.setAddress(settings.getCim());
+            db.updateClient(telephely, telephely.getClientNumber());
+        }
+
+        Client diebold = sqlBuilder.getSajatClient("DieboldNixdorf");
+        if (diebold == null) {
+            diebold = new Client(
+                    "DieboldNixdorf",
+                    "DieboldNixdorf",
+                    "telephely",
+                    "telephely",
+                    2220,
+                    "Vecsés",
+                    "Lőrinci út 59-61",
+                    true,
+                    0,
+                    "DieboldNixdorf");
+            sqlBuilder.insert(diebold.doubleList(), "sajat_cimek");
+            sqlBuilder.insert(diebold.doubleList(), "clients");
+        }
+
+        Client magan = sqlBuilder.getClient("Magánhasználat");
+        if (magan == null) {
+            magan = new Client(
+                    "Magánhasználat",
+                    "Magánhasználat",
+                    "Magánhasználat",
+                    "Magánhasználat",
+                    0,
+                    "Magánhasználat",
+                    "Magánhasználat",
+                    true,
+                    0,
+                    "Magánhasználat"
+            );
+            sqlBuilder.insert(magan.doubleList(), "clients");
+        }
+    }
+//Elkészíti az excel táblát
+
+   /* public void make(String fileName, String sheetName) {
+        //**workdate->settings.getAktualis_honap()
+        Integer megtettKM = db.getSpedometer(settings.getAktualis_honap(), settings.getRendszam());
+        RowToExcel rowToExcel = new RowToExcel();
+        rowToExcel.createNewExcelFile(fileName);
+        //**workdate->settings.getAktualis_honap()
+        rowToExcel.setCell(fileName, sheetName, "D2", settings.getAktualis_honap());
+        rowToExcel.setCell(fileName, sheetName, "C3", settings.getAuto());
+        rowToExcel.setCell(fileName, sheetName, "C4", settings.getRendszam());
+        rowToExcel.setCell(fileName, sheetName, "C5", String.valueOf(settings.getElozo_zaro()));
+        rowToExcel.setCell(fileName, sheetName, "C6", String.valueOf(settings.getZaroKm()));
+        rowToExcel.setCell(fileName, sheetName, "L174", String.valueOf(settings.getZaroKm()));
+        rowToExcel.setCell(fileName, sheetName, "D4", settings.getNev());
+        rowToExcel.setCell(fileName, sheetName, "G3", settings.getLoketterfogat());
+        rowToExcel.setCell(fileName, sheetName, "G4", settings.getFogyasztas());
+        rowToExcel.setCell(fileName, sheetName, "G5", megtettKM.toString());
+        rowToExcel.setCell(fileName, sheetName, "L172", megtettKM.toString());
+        //**workdate->settings.getAktualis_honap()
+        String fuelValue = String.valueOf(db.getFueling(settings.getAktualis_honap(), settings.getRendszam()));
+        if (fuelValue.length() > 6) {
+            fuelValue = fuelValue.substring(0, 7);
+        }
+        rowToExcel.setCell(fileName, sheetName, "G7", fuelValue);
+        //**workdate->settings.getAktualis_honap()
+        Double value = 100 * db.getFueling(settings.getAktualis_honap(), settings.getRendszam()) / megtettKM;
+        String dValue = "";
+        if (value.toString().length() > 4) {
+            dValue = value.toString().substring(0, 5);
+        }
+        rowToExcel.setCell(fileName, sheetName, "G6", dValue);
+        rowToExcel.setCell(fileName, sheetName, "L173", String.valueOf(db.getMaganut(workDate, settings.getRendszam())));
+        //**workdate->settings.getAktualis_honap()
+        Double doubleValue = (double) db.getMaganut(settings.getAktualis_honap(), settings.getRendszam()) / megtettKM * 100;
+        if (doubleValue.toString().length() > 2 && doubleValue != 100) {
+            dValue = doubleValue.toString().substring(0, 2);
+        } else {
+            dValue = doubleValue.toString();
+        }
+
+        rowToExcel.setCell(fileName, sheetName, "M173", dValue + "%");
+
+        for (int i = 0; i < observableList.size(); i++) {
+            String utCelja;
+            String mORc;
+            if (observableList.get(i).isMagan()) {
+                utCelja = "Magán";
+                mORc = "M";
+            } else {
+                utCelja = "Hibajavítás";
+                mORc = "C";
+            }
+            RowToExcel row = new RowToExcel(
+                    observableList.get(i).getDatum(),
+                    utCelja,
+                    observableList.get(i).getIndulas(),
+                    observableList.get(i).getErkezes(),
+                    observableList.get(i).getUgyfel(),
+                    observableList.get(i).getSpedometer(),
+                    observableList.get(i).getFueling(),
+                    observableList.get(i).getTavolsag(),
+                    mORc);
+            row.setRow(fileName, sheetName, i + 9);
+        }
+        try {
+            Runtime.getRuntime().exec(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+//Újraszámolja a kilométeróra állást az adatbázisban
+
+    public void rebuildDistanceInDb() {
+        int currentValue = settings.getElozo_zaro();
+
+        for (int i = 0; i < observableList.size(); i++) {
+            currentValue = currentValue + observableList.get(i).getTavolsag();
+            observableList.get(i).setSpedometer(currentValue);
+            db.updateRoute(observableList.get(i), observableList.get(i).getId());
+        }
+        setLabels();
+    }
+
+
+
+
+
+
+//"+" = plus gomb; "-" = - gomb; Ha nem volt + vagy - akkor  "#" = beirt érték után Kész gomb
+
+    public void setWorkdate(String plusOrMinus) {
+        // checkDateForPlusButton();
+        Settings prevSettings = settings;
+        workDate = txtDate.getText();
+
+        if (plusOrMinus == "-" || plusOrMinus == "#") {
+            settingsId = settings.getRendszam() + workDate;
+            System.out.println("setworkdate1" + workDate);
+            Settings s1 = sqlBuilder.getSettings(settingsId);
+            if (s1 != null) {
+                settings = s1;
+                settings.setActive(true);
+                db.updateSettings(settings, settings.getId());
+                observableList.clear();
+                observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+                setLabels();
+            } else {
+                observableList.clear();
+                new Alert(this, workDate + " hónapban nincsenek adatok. ", true, "info").show();
+            }
+        }
+
+        if (plusOrMinus == "+") {
+
+            workDate = txtDate.getText();
+            settingsId = settings.getRendszam() + workDate;
+            System.out.println("plusorminus: " + workDate);
+            Settings s1 = sqlBuilder.getSettings(settingsId);
+            System.out.println();
+            if (s1 != null) {
+                settings = s1;
+                settings.setActive(true);
+                db.updateSettings(settings, settings.getId());
+                observableList.clear();
+                observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+
+                if (settings.getElozo_zaro() != prevSettings.getZaroKm()) {
+                    settings.setElozo_zaro(prevSettings.getZaroKm());
+                    settings.setZaro_km(sqlBuilder.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
+                }
+                setLabels();
+
+            } else {
+                int closingKmValue = settings.getZaroKm(); //elmenti a zárót
+                settings.setAktualis_honap(workDate);
+                System.out.println("plusorminus2: " + workDate);
+                settings.setElozo_zaro(closingKmValue);    //beállítja a mentett zárót nyitónak
+                settings.setZaro_km(closingKmValue);        //zárónak is
+                settings.setActive(true);
+                //db.addSettings(settings);
+                sqlBuilder.insert(settings.doubleList(),"settings");
+                System.out.println("setworkdate2" + workDate);
+                observableList.clear();
+                observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+
+                settings.setZaro_km(sqlBuilder.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
+                System.out.println("setworkdate3" + workDate);
+                db.updateSettings(settings, (settings.getRendszam() + workDate));
+
+                setLabels();
+            }
+        }
+    }
+
+
+    //Meghívja a távolság lekérdező függvényt majd beállítja a vizuális objektumok értékét
+    public void getDistanceFromGmaps(String sAddress, String tAddress) {
+        String txtDistanceValue = txtDistance.getText();
+
+        Integer distance = remote.getDistanceFromGmaps(txtDistanceValue, sAddress, tAddress);
+
+        txtDistance.setText(distance.toString());
+        btnBev.setDisable(false);
+        cbClient.setDisable(false);
+        txtDistance.setEditable(false);
+    }
+}
+
+
