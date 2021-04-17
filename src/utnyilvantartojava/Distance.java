@@ -52,4 +52,29 @@ public class Distance implements IDbObject {
         list.add("distance",this.distance);
         return list;
     }
+
+    @Override
+    public int colmnsInDb() {
+        return 0;
+    }
+
+    @Override
+    public void dbUpdate() {
+
+    }
+
+    @Override
+    public void dbInsert() {
+
+    }
+
+    @Override
+    public List<String> keysFromDoubleList() {
+        return null;
+    }
+
+    @Override
+    public List<Object> valuesFromDoubleList() {
+        return null;
+    }
 }

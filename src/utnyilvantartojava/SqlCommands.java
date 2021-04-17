@@ -1,6 +1,7 @@
 package utnyilvantartojava;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 abstract class SqlCommands extends Connect {
@@ -23,6 +24,7 @@ abstract class SqlCommands extends Connect {
             System.out.println("" + ex);
         }
     }
+
 
 
     //Insert
@@ -63,4 +65,73 @@ abstract class SqlCommands extends Connect {
         System.out.println("Nem sikerült a lekérdezés: "+sqlQuery);
         throwables.printStackTrace();
     }}
+
+    public ArrayList getQueryList(String sqlQuery, IDbObject object){
+        List<Object> resultList=null;
+        List<String> valueList=object.doubleList()
+
+        try {
+
+
+           resultList = new ArrayList<>();
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
+                for (int i = 0; i<object.colmnsInDb(); i++){
+                = rs.getInt("routeid");
+                String date = rs.getString("date");
+                boolean priv = convertBool(rs.getInt("private"));
+                String depart = rs.getString("depart");
+                String arrive = rs.getString("arrive");
+                String client = rs.getString("client");
+                int spedometer = rs.getInt("spedometer");
+                double fueling = rs.getDouble("fueling");
+                int distance = rs.getInt("distance");
+                boolean backandforth = convertBool(rs.getInt("backandforth"));
+                int cellId = rs.getInt("cellId");
+
+                routes.add(new Route(routeId, date, priv, depart, arrive, client, fueling, spedometer, distance, backandforth, cellId));
+                // System.out.println(date);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return routes;
+    }
+
+
+
+  /*  public ArrayList getRoutes(String workDate, String rendszam) {      //A kiválasztott hónap utjait adja vissza
+        ArrayList<Route> routes = null;
+        // System.out.println(workDate);
+        try {
+            String sqlQuery = "select * from routes where date like '" + workDate + "-%%'  and rendszam='" + rendszam + "' order by date;";
+
+            routes = new ArrayList<>();
+            rs = createStatement.executeQuery(sqlQuery);
+            while (rs.next()) {
+                Integer routeId = rs.getInt("routeid");
+                String date = rs.getString("date");
+                boolean priv = convertBool(rs.getInt("private"));
+                String depart = rs.getString("depart");
+                String arrive = rs.getString("arrive");
+                String client = rs.getString("client");
+                int spedometer = rs.getInt("spedometer");
+                double fueling = rs.getDouble("fueling");
+                int distance = rs.getInt("distance");
+                boolean backandforth = convertBool(rs.getInt("backandforth"));
+                int cellId = rs.getInt("cellId");
+
+                routes.add(new Route(routeId, date, priv, depart, arrive, client, fueling, spedometer, distance, backandforth, cellId));
+                // System.out.println(date);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hiba! Nem sikerült az adatbázisból olvasni");
+            System.out.println("" + ex);
+        }
+        return routes;
+    }
+
+   */
 }
+

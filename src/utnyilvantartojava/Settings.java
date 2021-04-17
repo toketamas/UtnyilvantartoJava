@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class Settings implements IDbObject {
 
     private String nev;
@@ -20,18 +19,15 @@ public class Settings implements IDbObject {
     private String utolso_ugyfel;
     private int zaro_km;
     private String id;
-    private  int sorszam;
+    private int sorszam;
     private String utolsoSzerkesztes;
     private Boolean active;
 
 
-
-
-
     public Settings(String id) {
         this.id = id;
-        this.nev ="";
-        this.varos ="";
+        this.nev = "";
+        this.varos = "";
         this.cim = "";
         this.auto = "";
         this.rendszam = "";
@@ -40,14 +36,13 @@ public class Settings implements IDbObject {
         this.elozo_zaro = 0;
         this.aktualis_honap = "";
         this.utolso_ugyfel = "telephely";
-        this.zaro_km =0;
-        this.active=true;
+        this.zaro_km = 0;
+        this.active = true;
 
     }
 
     public Settings(String nev, String varos, String cim, String auto, String rendszam, String loketterfogat, String fogyasztas,
-                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean active)
-    {
+                    int elozo_zaro, String aktualis_honap, String utolso_ugyfel, int zaro_km, String id, int sorszam, String utolsoSzerkesztes, Boolean active) {
         this.nev = nev;
         this.varos = varos;
         this.cim = cim;
@@ -59,12 +54,13 @@ public class Settings implements IDbObject {
         this.aktualis_honap = aktualis_honap;
         this.utolso_ugyfel = utolso_ugyfel;
         this.zaro_km = zaro_km;
-        this.id =id;
-        this.sorszam=sorszam;
-        this.utolsoSzerkesztes=utolsoSzerkesztes;
-        this.active=active;
-    };
+        this.id = id;
+        this.sorszam = sorszam;
+        this.utolsoSzerkesztes = utolsoSzerkesztes;
+        this.active = active;
+    }
 
+    ;
 
 
     public String getId() {
@@ -175,37 +171,52 @@ public class Settings implements IDbObject {
         this.utolso_ugyfel = utolso_ugyfel;
     }
 
+    @Override
+    public int colmnsInDb() {
+        return 15;
+    }
+
+    @Override
+    public void dbUpdate() {
+
+    }
+
+    @Override
+    public void dbInsert() {
+
+    }
+
+    @Override
+    public List<String> keysFromDoubleList() {
+        return null;
+    }
+
+    @Override
+    public List<Object> valuesFromDoubleList() {
+        return null;
+    }
 
 
-
-
-    public DoubleList doubleList(){
+    public DoubleList doubleList() {
         DoubleList list = new DoubleList();
-        list.add("nev",this.nev);
-        list.add("varos",this.varos);
-        list.add("cim",this.cim);
-        list.add("auto",this.auto);
-        list.add("rendszam",this.rendszam);
-        list.add("loketterfogat",this.loketterfogat);
-        list.add("fogyasztas",this.fogyasztas);
-        list.add("elozo_zaro",this.elozo_zaro);
-        list.add("aktualis_honap",this.aktualis_honap);
-        list.add("utolso_ugyfel",this.utolso_ugyfel);
-        list.add("zaro_km",this.zaro_km);
-       // list.add("id",this.getId());
+        list.add("nev", this.nev);
+        list.add("varos", this.varos);
+        list.add("cim", this.cim);
+        list.add("auto", this.auto);
+        list.add("rendszam", this.rendszam);
+        list.add("loketterfogat", this.loketterfogat);
+        list.add("fogyasztas", this.fogyasztas);
+        list.add("elozo_zaro", this.elozo_zaro);
+        list.add("aktualis_honap", this.aktualis_honap);
+        list.add("utolso_ugyfel", this.utolso_ugyfel);
+        list.add("zaro_km", this.zaro_km);
+        // list.add("id",this.getId());
         //list.add("sorszam",this.sorszam);
-        list.add("utolso_szerkesztes",LocalDateTime.now().toString());
-        list.add("active",this.active);
+        list.add("utolso_szerkesztes", LocalDateTime.now().toString());
+        list.add("active", this.active);
         return list;
     }
 
-    public void dbUpdate(){
 
-    }
-
-    public void dbInsert(){
-
-
-    }
 
 }

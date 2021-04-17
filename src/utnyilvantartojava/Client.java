@@ -124,4 +124,29 @@ public class Client implements IDbObject {
         list.add("field",this.field);
         return list;
     }
+
+    @Override
+    public int colmnsInDb() {
+        return 0;
+    }
+
+    @Override
+    public void dbUpdate() {
+
+    }
+
+    @Override
+    public void dbInsert() {
+
+    }
+
+    @Override
+    public List<String> keysFromDoubleList() {
+        return null;
+    }
+
+    @Override
+    public List<Object> valuesFromDoubleList() {
+        return null;
+    }
 }
