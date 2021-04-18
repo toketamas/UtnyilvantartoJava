@@ -54,6 +54,15 @@ import java.sql.*;
 
         }
 
+        public void close(){
+            try {
+                this.conn.close();
+            } catch (SQLException throwables) {
+                System.err.println("Nem sikerült lezárni az adatbázis kapcsolatot!");
+                throwables.printStackTrace();
+            }
+        }
+
 
     }
 

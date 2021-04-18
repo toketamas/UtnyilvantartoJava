@@ -9,11 +9,7 @@ public class Functions {
     public Functions(ViewController context) {
 
         this.context=context;
-        sqlBuilder = new SqlBuilder(
-                Constants.SqliteDataBase.JDBC_DRIVER,
-                Constants.SqliteDataBase.URL,
-                Constants.SqliteDataBase.USERNAME,
-                Constants.SqliteDataBase.PASSWORD);
+        sqlBuilder = new SqlBuilder();
     }
 
     public static Functions functions(ViewController context){
@@ -76,14 +72,17 @@ public class Functions {
         context.txtSajatCim.clear();
 
         String field = context.settings.getNev();
-        sqlBuilder.insert(sajatClient.doubleList(), "sajat_cimek");
-        sqlBuilder.insert(sajatClient.doubleList(), "clients");
+        sajatClient.insertDb();
+        sajatClient.insertDbSajatCim();
+
+       // sqlBuilder.insert(sajatClient.doubleList(), "sajat_cimek");
+        //sqlBuilder.insert(sajatClient.doubleList(), "clients");
         context.cbSajat.getItems().clear();
-        context.cbSajat.getItems().addAll(context.db.getAllClient(true));
+        context.cbSajat.getItems().addAll(context.sqlBuilder.getAllClient(true));
         //cbClient.getEditor().clear();
         context.cbClient.getItems().remove(0, context.cbClient.getItems().size());
-        context.cbClient.getItems().addAll(context.db.getAllClient(true));
-        context.cbClient.getItems().addAll(context.db.getAllClient(false));
+        context.cbClient.getItems().addAll(context.sqlBuilder.getAllClient(true));
+        context.cbClient.getItems().addAll(context.sqlBuilder.getAllClient(false));
     }
 //Egy saját uticélt töröl az adatbázisból
 
@@ -92,10 +91,10 @@ public class Functions {
         sqlBuilder.delClient(value, true);
         sqlBuilder.delClient(value, false);
         context.cbSajat.getItems().clear();
-        context.cbSajat.getItems().addAll(context.db.getAllClient(true));
+        context.cbSajat.getItems().addAll(context.sqlBuilder.getAllClient(true));
         context.cbClient.getItems().remove(0, context.cbClient.getItems().size());
-        context.cbClient.getItems().addAll(context.db.getAllClient(true));
-        context.cbClient.getItems().addAll(context.db.getAllClient(false));
+        context.cbClient.getItems().addAll(context.sqlBuilder.getAllClient(true));
+        context.cbClient.getItems().addAll(context.sqlBuilder.getAllClient(false));
     }
 
     public void checkDateForPlusButton() {

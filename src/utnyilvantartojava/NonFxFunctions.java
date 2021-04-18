@@ -80,6 +80,29 @@ public class NonFxFunctions {
             return clientNumber;
         }
     }
+    public Boolean convertBool(String value) {
+        if (value.contentEquals("ok")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public int convertBool(Boolean value) {
+        int convertedValue;
+        if (value) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public Boolean convertBool(int value) {
+        if (value == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 }

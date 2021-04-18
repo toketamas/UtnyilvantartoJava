@@ -1,11 +1,12 @@
 package utnyilvantartojava;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
-//<editor-fold desc="constructors">
+
 public class Settings implements IDbObject {
 
     private String nev;
@@ -24,6 +25,45 @@ public class Settings implements IDbObject {
     private String utolsoSzerkesztes;
     private Boolean active;
 
+    final String SETTINGS_TABLE_IN_DB ="settings";
+
+    //<editor-fold desc="constructors">
+
+    public Settings() {
+        this.id = "";
+        this.nev = "";
+        this.varos = "";
+        this.cim = "";
+        this.auto = "";
+        this.rendszam = "";
+        this.loketterfogat = "";
+        this.fogyasztas = "";
+        this.elozo_zaro = 0;
+        this.aktualis_honap = "";
+        this.utolso_ugyfel = "";
+        this.zaro_km = 0;
+        this.active = false;
+
+    }
+
+    public Settings(List<Object> list) {
+        this.nev = (String) list.get(0);
+        this.varos = (String) list.get(1);
+        this.cim = (String) list.get(2);
+        this.auto = (String) list.get(3);
+        this.rendszam = (String) list.get(4);
+        this.loketterfogat = (String) list.get(5);
+        this.fogyasztas = (String) list.get(6);
+        this.elozo_zaro = (int) list.get(7);
+        this.aktualis_honap = (String) list.get(8);
+        this.utolso_ugyfel = (String) list.get(9);
+        this.zaro_km = (int) list.get(10);
+        this.id = (String) list.get(11);
+        this.sorszam = (int) list.get(12);
+        this.utolsoSzerkesztes = (String) list.get(13);
+        this.active = new NonFxFunctions().convertBool((String) list.get(14));
+
+    }
 
     public Settings(String id) {
         this.id = id;
@@ -179,31 +219,28 @@ public class Settings implements IDbObject {
     }
 
     @Override
-    public void dbUpdate() {
+    public void updateDb() {
+
 
     }
 
     @Override
-    public void dbInsert() {
-
+    public void insertDb() {
+    SqlBuilder sqlBuilder=new SqlBuilder();
+    sqlBuilder.insert(this.values(), SETTINGS_TABLE_IN_DB);
+    sqlBuilder.close();
     }
 
     @Override
-    public List<String> keysFromDoubleList() {
-        List<String> keyList = new ArrayList<>();
-        for (int i = 0; i < this.doubleList().size(); i++) {
-            keyList.add((String) doubleList().get(i).get(0));
-        }
-        return keyList;
+    public List<String> keys() {
+
+        return doubleList().keys();
     }
 
     @Override
-    public List<Object> valuesFromDoubleList() {
-        List<Object> keyList = new ArrayList<>();
-        for (int i = 0; i < this.doubleList().size(); i++) {
-            keyList.add(doubleList().get(i).get(1));
-        }
-        return keyList;
+    public List<Object> values() {
+
+        return doubleList().values();
     }
 
 
@@ -227,6 +264,8 @@ public class Settings implements IDbObject {
         list.add("active", this.active);
         return list;
     }
+
+
 
 
 }

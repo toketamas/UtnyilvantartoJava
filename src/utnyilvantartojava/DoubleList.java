@@ -47,7 +47,7 @@ public class DoubleList extends ArrayList {
 
     }*/
 
-    public List first(String firstOrSecond) {
+    public List keys() {
         int fs;
         List<Object> list = new ArrayList<>();
         for (int i = 0; i < doubleList.size(); i++) {
@@ -59,7 +59,7 @@ public class DoubleList extends ArrayList {
 
     }
 
-    public List second() {
+    public List values() {
         int fs;
         List<Object> list = new ArrayList<>();
 

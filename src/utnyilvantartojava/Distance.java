@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Distance implements IDbObject {
+
+    final String DISTANCE_IN_DB="distances";
+
     private String clientid1;
     private String clientid2;
     private int distance;
@@ -59,30 +62,26 @@ public class Distance implements IDbObject {
     }
 
     @Override
-    public void dbUpdate() {
+    public void updateDb() {
 
     }
 
     @Override
-    public void dbInsert() {
-
+    public void insertDb() {
+        SqlBuilder sqlBuilder=new SqlBuilder();
+        sqlBuilder.insert(this.values(),DISTANCE_IN_DB);
+        sqlBuilder.close();
     }
 
     @Override
-    public List<String> keysFromDoubleList() {
-        List<String> keyList=new ArrayList<>();
-        for(int i=0; i< this.doubleList().size();i++){
-            keyList.add((String) doubleList().get(i).get(0));
-        }
-        return keyList;
+    public List<String> keys() {
+
+        return doubleList().keys();
     }
 
     @Override
-    public List<Object> valuesFromDoubleList() {
-        List<Object> keyList=new ArrayList<>();
-        for(int i=0; i< this.doubleList().size();i++){
-            keyList.add(doubleList().get(i).get(1));
-        }
-        return keyList;
+    public List<Object> values() {
+
+        return doubleList().values();
     }
 }

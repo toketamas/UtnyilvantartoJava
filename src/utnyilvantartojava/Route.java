@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 public class Route implements IDbObject {
 
+    final String TABLE_NAME_IN_DB="routes";
 // private LocalDate datum;
     private Integer id;
     private StringProperty datum;
@@ -259,28 +260,24 @@ public class Route implements IDbObject {
     }
 
     @Override
-    public void dbUpdate() {
+    public void updateDb() {
 
     }
 
     @Override
-    public void dbInsert() {
+    public void insertDb() {
 
     }
 
     @Override
-    public List<String> keysFromDoubleList() {
-        List<String> keyList=new ArrayList<>();
-        for(int i=0; i< this.doubleList().size();i++){
-            keyList.add((String) doubleList().get(i).get(0));
-        }
-        return keyList;
+    public List<String> keys() {
+
+        return doubleList().keys();
     }
-    public List<Object> valuesFromDoubleList() {
-        List<Object> keyList=new ArrayList<>();
-        for(int i=0; i< this.doubleList().size();i++){
-            keyList.add(doubleList().get(i).get(1));
-        }
-        return keyList;
+
+    @Override
+    public List<Object> values() {
+
+        return doubleList().values();
     }
 }

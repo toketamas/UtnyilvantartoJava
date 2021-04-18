@@ -5,16 +5,24 @@ import java.util.List;
 
 //Ez egy helyszínt reprezentál(egy gépet a clientnumber lesz a gépszám ez lesz elsődleges kulcs )
 public class Client implements IDbObject {
+
+    final String CLIENTS_TABLE_IN_DB = "clients";
+    final String SAJAT_CIMEK_TABLE_IN_DB = "sajat_cimek";
+
+
     private String client;
     private String clientNumber;
     private String type;
-    private  String factoryNumber;
+    private String factoryNumber;
     private int zipCode;
     private String city;
     private String address;
     private boolean exist;
     private int maintenancePerYear;
     private String field;
+
+    //<editor-fold desc="constructors">
+    public Client(){}
 
     public Client(String client, String clientNumber, String type, String factoryNumber, int zipCode, String city, String address, boolean exist, int maintenancePerYear, String field) {
         this.client = client;
@@ -28,6 +36,20 @@ public class Client implements IDbObject {
         this.maintenancePerYear = maintenancePerYear;
         this.field = field;
     }
+
+    public Client(List<Object> list) {
+        this.client = (String) list.get(0);
+        this.clientNumber = (String) list.get(1);
+        this.type = (String) list.get(2);
+        this.factoryNumber = (String) list.get(3);
+        this.zipCode = (int) list.get(4);
+        this.city = (String) list.get(5);
+        this.address = (String) list.get(6);
+        this.exist = new NonFxFunctions().convertBool((Integer) list.get(7));
+        this.maintenancePerYear = (int) list.get(8);
+        this.field = (String) list.get(9);
+    }
+    //</editor-fold>
 
     public String getClient() {
         return client;
@@ -112,16 +134,16 @@ public class Client implements IDbObject {
     @Override
     public DoubleList doubleList() {
         DoubleList list = new DoubleList();
-        list.add("client",this.client);
-        list.add("clientNumber",this.clientNumber);
-        list.add("type",this.type);
-        list.add("factoryNumber",this.factoryNumber);
-        list.add("zipCode",this.zipCode);
-        list.add("city",this.city);
-        list.add("address",this.address);
-        list.add("exist",this.exist);
-        list.add("maintenancePerYear",this.maintenancePerYear);
-        list.add("field",this.field);
+        list.add("client", this.client);
+        list.add("clientNumber", this.clientNumber);
+        list.add("type", this.type);
+        list.add("factoryNumber", this.factoryNumber);
+        list.add("zipCode", this.zipCode);
+        list.add("city", this.city);
+        list.add("address", this.address);
+        list.add("exist", this.exist);
+        list.add("maintenancePerYear", this.maintenancePerYear);
+        list.add("field", this.field);
         return list;
     }
 
@@ -131,30 +153,33 @@ public class Client implements IDbObject {
     }
 
     @Override
-    public void dbUpdate() {
+    public void updateDb() {
 
     }
 
     @Override
-    public void dbInsert() {
+    public void insertDb() {
+        SqlBuilder sqlBuilder = new SqlBuilder();
+        sqlBuilder.insert(this.values(), CLIENTS_TABLE_IN_DB);
+    }
 
+    public void insertDbSajatCim() {
+        SqlBuilder sqlBuilder = new SqlBuilder();
+        sqlBuilder.insert(this.values(), SAJAT_CIMEK_TABLE_IN_DB);
+        sqlBuilder.close();
     }
 
     @Override
-    public List<String> keysFromDoubleList() {
-        List<String> keyList=new ArrayList<>();
-        for(int i=0; i< this.doubleList().size();i++){
-            keyList.add((String) doubleList().get(i).get(0));
-        }
-        return keyList;
+    public List<String> keys() {
+
+        return doubleList().keys();
     }
 
     @Override
-    public List<Object> valuesFromDoubleList() {
-        List<Object> keyList=new ArrayList<>();
-        for(int i=0; i< this.doubleList().size();i++){
-            keyList.add(doubleList().get(i).get(1));
-        }
-        return keyList;
+    public List<Object> values() {
+
+        return doubleList().values();
     }
+
+
 }

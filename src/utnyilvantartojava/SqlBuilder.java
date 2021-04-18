@@ -3,13 +3,18 @@ package utnyilvantartojava;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
 
 public class SqlBuilder extends SqlCommands {
-
-
-
+    public SqlBuilder() {
+        super(
+                Constants.SqliteDataBase.JDBC_DRIVER,
+                Constants.SqliteDataBase.URL,
+                Constants.SqliteDataBase.USERNAME,
+                Constants.SqliteDataBase.PASSWORD);
+    }
 
 
     public SqlBuilder(String jdbcDriver, String url, String username, String passworld) {
@@ -31,42 +36,52 @@ public class SqlBuilder extends SqlCommands {
     }
 
 
-
     public void update(DoubleList list, String tableName, String condition) {
         System.out.println("listaméret " + list.size());
         List<Object> objList = new ArrayList<>();
         String sqlString = "UPDATE " + tableName + " SET ";
         for (int i = 0; i < list.size(); i++) {
 
-            sqlString += " " + list.get(i).get(0) + " = ?";
+            sqlString += " " + list.get(i).get(0) + "=" + list.get(1);
             objList.add(list.get(i).get(1));
             if (i < list.size() - 1)
                 sqlString += ",";
             else
-                sqlString+=" WHERE "+condition;
+                sqlString += " WHERE " + condition;
         }
         System.out.println("ezaz: " + sqlString);
-        for (int j=0; j<objList.size(); j++)
-            System.out.println(objList.get(j)+" , "+objList.get(j).getClass());
-        insertStm(objList,sqlString,tableName);
+        for (int j = 0; j < objList.size(); j++)
+            System.out.println(objList.get(j) + " , " + objList.get(j).getClass());
+        insertStm(objList, sqlString, tableName);
     }
 
 
     //<editor-fold desc="Egyetlen érték lekérdezés">
     public Client getClient(String value) {
-        return (Client) query("select * from clients where clientnumber='" + value + "';");
+        String sqlQuery = "select * from clients where clientnumber='" + value + "';";
+        return clientHelper(sqlQuery);
+
     }
 
     public Client getSajatClient(String value) {
-        return (Client) query("select * from sajat_cimek where clientnumber='" + value + "';");
+        String sqlQuery="select * from sajat_cimek where clientnumber='" + value + "';";
+        return clientHelper(sqlQuery);
     }
 
     public Client getClientFromAddress(String value) {
-        return (Client) query("select * from clients where city || ' ' || address='" + value + "';");
+        String sqlQuery="select * from clients where city || ' ' || address='" + value + "';";
+        return clientHelper(sqlQuery);
     }
 
     public Client getClientFromClientNumber(String value) {
-        return (Client) query("select * from clients where clientnumber='" + value + "';");
+        String sqlQuery="select * from clients where clientnumber='" + value + "';";
+        return clientHelper(sqlQuery);
+    }
+
+    private Client clientHelper(String sqlQuery){
+        List<Object> list = (List<Object>) queryObjectList(sqlQuery).get(0);
+        Client client = new Client(list);
+        return client;
     }
 
     public int getMaxKmFromMonth(String workDate) {
@@ -108,16 +123,24 @@ public class SqlBuilder extends SqlCommands {
 
     public Settings getLastSettings() {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings WHERE active='true' ;";
-        return (Settings) query(sqlQuery);
+
+        //Csak egy objektum van a listában
+        List<Object> list = (List<Object>) queryObjectList(sqlQuery).get(0);
+        //A lista eső elemét eltávolítja mert az egy számított érték
+        list.remove(0);
+        Settings settings=new Settings(list);
+
+        return settings;
     }
 
     public Settings getLastSettingsIfActiveNullAll() {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings  ;";
         return (Settings) query(sqlQuery);
     }
+
     public String getDateOfLastRoute() {
         String value = null;
-        String sqlQuery = "select * from routes\n"
+        String sqlQuery = "select date from routes\n"
                 + "where routeid = (select max (routeid) from routes);\n"
                 + "; ";
         return (String) query(sqlQuery);

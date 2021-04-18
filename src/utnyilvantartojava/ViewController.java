@@ -27,7 +27,6 @@ import static utnyilvantartojava.Functions.functions;
 import static utnyilvantartojava.TableFunctions.tableFunctions;
 
 
-
 //<editor-fold desc="FXML Annotations">
 public class ViewController implements Initializable {
     @FXML
@@ -220,8 +219,7 @@ public class ViewController implements Initializable {
     //</editor-fold>
 
 
-
-    DataBaseConnection db;
+    //DataBaseConnection db;
     // RemoteDb remoteDb = new RemoteDb();
 
     public ObservableList<Route> observableList = FXCollections.observableArrayList();
@@ -278,15 +276,12 @@ public class ViewController implements Initializable {
 
 
     public void run() {
-        nonFxFunctions =new NonFxFunctions();
-        db = new DataBaseConnection();
-        sqlBuilder = new SqlBuilder(
-                Constants.SqliteDataBase.JDBC_DRIVER,
-                Constants.SqliteDataBase.URL,
-                Constants.SqliteDataBase.USERNAME,
-                Constants.SqliteDataBase.PASSWORD);
+        nonFxFunctions = new NonFxFunctions();
+        //db = new DataBaseConnection();
+        sqlBuilder = new SqlBuilder();
 // átnevezi a lezárt tábla oszlopot active-ra        
-        db.renColToActive();
+
+       sqlBuilder.renColToActive();
         cbClient.getItems().clear();
         cbSajat.getItems().clear();
         observableList.clear();
@@ -297,13 +292,15 @@ public class ViewController implements Initializable {
         datePicker.setValue(LocalDate.now());
 
 //betölti a settings táblából az utolsó sort ahol az active érték true
+        System.out.println("Itt jönne a setting betöltése");
         settings = sqlBuilder.getLastSettings();
+        System.out.println("Rendszám = " + settings.getRendszam());
 //ha nem sikerül megpróbálja betölteni az utolsó sort és az active értékét true-ra állítani       
         if (settings.getId() == null) {
             settings = sqlBuilder.getLastSettingsIfActiveNullAll();
             if (settings != null) {
                 settings.setActive(true);
-                db.updateSettings(settings, settings.getId());
+                sqlBuilder.updateSettings(settings, settings.getId());
                 settings = sqlBuilder.getLastSettings();
             }
 
@@ -353,8 +350,8 @@ public class ViewController implements Initializable {
 
         System.out.println(settings.doubleList().size());
         System.out.println(settings.doubleList().size());
-        sqlBuilder.insert(settings.doubleList(), "settings");
-
+        //sqlBuilder.insert(settings.doubleList(), "settings");
+        settings.insertDb();
 // kivesszük az adatbázisból a telephely címét
         telephely = sqlBuilder.getClient("telephely");
 //beállítja a tábla oszlopokat
@@ -382,7 +379,9 @@ public class ViewController implements Initializable {
 //!!!!!!!!!!!!!! beállítja az excel forrását egyenlőre local ha lesz távoli akkor ezt kell módosítani!!!!!!!!!
         excelSource = localExcel;
 //hozzáadja a listához a rendszámhoz és a szerkesztett hónaphoz tartozó adatokat
-        observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+
+        observableList.addAll(sqlBuilder.getRoutes(workDate, settings.getRendszam()));
+
 //újraszámolja a megtett távolságot
         rebuildDistanceInDb();
 //beállítja a labeleket
@@ -407,14 +406,14 @@ public class ViewController implements Initializable {
 //hozzáadja a combobox listájához az ügyfeleket és a saját címeket az adatbázisból
         //cbClient.getItems().addAll(db.getAllClient(true));
         cbClient.getItems().clear();
-        cbClient.getItems().addAll(db.getAllClient(false));
+        cbClient.getItems().addAll(sqlBuilder.getAllClient(false));
 //hozzáadja a cb sajat comboboxhoz a saját címeket        
-        cbSajat.getItems().addAll(db.getAllClient(true));
+        cbSajat.getItems().addAll(sqlBuilder.getAllClient(true));
 
 //betölti az összes lehetséges várost az érkezés textbox listájába 
-        fillField(txtArrive, db.getAllCitys());
+        fillField(txtArrive, sqlBuilder.getAllCitys());
 //betölti az összes lehetséges várost az indulás textbox listájába
-        fillField(txtDepart, db.getAllCitys());
+        fillField(txtDepart, sqlBuilder.getAllCitys());
 //a tábla végére görget
         table.scrollTo(table.getItems().size() - 1);
         setLabels();
@@ -489,7 +488,7 @@ public class ViewController implements Initializable {
 //beállításoknál az ok gomb
         if (btnSetOk.isArmed()) {
             settings.setActive(false);
-            db.updateSettings(settings, settings.getId());
+            sqlBuilder.updateSettings(settings, settings.getId());
             settings.setActive(true);
 
 //ha van írva valami ezekbe a textboxokba akkor úgy vesszük, hogy ki van töltve az
@@ -519,14 +518,16 @@ public class ViewController implements Initializable {
                     settings.setActive(true);
                     //itt
                     //db.addSettings(settings);
-                    sqlBuilder.insert(settings.doubleList(),"settings");
+
+                    settings.insertDb();
+                    //sqlBuilder.insert(settings.doubleList(),"settings");
                     telephely = sqlBuilder.getClient("telephely");
                     spedometer = settings.getElozo_zaro();
 
                 } else {
 // ha már létezett az aktuális setting objektum akkor beállítja a megváltozott
 //adatokat és frissíti az adatbázist ez olyankor ha pl. a rendszám vagy a lakcím változott
-                    db.updateSettings(settings, settingsId);
+                    sqlBuilder.updateSettings(settings, settingsId);
                 }
 // betöltjük az előzőleg módosított aktuális settings objektumot 
                 settings = sqlBuilder.getLastSettings();
@@ -535,7 +536,7 @@ public class ViewController implements Initializable {
                 telephely.setCity(settings.getVaros());
                 telephely.setAddress(settings.getCim());
                 //mentjük az adatbázisba
-                db.updateClient(telephely, "telephely");
+                sqlBuilder.updateClient(telephely, "telephely");
 //Beállítjuk a mezők szerkeszthetőségét visszaugrunk az utnyilvántartás tab-ra és folytatodik a program
                 setLabels();
                 setText();
@@ -578,7 +579,7 @@ public class ViewController implements Initializable {
                 selectionModel.select(0);
             } else {
 
-                db.conn.close();
+
                 btnReadExcel.setText("Kész");
                 tabNyilv.setDisable(true);
                 try {
@@ -595,10 +596,10 @@ public class ViewController implements Initializable {
         }
 
         if (btnMakeExcel.isArmed()) {               //Excel készítése
-            Excel excel =new Excel();
+            Excel excel = new Excel();
             rebuildDistanceInDb();
             excelName = ((workDate + "_" + settings.getNev() + "_" + settings.getRendszam() + "_gkelsz.xlsx")).replaceAll(" ", "_");
-            excel.make(excelName, "nyomtat",settings,observableList);
+            excel.make(excelName, "nyomtat", settings, observableList);
 
             try {
 
@@ -692,7 +693,7 @@ public class ViewController implements Initializable {
                     settings.setUtolso_ugyfel(telephely.getClientNumber());
                 }
                 settings.setZaro_km(settings.getElozo_zaro() + sqlBuilder.getSpedometer(workDate, settings.getRendszam()));
-                db.updateSettings(settings, (settings.getId()));
+                sqlBuilder.updateSettings(settings, (settings.getId()));
                 btnSave.setDisable(false);
                 chkBack.setSelected(false);
 
@@ -715,11 +716,11 @@ public class ViewController implements Initializable {
             fuel = nonFxFunctions.checkFueling(fuel);
             selectedRoute.setFueling(Double.parseDouble(fuel));
             observableList.set(selectedRoute.getCellId(), selectedRoute);
-            db.updateRoute(selectedRoute, selectedRoute.getId());
+            sqlBuilder.updateRoute(selectedRoute, selectedRoute.getId());
 //Elmenti az adatbázisba a distance táblába a módosított távolságot
             updateDistance(selectedRoute, settings.getUtolso_ugyfel(), txtDistance.getText());
             observableList.clear();
-            observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+            observableList.addAll(sqlBuilder.getRoutes(workDate, settings.getRendszam()));
             startClient = startClientTemp;
             targetClient = targetClientTemp;
             txtDepart.setText(nonFxFunctions.getClientFullAddress(startClient));
@@ -746,16 +747,16 @@ public class ViewController implements Initializable {
         if (btnPlus.isArmed()) {
 
             settings.setActive(false);
-            db.updateSettings(settings, settings.getId());
-            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings,workDate,"+"));
+            sqlBuilder.updateSettings(settings, settings.getId());
+            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings, workDate, "+"));
             setWorkdate("+");
             functions(this).checkDateForPlusButton();
         }
         if (btnMinus.isArmed()) {
 
             settings.setActive(false);
-            db.updateSettings(settings, settings.getId());
-            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings,workDate,"-"));
+            sqlBuilder.updateSettings(settings, settings.getId());
+            txtDate.setText(nonFxFunctions.workDateDecOrInc(settings, workDate, "-"));
             setWorkdate("-");
             functions(this).checkDateForPlusButton();
         }
@@ -763,7 +764,7 @@ public class ViewController implements Initializable {
         if (btnReady.isArmed()) {
 
             settings.setActive(false);
-            db.updateSettings(settings, settings.getId());
+            sqlBuilder.updateSettings(settings, settings.getId());
             setWorkdate("#");
             functions(this).checkDateForPlusButton();
 
@@ -811,7 +812,7 @@ public class ViewController implements Initializable {
 //ugyanaz mint feljebb csak a selectedRoute-ból kinyert címmel.
         String masodikCim = nonFxFunctions.getClientFullAddress(sqlBuilder.getClientFromClientNumber(gepszam));
 //frissíti az adatbázist.
-       sqlBuilder.updateDistance(elsoCim, masodikCim, Integer.parseInt(distance));
+        sqlBuilder.updateDistance(elsoCim, masodikCim, Integer.parseInt(distance));
         sqlBuilder.updateDistanceRev(elsoCim, masodikCim, Integer.parseInt(distance));
     }
 //magánutat ad a listához
@@ -926,7 +927,7 @@ public class ViewController implements Initializable {
 //mert a köv. út innen indul majd 
                 settings.setUtolso_ugyfel(targetClient.getClientNumber());
                 settings.setActive(true);
-                db.updateSettings(settings, settings.getId());
+                sqlBuilder.updateSettings(settings, settings.getId());
                 txtDepart.setText(nonFxFunctions.getClientFullAddress(targetClient));
                 checkDistInDb();
                 startClient = targetClient;
@@ -935,14 +936,14 @@ public class ViewController implements Initializable {
 //megnézi a listában hogy be volt e állítva az utolsó előtti elemnél az oda vissza 
 //ha igen akkor azt és az utolsót is küldi az adatbázisba
             if (observableList.get(observableList.size() - 1).isVissza()) {
-                db.addRoute(observableList.get(observableList.size() - 2), settings.getRendszam());
+                sqlBuilder.addRoute(observableList.get(observableList.size() - 2), settings.getRendszam());
 
             }
 //egyébként csak az utolsó listaelem megy az adatbázisba
-            db.addRoute(observableList.get(observableList.size() - 1), settings.getRendszam());
+            sqlBuilder.addRoute(observableList.get(observableList.size() - 1), settings.getRendszam());
             observableList.clear();
 //újra betölti az adatokat a listába az adatbázisba        
-            observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+            observableList.addAll(sqlBuilder.getRoutes(workDate, settings.getRendszam()));
             if (chkBackToSites.isSelected()) {
                 chkSites.setSelected(true);
                 chkBackToSites.setSelected(false);
@@ -958,7 +959,7 @@ public class ViewController implements Initializable {
             setLabels();
             settings.setZaro_km(sqlBuilder.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
             settings.setActive(true);
-            db.updateSettings(settings, (settings.getRendszam() + workDate));
+            sqlBuilder.updateSettings(settings, (settings.getRendszam() + workDate));
             cbClient.setValue("Uticél");
 
         } catch (NumberFormatException e) {
@@ -980,9 +981,10 @@ public class ViewController implements Initializable {
         // ha a visszakapott érték 0 akkor beírja az adatbázisba új távolságként
         if (start.getDistance() == 0 && target.getDistance() == 0) {
             //       if (start == null && target == null) {
-            Distance distance= new Distance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
+            Distance distance = new Distance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient), Integer.parseInt(txtDistance.getText()));
 
-            sqlBuilder.insert(distance.doubleList(),"distance");
+            distance.insertDb();
+            //  sqlBuilder.insert(distance.doubleList(),"distance");
             btnBev.setDisable(false);
             btnDistance.setDisable(true);
             System.out.println("beírtam");
@@ -1008,7 +1010,7 @@ public class ViewController implements Initializable {
             String address = fullAddress.substring(index).trim();
             targetClient.setCity(city);
             targetClient.setAddress(address);
-            db.updateClient(targetClient, targetClient.getClientNumber());
+            sqlBuilder.updateClient(targetClient, targetClient.getClientNumber());
         }
         Distance actualDist = sqlBuilder.getDistance(nonFxFunctions.getClientFullAddress(startClient), nonFxFunctions.getClientFullAddress(targetClient));
         //egy visszafele út       
@@ -1183,7 +1185,6 @@ public class ViewController implements Initializable {
 //Kiszedi a Route-bol a csupasz gépszámot    
 
 
-
     public static void saveFile(String filename, String[] list) {
         PrintWriter writer = null;
         try {
@@ -1265,12 +1266,13 @@ public class ViewController implements Initializable {
                     true,
                     0,
                     settings.getNev());
-            sqlBuilder.insert(telephely.doubleList(), "clients");
+            telephely.insertDb();
+            //sqlBuilder.insert(telephely.doubleList(), "clients");
 
         } else {
             telephely.setCity(settings.getVaros());
             telephely.setAddress(settings.getCim());
-            db.updateClient(telephely, telephely.getClientNumber());
+            sqlBuilder.updateClient(telephely, telephely.getClientNumber());
         }
 
         Client diebold = sqlBuilder.getSajatClient("DieboldNixdorf");
@@ -1286,8 +1288,10 @@ public class ViewController implements Initializable {
                     true,
                     0,
                     "DieboldNixdorf");
-            sqlBuilder.insert(diebold.doubleList(), "sajat_cimek");
-            sqlBuilder.insert(diebold.doubleList(), "clients");
+            diebold.insertDbSajatCim();
+            diebold.insertDb();
+            //sqlBuilder.insert(diebold.doubleList(), "sajat_cimek");
+            // sqlBuilder.insert(diebold.doubleList(), "clients");
         }
 
         Client magan = sqlBuilder.getClient("Magánhasználat");
@@ -1304,7 +1308,8 @@ public class ViewController implements Initializable {
                     0,
                     "Magánhasználat"
             );
-            sqlBuilder.insert(magan.doubleList(), "clients");
+            magan.insertDb();
+            //sqlBuilder.insert(magan.doubleList(), "clients");
         }
     }
 //Elkészíti az excel táblát
@@ -1388,14 +1393,13 @@ public class ViewController implements Initializable {
         for (int i = 0; i < observableList.size(); i++) {
             currentValue = currentValue + observableList.get(i).getTavolsag();
             observableList.get(i).setSpedometer(currentValue);
-            db.updateRoute(observableList.get(i), observableList.get(i).getId());
+
+
+            sqlBuilder.updateRoute(observableList.get(i), observableList.get(i).getId());
+            //observableList.get(i).updateDb();
         }
         setLabels();
     }
-
-
-
-
 
 
 //"+" = plus gomb; "-" = - gomb; Ha nem volt + vagy - akkor  "#" = beirt érték után Kész gomb
@@ -1412,9 +1416,9 @@ public class ViewController implements Initializable {
             if (s1 != null) {
                 settings = s1;
                 settings.setActive(true);
-                db.updateSettings(settings, settings.getId());
+                sqlBuilder.updateSettings(settings, settings.getId());
                 observableList.clear();
-                observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+                observableList.addAll(sqlBuilder.getRoutes(workDate, settings.getRendszam()));
                 setLabels();
             } else {
                 observableList.clear();
@@ -1432,9 +1436,9 @@ public class ViewController implements Initializable {
             if (s1 != null) {
                 settings = s1;
                 settings.setActive(true);
-                db.updateSettings(settings, settings.getId());
+                sqlBuilder.updateSettings(settings, settings.getId());
                 observableList.clear();
-                observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+                observableList.addAll(sqlBuilder.getRoutes(workDate, settings.getRendszam()));
 
                 if (settings.getElozo_zaro() != prevSettings.getZaroKm()) {
                     settings.setElozo_zaro(prevSettings.getZaroKm());
@@ -1450,14 +1454,15 @@ public class ViewController implements Initializable {
                 settings.setZaro_km(closingKmValue);        //zárónak is
                 settings.setActive(true);
                 //db.addSettings(settings);
-                sqlBuilder.insert(settings.doubleList(),"settings");
+                //sqlBuilder.insert(settings.doubleList(),"settings");
+                settings.insertDb();
                 System.out.println("setworkdate2" + workDate);
                 observableList.clear();
-                observableList.addAll(db.getRoutes(workDate, settings.getRendszam()));
+                observableList.addAll(sqlBuilder.getRoutes(workDate, settings.getRendszam()));
 
                 settings.setZaro_km(sqlBuilder.getSpedometer(workDate, settings.getRendszam()) + settings.getElozo_zaro());
                 System.out.println("setworkdate3" + workDate);
-                db.updateSettings(settings, (settings.getRendszam() + workDate));
+                sqlBuilder.updateSettings(settings, (settings.getRendszam() + workDate));
 
                 setLabels();
             }
