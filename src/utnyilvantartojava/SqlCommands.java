@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 abstract class SqlCommands extends Connect {
 
-    public SqlCommands(String jdbcDriver, String url, String username, String passworld) {
+    protected SqlCommands(String jdbcDriver, String url, String username, String passworld) {
         super(jdbcDriver, url, username, passworld);
     }
 
@@ -30,7 +30,7 @@ abstract class SqlCommands extends Connect {
 
 
 
-    //Insert
+    //Insert & update
     protected void insertStm(List<Object> list, String sqlQuery, String tableName) {
         try {
             preparedStatement = conn.prepareStatement(sqlQuery);
@@ -47,8 +47,8 @@ abstract class SqlCommands extends Connect {
         }
     }
 
-// egy adatbázis cella értékét adja vissza megadandó a lekérdezés és az oszlop neve amin végre kell hajtani
-    public Object query(String sqlQuery) {
+// egy adatbázis cella értékét adja vissza
+    protected Object query(String sqlQuery) {
         Object value = null;
         try {
             rs = createStatement.executeQuery(sqlQuery);
@@ -60,7 +60,7 @@ abstract class SqlCommands extends Connect {
     }
 
  //nem ad vissza értéket
-    public void nonQuery(String sqlQuery){
+    protected void nonQuery(String sqlQuery){
     try {
         preparedStatement = conn.prepareStatement(sqlQuery);
         preparedStatement.execute();
@@ -72,7 +72,7 @@ abstract class SqlCommands extends Connect {
 
 //Ez egy listát ad vissza a táblából(objektumok listája), ezt használjuk akkor is ha egy sort (objektumot) akarunk lekérdezni
 //Az objektumnak kell egy olyan konstruktor ahol egy listábol szedi ki az értékeket
-    public List<Object> queryObjectList(String sqlQuery){
+    protected List<Object> queryObjectList(String sqlQuery){
         List<Object> resultList=null;
         List<Object> list =new ArrayList<>();
         try {
@@ -115,7 +115,7 @@ abstract class SqlCommands extends Connect {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

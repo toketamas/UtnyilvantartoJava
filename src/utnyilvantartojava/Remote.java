@@ -1,22 +1,10 @@
 package utnyilvantartojava;
 
-import com.mysql.cj.xdevapi.JsonParser;
-import com.mysql.cj.xdevapi.JsonString;
-import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
 import okhttp3.*;
-import org.controlsfx.control.SearchableComboBox;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-
-import java.util.Map;
 
 public class Remote implements Runnable {
 

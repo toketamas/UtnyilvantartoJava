@@ -1,5 +1,7 @@
 package utnyilvantartojava;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,8 @@ public class Client implements IDbObject {
     private String field;
 
     //<editor-fold desc="constructors">
-    public Client(){}
+    public Client() {
+    }
 
     public Client(String client, String clientNumber, String type, String factoryNumber, int zipCode, String city, String address, boolean exist, int maintenancePerYear, String field) {
         this.client = client;
@@ -179,6 +182,23 @@ public class Client implements IDbObject {
     public List<Object> values() {
 
         return doubleList().values();
+    }
+
+    @Override
+    public String jsonPost() {
+        String json = new JSONObject()
+                .put("client", this.client)
+                .put("clientNumber", this.clientNumber)
+                .put("type", this.type)
+                .put("factoryNumber", this.factoryNumber)
+                .put("zipCode", this.zipCode)
+                .put("city", this.city)
+                .put("address", this.address)
+                .put("exist", this.exist)
+                .put("maintenancePerYear", this.maintenancePerYear)
+                .put("field", this.field)
+                .toString();
+        return json;
     }
 
 

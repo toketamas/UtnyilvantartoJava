@@ -226,7 +226,7 @@ public class Route implements IDbObject {
                 list.add(read.nextLine());
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(DataBaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return list;

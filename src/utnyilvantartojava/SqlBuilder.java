@@ -17,8 +17,8 @@ public class SqlBuilder extends SqlCommands {
     }
 
 
-    public SqlBuilder(String jdbcDriver, String url, String username, String passworld) {
-        super(jdbcDriver, url, username, passworld);
+    public SqlBuilder(String jdbcDriver, String url, String username, String password) {
+        super(jdbcDriver, url, username, password);
     }
 
 

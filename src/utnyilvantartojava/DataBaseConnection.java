@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DataBaseConnection {
+/*public class DataBaseConnection {
 
     final String JDBC_DRIVER = Constants.SqliteDataBase.JDBC_DRIVER;
     final String URL = Constants.SqliteDataBase.URL;
@@ -29,7 +29,7 @@ public class DataBaseConnection {
     ResultSet rs1 = null;
     PreparedStatement preparedStatement1 = null;
 
-     */
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     public DataBaseConnection() {
@@ -135,8 +135,6 @@ public class DataBaseConnection {
         }
     }
 
-  */
-
    public void updateSettings(Settings settings, String idValue) {
         System.out.println("update: " + settings.getAktualis_honap());
         String sqlQuery = "update settings set "
@@ -179,7 +177,7 @@ public class DataBaseConnection {
     public Settings getLastSettingsIfActiveNullAll() {
         String sqlQuery = "SELECT MAX(sorszam), * FROM settings  ;";
         return querySettings(sqlQuery);
-    }*/
+    }
 
 
 
@@ -357,7 +355,7 @@ public class DataBaseConnection {
      public double getFuelingMonth(String workDate){
         String sqlQuery = "SELECT sum(fueling) as value FROM routes where date like '"+workDate+"-%%';";
         return queryDoubleValueFromRoute(sqlQuery,"value");
-    }*/
+    }
     public void updateRoute(Route route, int routeId) {
         String sqlQuery = "update routes set "
                 + "date='" + route.getDatum() + "',"
@@ -495,7 +493,7 @@ public class DataBaseConnection {
         return client;
     }
 
-   */
+
 
     public void updateClient(Client client, String clientNumber) {
         System.out.println("client:" + client);
@@ -522,7 +520,7 @@ public class DataBaseConnection {
         }
     }
 
-   /* public void delClient(String value, boolean sajatKliens) {
+    public void delClient(String value, boolean sajatKliens) {
 
         String sqlQuery;
         if (sajatKliens) {
@@ -536,7 +534,7 @@ public class DataBaseConnection {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }*/
+    }
 
     public ArrayList getAllClient(boolean sajatKliens) {      //visszaadja  az összes gépszámot
         ArrayList<String> clients = null;
@@ -600,6 +598,6 @@ public class DataBaseConnection {
             return false;
         }
     }
+    }
+*/
 
-
-}

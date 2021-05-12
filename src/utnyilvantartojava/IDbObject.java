@@ -1,5 +1,7 @@
 package utnyilvantartojava;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 public interface IDbObject {
@@ -10,5 +12,6 @@ public interface IDbObject {
     public void insertDb();
     public List<String> keys();
     public List<Object> values();
+    public String jsonPost();
 
 }

@@ -2,6 +2,8 @@ package utnyilvantartojava;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
+
 
 public class Distance implements IDbObject {
 
@@ -83,5 +85,15 @@ public class Distance implements IDbObject {
     public List<Object> values() {
 
         return doubleList().values();
+    }
+
+    @Override
+    public String jsonPost() {
+        String json = new JSONObject()
+                .put("clientid1",this.clientid1)
+                .put("clientid2",this.clientid2)
+                .put("distance",this.distance)
+                .toString();
+        return json;
     }
 }
