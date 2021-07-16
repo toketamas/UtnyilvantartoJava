@@ -1107,11 +1107,17 @@ alert.show();
         // btnAlertSingleOK.setDisable(true);
 //kikeresi a " km" szöveg kezdőindexét ez van a gmapstól visszakapott kódban a távolság után közvetlenűl
         int index = gotUrl.indexOf(" km");
+        if(index==-1)
+            index=gotUrl.indexOf(" m");
 //kiszedi a távolságot megfelelően kerekíti és beírja a textboxba
+        System.out.println(gotUrl.substring(index-10));
         String sub = gotUrl.substring(index - 6, index);
         System.out.println(sub);
         sub = sub.replace(',', '.');
-        distance = (int) Math.round(Double.parseDouble(sub.substring(sub.indexOf("\"") + 1)));
+        double val=Double.parseDouble(sub.substring(sub.indexOf("\"") + 1));
+        if (val<1)
+            val=1;
+        distance = (int) Math.round(val);
         txtDistance.setText(distance.toString());
         btnBev.setDisable(false);
         cbClient.setDisable(false);
