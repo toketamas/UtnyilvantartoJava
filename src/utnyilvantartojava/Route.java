@@ -280,4 +280,9 @@ public class Route implements IDbObject {
 
         return doubleList().values();
     }
+
+    @Override
+    public String jsonPost() {
+        return null;
+    }
 }

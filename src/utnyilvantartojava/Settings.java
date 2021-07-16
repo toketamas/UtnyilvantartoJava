@@ -243,6 +243,11 @@ public class Settings implements IDbObject {
         return doubleList().values();
     }
 
+    @Override
+    public String jsonPost() {
+        return null;
+    }
+
 
     @Override
     public DoubleList doubleList() {
