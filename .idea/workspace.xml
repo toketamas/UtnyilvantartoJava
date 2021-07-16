@@ -81,10 +81,6 @@
       <change afterPath="$PROJECT_DIR$/../IoExcel/src/exceltodb/ExcelToDB.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../IoExcel/src/exceltodb/Main.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -365,7 +361,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="mongoteszt" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
