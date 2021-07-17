@@ -10,5 +10,6 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp:4.9.1" level="project" />
     <orderEntry type="library" name="org.json:json:20210307" level="project" />
+    <orderEntry type="library" name="jackson:jackson-lgpl:0.9.3" level="project" />
   </component>
 </module>
