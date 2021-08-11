@@ -407,17 +407,18 @@ public class ViewController implements Initializable {
         //!!!!!!!!!!!!!!!!!!!!! Ez itt a http kérés tesztje!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Remote remote = new Remote();
 // regisztrál a mysql-be
-        remote.regUser(settings);
+        //remote.regUser(settings);
 //ellenőrzi hogy engedélyezve van e és frissíti az utolsó hozzáférés idejét.
-        if (remote.checkUser(settings, tabNyilv)){
+     /*   if (remote.checkUser(settings, tabNyilv)){
             System.out.println("Engedélyezve");
         remote.updateTimeStamp(settings);
         }
        else{
+            System.err.println("Tiltva");
             Alert alert = new Alert(this, "Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
             alert.show();
-            tabNyilv.setDisable(true);
-        }
+           tabNyilv.setDisable(true); */
+      //  }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 

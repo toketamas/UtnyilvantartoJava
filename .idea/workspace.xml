@@ -82,8 +82,14 @@
       <change afterPath="$PROJECT_DIR$/../IoExcel/src/exceltodb/Main.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blank.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/blank.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/UtnyilvantartoJava_jar/UtnyilvantartoJava.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants$WebapiUrl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Constants$WebapiUrl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/Remote.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/UtnyilvantartoJava/utnyilvantartojava/ViewController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routeregister.db" beforeDir="false" afterPath="$PROJECT_DIR$/routeregister.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/Remote.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utnyilvantartojava/ViewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

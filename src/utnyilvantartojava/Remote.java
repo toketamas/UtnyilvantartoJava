@@ -101,7 +101,7 @@ public Remote(String url,String jsonStr){
         }
         else {
             //showAlert("Hiba a program indítása közben!\n Validálás sikertelen!\n Van internet kapcsolat?", true, "err");
-            tab.setDisable(true);
+            //tab.setDisable(true);
             result=false;
         }
 
